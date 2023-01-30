@@ -1,0 +1,9 @@
+﻿# Astrana license
+
+This is the Astrana license file.
+
+Lorem Ipsum is simply a dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text since the 1500s, when an unknown printer took a galley of type and coded it to make a type sample book. It has survived not only five centuries, but also the leap to electronic typesetting, remaining essentially unchanged. It was popularized in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software such as Aldus PageMaker, which included Lorem Ipsum versions.
+
+Contrary to popular belief, Lorem Ipsum is not just random text. It has its roots in a piece of classical Latin literature from 45 B.C. C., so it is more than 2000 years old. Richard McClintock, a professor of Latin at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, in a passage from Lorem Ipsum, and by reviewing citations of the word in classical literature, he discovered the undoubted source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of Cicero's "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil), written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.
+
+The standard Lorem Ipsum fragment used since the 16th century is reproduced below for those interested. Sections 1.10.32 and 1.10.33 of Cicero's "de Finibus Bonorum et Malorum" are also reproduced in their exact original form, accompanied by English versions of H. Rackham's 1914 translation.

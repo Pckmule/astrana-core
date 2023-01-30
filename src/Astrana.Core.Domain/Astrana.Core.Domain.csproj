@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Astrana.Core.Data\Astrana.Core.Data.csproj" />
+    <ProjectReference Include="..\Astrana.Core.Domain.Models\Astrana.Core.Domain.Models.csproj" />
+    <ProjectReference Include="..\Astrana.Core\Astrana.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ApiAccessTokens\" />
+    <Folder Include="Languages\Commands\" />
+  </ItemGroup>
+
+</Project>
