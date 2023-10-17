@@ -8,13 +8,14 @@ namespace Astrana.Core.Data.Constants
 {
     public static class SchemaNames
     {
-        public const string Default = "dbo";
         public const string Configuration = "config";
         public const string ContactInformation = "contact";
         public const string Content = "content";
-        public const string User = "user";
+        public const string Default = "dbo";
         public const string IdentityAccessManagement = "iam";
-        public const string Maintenance = "maintenance";
         public const string Logs = "logs";
+        public const string Maintenance = "maintenance";
+        public const string User = "user";
+        public const string Workflow = "workflow";
     }
 }

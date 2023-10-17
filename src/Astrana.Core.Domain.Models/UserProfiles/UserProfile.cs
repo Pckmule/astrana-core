@@ -5,18 +5,19 @@
 */
 
 using Astrana.Core.Attributes;
-using Astrana.Core.Domain.Models.Images;
-using Astrana.Core.Domain.Models.System.Contracts;
+using Astrana.Core.Domain.Models.ContentCollections;
 using Astrana.Core.Domain.Models.UserProfiles.Constants;
 using Astrana.Core.Domain.Models.UserProfiles.Contracts;
 using Astrana.Core.Domain.Models.UserProfiles.Enums;
-using Astrana.Core.Validation;
-using Astrana.Core.Validation.Attributes;
+using Astrana.Core.Framework.Domain;
+using Astrana.Core.Framework.Model;
+using Astrana.Core.Framework.Model.Validation;
+using Astrana.Core.Framework.Model.Validation.Attributes;
 using System.ComponentModel.DataAnnotations;
 
 namespace Astrana.Core.Domain.Models.UserProfiles
 {
-    public sealed class UserProfile : BaseDomainModel, IUserProfile, IEditableEntity<Guid>, IAuditable<Guid>, IDeactivatable<Guid>
+    public sealed class UserProfile : DomainEntity, IUserProfile, IAuditable<Guid>
     {
         public UserProfile()
         {
@@ -26,7 +27,11 @@ namespace Astrana.Core.Domain.Models.UserProfiles
         }
 
         [Required]
-        public Guid Id { get; set; }
+        public Guid ProfileId
+        {
+            get => Id;
+            set => Id = value;
+        }
 
         [Required]
         public Guid UserAccountId { get; set; }
@@ -53,15 +58,15 @@ namespace Astrana.Core.Domain.Models.UserProfiles
         public DateTimeOffset DateOfBirth { get; set; }
 
         [RequiredEnum]
-        public Gender Gender { get; set; }
+        public Sex Sex { get; set; }
 
         [MinLength(ModelProperties.UserProfile.MinimumIntroductionLength)]
         [MaxLength(ModelProperties.UserProfile.MaximumIntroductionLength)]
         public string Introduction { get; set; }
+        
+        public ContentCollection? ProfilePicturesCollection { get; set; }
 
-        public Image? ProfilePicture { get; set; }
-
-        public Image? CoverPicture { get; set; }
+        public ContentCollection? CoverPicturesCollection { get; set; }
 
         [Required]
         public Guid CreatedBy { get; set; }
@@ -74,12 +79,6 @@ namespace Astrana.Core.Domain.Models.UserProfiles
 
         [Required]
         public DateTimeOffset LastModifiedTimestamp { get; set; }
-
-        public DateTimeOffset? DeactivatedTimestamp { get; set; }
-
-        public string? DeactivatedReason { get; set; }
-
-        public Guid? DeactivatedBy { get; set; }
 
         public override EntityValidationResult Validate()
         {

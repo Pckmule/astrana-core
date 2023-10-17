@@ -4,9 +4,9 @@ namespace Astrana.Core.SignalRHubs
 {
     public class MainHub : Hub
     {
-        public async Task SendMessageAsync(string user, string message)
+        public async Task SendMessageAsync(string data)
         {
-            await Clients.All.SendAsync("ReceiveMessage", user, message);
+            await Clients.All.SendAsync("ReceiveMessage", data);
         }
     }
 }

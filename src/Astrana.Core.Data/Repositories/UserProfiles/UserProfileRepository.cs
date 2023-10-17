@@ -4,8 +4,12 @@
 * file, You can obtain one at https://mozilla.org/MPL/2.0/.
 */
 
+using Astrana.Core.Data.Entities.Content;
 using Astrana.Core.Data.Entities.User;
 using Astrana.Core.Data.Exceptions;
+using Astrana.Core.Domain.Models.ContentCollections.Enums;
+using Astrana.Core.Domain.Models.Links.Contracts;
+using Astrana.Core.Domain.Models.Media.Enums;
 using Astrana.Core.Domain.Models.Results;
 using Astrana.Core.Domain.Models.Results.Contracts;
 using Astrana.Core.Domain.Models.UserProfiles.Contracts;
@@ -32,13 +36,26 @@ namespace Astrana.Core.Data.Repositories.UserProfiles
         {
             options ??= new UserProfileQueryOptions<Guid, Guid>();
 
-            var query = ctx.UserProfiles.Include(o => o.ProfilePicture).Include(o => o.CoverPicture).AsQueryable();
+            var query = databaseSession.UserProfiles
+                .Include(o => o.ProfilePicturesCollection)
+                .ThenInclude(o => o.ContentCollectionItems)
+                .Include(o => o.ProfilePicturesCollection)
+                .ThenInclude(o => o.ContentCollectionItems)
+                .ThenInclude(o => o.Image)
+                .Include(o => o.CoverPicturesCollection)
+                .ThenInclude(o => o.ContentCollectionItems)
+                .Include(o => o.CoverPicturesCollection)
+                .ThenInclude(o => o.ContentCollectionItems)
+                .ThenInclude(o => o.Image)
+                .AsQueryable();
 
             // Add Filters
             if (options.Ids.Any())
                 query = query.Where(o => options.Ids.Contains(o.Id));
 
-            // Add Filters
+            if (options.ExcludeIds.Any())
+                query = query.Where(o => !options.ExcludeIds.Contains(o.Id));
+            
             if (options.AccountIds.Any())
                 query = query.Where(o => options.AccountIds.Contains(o.UserAccountId));
 
@@ -52,7 +69,7 @@ namespace Astrana.Core.Data.Repositories.UserProfiles
             query = query.OrderByDescending(o => o.CreatedTimestamp);
 
             // Add Paging
-            if (!options.PagingDisabled && options.PageSize.HasValue && options.CurrentPage.HasValue)
+            if (options is { PagingDisabled: false, PageSize: { }, CurrentPage: { } })
                 query = query.Skip(options.PageSize.Value * (options.CurrentPage.Value - 1)).Take(options.PageSize.Value);
 
             return query;
@@ -94,7 +111,19 @@ namespace Astrana.Core.Data.Repositories.UserProfiles
             else
                 resultSetCount = queryResults.Count;
 
-            var userProfiles = queryResults.Select(userProfile => ModelMapper.MapModel<DM.UserProfiles.UserProfile, UserProfile>(userProfile)).ToList();
+            var userProfiles = queryResults.Select(Entities.User.ModelMappings.UserProfile.MapToDomainModel).ToList();
+
+            foreach (var userProfile in userProfiles)
+            {
+                if(userProfile == null)
+                    continue;
+
+                if (userProfile.ProfilePicturesCollection != null && userProfile.ProfilePicturesCollection.ContentItems != null)
+                    userProfile.ProfilePicturesCollection.ContentItems = userProfile.ProfilePicturesCollection.ContentItems.OrderByDescending(o => o.CreatedTimestamp).ToList();
+
+                if (userProfile.CoverPicturesCollection != null && userProfile.CoverPicturesCollection.ContentItems != null)
+                    userProfile.CoverPicturesCollection.ContentItems = userProfile.CoverPicturesCollection.ContentItems.OrderByDescending(o => o.CreatedTimestamp).ToList();
+            }
 
             logger.LogInformation(string.Format(MessageRetrievedEntity, nameof(UserProfile)), queryOptions);
 
@@ -137,7 +166,6 @@ namespace Astrana.Core.Data.Repositories.UserProfiles
             ValidateActioningUserId(actioningUserId);
 
             var countAdded = 0;
-            Guid newUserProfileId;
 
             var results = new Dictionary<string, List<ResultError>>();
 
@@ -147,6 +175,16 @@ namespace Astrana.Core.Data.Repositories.UserProfiles
 
                 var newUserProfileEntity = ModelMapper.MapModel<UserProfile, IUserProfileToAdd>(requestedAddition);
 
+                newUserProfileEntity.ProfilePicturesCollection = new ContentCollection
+                {
+                    Name = "Profile Pictures"
+                };
+
+                newUserProfileEntity.CoverPicturesCollection = new ContentCollection
+                {
+                    Name = "Profile Cover Pictures"
+                };
+
                 newUserProfileEntity.CreatedBy = actioningUserId;
                 newUserProfileEntity.CreatedTimestamp = now;
 
@@ -154,12 +192,12 @@ namespace Astrana.Core.Data.Repositories.UserProfiles
                 newUserProfileEntity.LastModifiedTimestamp = now;
 
                 // Save records.
-                ctx.UserProfiles.Add(newUserProfileEntity);
-                await ctx.SaveChangesAsync();
+                databaseSession.UserProfiles.Add(newUserProfileEntity);
+                await databaseSession.SaveChangesAsync();
 
                 countAdded++;
 
-                newUserProfileId = newUserProfileEntity.Id;
+                var newUserProfileId = newUserProfileEntity.Id;
                
                 logger.LogInformation(string.Format(MessageSuccessfullyCreatedEntity, 1, nameof(UserProfile) + "(s)"));
 
@@ -224,7 +262,7 @@ namespace Astrana.Core.Data.Repositories.UserProfiles
 
                 foreach (var update in requestedUpdates)
                 {
-                    var existingUserProfileEntity = await ctx.UserProfiles.FirstOrDefaultAsync(o => o.Id == update.Id);
+                    var existingUserProfileEntity = await databaseSession.UserProfiles.FirstOrDefaultAsync(o => o.Id == update.ProfileId);
 
                     if (existingUserProfileEntity == null)
                         continue;
@@ -243,9 +281,9 @@ namespace Astrana.Core.Data.Repositories.UserProfiles
                     existingUserProfileEntity.LastModifiedTimestamp = now;
 
                     // Save changes to records.
-                    ctx.UserProfiles.Update(existingUserProfileEntity);
+                    databaseSession.UserProfiles.Update(existingUserProfileEntity);
 
-                    await ctx.SaveChangesAsync();
+                    await databaseSession.SaveChangesAsync();
 
                     countUpdated++;
 
@@ -267,6 +305,192 @@ namespace Astrana.Core.Data.Repositories.UserProfiles
                 throw new CannotUpdateRecordsException(ex);
             }
         }
+        
+        /// <summary>
+        /// Updates the introduction for an existing User Profile by User Profile ID.
+        /// </summary>
+        /// <param name="userProfileId"></param>
+        /// <param name="updatedUserProfileIntroduction"></param>
+        /// <param name="actioningUserId"></param>
+        /// <param name="returnRecords"></param>
+        /// <returns></returns>
+        public async Task<IUpdateResult<DM.UserProfiles.UserProfile>> UpdateProfileIntroductionAsync(Guid userProfileId,  string updatedUserProfileIntroduction, Guid actioningUserId, bool returnRecords = false)
+        {
+            ValidateActioningUserId(actioningUserId);
+
+            if(userProfileId.Equals(Guid.Empty))
+                return new UpdateFailResult<DM.UserProfiles.UserProfile>(null, 0, "Profile ID is invalid.");
+
+            var countUpdated = 0;
+            var updatedUserProfileIds = new List<Guid>();
+
+            try
+            {
+                var now = DateTime.UtcNow;
+
+                var existingUserProfileEntity = await databaseSession.UserProfiles.FirstOrDefaultAsync(o => o.Id == userProfileId);
+
+                if (existingUserProfileEntity == null)
+                    return new UpdateFailResult<DM.UserProfiles.UserProfile>(null, countUpdated, "Profile ID is invalid.");
+
+                // Update entity fields
+                existingUserProfileEntity.Introduction = updatedUserProfileIntroduction.Trim();
+
+                existingUserProfileEntity.LastModifiedBy = actioningUserId;
+                existingUserProfileEntity.LastModifiedTimestamp = now;
+
+                // Save changes to records.
+                databaseSession.UserProfiles.Update(existingUserProfileEntity);
+
+                await databaseSession.SaveChangesAsync();
+
+                countUpdated++;
+
+                updatedUserProfileIds.Add(existingUserProfileEntity.Id);
+
+                logger.LogInformation(string.Format(MessageSuccessfullyUpdatedEntity, updatedUserProfileIds.Count, nameof(UserProfile) + "(s)"));
+
+                // Return the current records.
+                if (returnRecords)
+                    return new UpdateSuccessResult<DM.UserProfiles.UserProfile>(await GetUserProfileByIdAsync(userProfileId), countUpdated);
+
+                return new UpdateSuccessResult<DM.UserProfiles.UserProfile>(null, countUpdated);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, ex.Message);
+
+                throw new CannotUpdateRecordsException(ex);
+            }
+        }
+
+        /// <summary>
+        /// Updates the User Profile Picture by User Profile ID.
+        /// </summary>
+        /// <param name="userProfileId"></param>
+        /// <param name="imageId"></param>
+        /// <param name="actioningUserId"></param>
+        /// <param name="returnRecords"></param>
+        /// <returns></returns>
+        /// <exception cref="CannotUpdateRecordsException"></exception>
+        public async Task<IUpdateResult<DM.UserProfiles.UserProfile>> UpdateProfilePictureAsync(Guid userProfileId, Guid imageId, Guid actioningUserId, bool returnRecords = false)
+        {
+            ValidateActioningUserId(actioningUserId);
+
+            var countUpdated = 0;
+            var updatedUserProfileIds = new List<Guid>();
+
+            try
+            {
+                var existingUserProfileEntity = await databaseSession.UserProfiles.FirstOrDefaultAsync(o => o.Id == userProfileId);
+                
+                if(existingUserProfileEntity == null)
+                    return new UpdateFailResult<DM.UserProfiles.UserProfile>(null, countUpdated, "User Profile Not Found");
+                
+                var imageEntity = await databaseSession.Images.FirstOrDefaultAsync(o => o.ImageId == imageId);
+
+                if (imageEntity == null)
+                    return new UpdateFailResult<DM.UserProfiles.UserProfile>(null, countUpdated, "Image Not Found");
+                
+                var profilePictureContentCollectionEntity = await databaseSession.ContentCollections.FirstOrDefaultAsync(o => o.ContentCollectionId == existingUserProfileEntity.ProfilePicturesCollection.ContentCollectionId);
+
+                if (profilePictureContentCollectionEntity == null)
+                    return new UpdateFailResult<DM.UserProfiles.UserProfile>(null, countUpdated, "Profile Picture Collection Not Found");
+
+                databaseSession.ContentCollections.First(o => o.ContentCollectionId == existingUserProfileEntity.ProfilePicturesCollection.ContentCollectionId).ContentCollectionItems.Add(new ContentCollectionItem
+                {
+                    MediaType = MediaType.Image,
+                    ImageId = imageEntity.ImageId,
+
+                    CreatedBy = actioningUserId,
+                    LastModifiedBy = actioningUserId
+                });
+                
+                await databaseSession.SaveChangesAsync();
+
+                countUpdated++;
+
+                updatedUserProfileIds.Add(existingUserProfileEntity.Id);
+
+                logger.LogInformation(string.Format(MessageSuccessfullyUpdatedEntity, updatedUserProfileIds.Count, nameof(UserProfile) + "(s)"));
+
+                // Return the current records.
+                if (returnRecords)
+                    return new UpdateSuccessResult<DM.UserProfiles.UserProfile>(await GetUserProfileByIdAsync(userProfileId), countUpdated);
+
+                return new UpdateSuccessResult<DM.UserProfiles.UserProfile>(null, countUpdated);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, ex.Message);
+
+                throw new CannotUpdateRecordsException(ex);
+            }
+        }
+
+        /// <summary>
+        /// Updates the User Profile Cover Picture by User Profile ID.
+        /// </summary>
+        /// <param name="userProfileId"></param>
+        /// <param name="imageId"></param>
+        /// <param name="actioningUserId"></param>
+        /// <param name="returnRecords"></param>
+        /// <returns></returns>
+        /// <exception cref="CannotUpdateRecordsException"></exception>
+        public async Task<IUpdateResult<DM.UserProfiles.UserProfile>> UpdateCoverPictureAsync(Guid userProfileId, Guid imageId, Guid actioningUserId, bool returnRecords = false)
+        {
+            ValidateActioningUserId(actioningUserId);
+
+            var countUpdated = 0;
+            var updatedUserProfileIds = new List<Guid>();
+
+            try
+            {
+                var existingUserProfileEntity = await databaseSession.UserProfiles.FirstOrDefaultAsync(o => o.Id == userProfileId);
+
+                if (existingUserProfileEntity == null)
+                    return new UpdateFailResult<DM.UserProfiles.UserProfile>(null, countUpdated, "User Profile Not Found");
+
+                var imageEntity = await databaseSession.Images.FirstOrDefaultAsync(o => o.ImageId == imageId);
+
+                if (imageEntity == null)
+                    return new UpdateFailResult<DM.UserProfiles.UserProfile>(null, countUpdated, "Image Not Found");
+
+                var profileCoverPictureContentCollectionEntity = await databaseSession.ContentCollections.FirstOrDefaultAsync(o => o.ContentCollectionId == existingUserProfileEntity.CoverPicturesCollection.ContentCollectionId);
+
+                if (profileCoverPictureContentCollectionEntity == null)
+                    return new UpdateFailResult<DM.UserProfiles.UserProfile>(null, countUpdated, "Profile Cover Picture Collection Not Found");
+
+                databaseSession.ContentCollections.First(o => o.ContentCollectionId == existingUserProfileEntity.CoverPicturesCollection.ContentCollectionId).ContentCollectionItems.Add(new ContentCollectionItem
+                {
+                    MediaType = MediaType.Image,
+                    ImageId = imageEntity.ImageId,
+
+                    CreatedBy = actioningUserId,
+                    LastModifiedBy = actioningUserId
+                });
+
+                await databaseSession.SaveChangesAsync();
+
+                countUpdated++;
+
+                updatedUserProfileIds.Add(existingUserProfileEntity.Id);
+
+                logger.LogInformation(string.Format(MessageSuccessfullyUpdatedEntity, updatedUserProfileIds.Count, nameof(UserProfile) + "(s)"));
+
+                // Return the current records.
+                if (returnRecords)
+                    return new UpdateSuccessResult<DM.UserProfiles.UserProfile>(await GetUserProfileByIdAsync(userProfileId), countUpdated);
+
+                return new UpdateSuccessResult<DM.UserProfiles.UserProfile>(null, countUpdated);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, ex.Message);
+
+                throw new CannotUpdateRecordsException(ex);
+            }
+        }
 
         public Task<IUpdateResult<List<Guid>>> DeactivateAsync(IEnumerable<Guid> validatedUserProfilesToDeactivateIds, Guid actioningUserId)
         {
@@ -274,6 +498,219 @@ namespace Astrana.Core.Data.Repositories.UserProfiles
         }
 
         public Task<IDeleteResult<List<Guid>>> DeleteAsync(IEnumerable<Guid> validatedUserProfilesToRemoveIds, Guid actioningUserId)
+        {
+            throw new NotImplementedException();
+        }
+
+
+
+        /// <summary>
+        /// Builds up an IQueryable according to the specified filter criteria.
+        /// </summary>
+        /// <param name="options"></param>
+        /// <returns></returns>
+        private IQueryable<UserProfileDetail> BuildUserProfileDetailsQuery(UserProfileDetailQueryOptions<Guid, Guid>? options = null)
+        {
+            options ??= new UserProfileDetailQueryOptions<Guid, Guid>();
+
+            var query = databaseSession.UserProfileDetails.AsQueryable();
+
+            // Add Filters
+            if (options.Ids.Any())
+                query = query.Where(o => options.Ids.Contains(o.Id));
+
+            if (options.ExcludeIds.Any())
+                query = query.Where(o => !options.ExcludeIds.Contains(o.Id));
+
+            if (options.Labels.Any())
+                query = query.Where(o => options.Labels.Contains(o.Label));
+
+            if (options.CreatedBefore.HasValue)
+                query = query.Where(o => o.CreatedTimestamp < options.CreatedBefore.Value);
+
+            if (options.CreatedAfter.HasValue)
+                query = query.Where(o => o.CreatedTimestamp > options.CreatedAfter.Value);
+
+            // Add Ordering
+            query = query.OrderByDescending(o => o.CreatedTimestamp);
+
+            // Add Paging
+            if (options is { PagingDisabled: false, PageSize: { }, CurrentPage: { } })
+                query = query.Skip(options.PageSize.Value * (options.CurrentPage.Value - 1)).Take(options.PageSize.Value);
+
+            return query;
+        }
+
+        /// <summary>
+        /// Returns a count of User Profile Details according to the specified filter criteria.
+        /// </summary>
+        /// <param name="queryOptions"></param>
+        /// <returns></returns>
+        public async Task<ICountResult> GetUserProfileDetailsCountAsync(UserProfileDetailQueryOptions<Guid, Guid>? queryOptions = null)
+        {
+            queryOptions ??= new UserProfileDetailQueryOptions<Guid, Guid>();
+
+            queryOptions.PagingDisabled = true;
+
+            return new CountResult(await BuildUserProfileDetailsQuery(queryOptions).CountAsync());
+        }
+
+        /// <summary>
+        /// Returns a list of User Profile Details according to the specified filter criteria.
+        /// </summary>
+        /// <param name="queryOptions"></param>
+        /// <returns></returns>
+        public async Task<IGetResult<DM.UserProfiles.UserProfileDetail>> GetUserProfileDetailsAsync(UserProfileDetailQueryOptions<Guid, Guid>? queryOptions = null)
+        {
+            queryOptions ??= new UserProfileDetailQueryOptions<Guid, Guid>();
+
+            var queryResults = await BuildUserProfileDetailsQuery(queryOptions).ToListAsync();
+
+            int resultSetCount;
+            if (queryOptions.PagingDisabled)
+            {
+                var countResultSetQueryOptions = queryOptions.Clone();
+                countResultSetQueryOptions.PagingDisabled = true;
+
+                resultSetCount = await BuildUserProfileDetailsQuery(queryOptions).CountAsync();
+            }
+            else
+                resultSetCount = queryResults.Count;
+
+            var userProfiles = queryResults.Select(userProfileDetail => ModelMapper.MapModel<DM.UserProfiles.UserProfileDetail, UserProfileDetail>(userProfileDetail)).ToList();
+
+            logger.LogInformation(string.Format(MessageRetrievedEntity, nameof(UserProfileDetail)), queryOptions);
+
+            return CreateGetResultWithPagination(userProfiles, queryOptions, resultSetCount);
+        }
+
+        /// <summary>
+        /// Finds and returns an User Profile Detail by it's ID.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<DM.UserProfiles.UserProfileDetail?> GetUserProfileDetailByIdAsync(Guid id)
+        {
+            return (await GetUserProfileDetailsAsync(new UserProfileDetailQueryOptions<Guid, Guid>(new List<Guid> { id }))).Data.FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Adds new User Profile Details to the Data Source.
+        /// </summary>
+        /// <param name="requestedAdditions"></param>
+        /// <param name="actioningUserId"></param>
+        /// <param name="returnRecords"></param>
+        /// <returns></returns>
+        public async Task<IAddResult<List<DM.UserProfiles.UserProfileDetail>>> CreateProfileDetailsAsync(IEnumerable<IUserProfileDetailToAdd> requestedAdditions, Guid actioningUserId, bool returnRecords = true)
+        {
+            ValidateActioningUserId(actioningUserId);
+
+            var countAdded = 0;
+            var newUserProfileDetailIds = new List<Guid>();
+
+            try
+            {
+                var now = DateTime.UtcNow;
+
+                foreach (var addition in requestedAdditions)
+                {
+                    var newUserProfileDetailEntity = ModelMapper.MapModel<UserProfileDetail, IUserProfileDetailToAdd>(addition);
+
+                    if (newUserProfileDetailEntity == null)
+                        continue;
+
+                    newUserProfileDetailEntity.CreatedBy = actioningUserId;
+                    newUserProfileDetailEntity.CreatedTimestamp = now;
+
+                    newUserProfileDetailEntity.LastModifiedBy = actioningUserId;
+                    newUserProfileDetailEntity.LastModifiedTimestamp = now;
+
+                    // Save records.
+                    databaseSession.UserProfileDetails.Add(newUserProfileDetailEntity);
+                    await databaseSession.SaveChangesAsync();
+
+                    countAdded++;
+
+                    newUserProfileDetailIds.Add(newUserProfileDetailEntity.Id);
+                }
+
+                logger.LogInformation(string.Format(MessageSuccessfullyCreatedEntity, newUserProfileDetailIds.Count, nameof(UserProfileDetail) + "(s)"));
+
+                // Return the current records.
+                if (returnRecords)
+                    return new AddSuccessResult<List<DM.UserProfiles.UserProfileDetail>>((await GetUserProfileDetailsAsync(new UserProfileDetailQueryOptions<Guid, Guid> { Ids = newUserProfileDetailIds })).Data, countAdded);
+
+                return new AddSuccessResult<List<DM.UserProfiles.UserProfileDetail>>(new List<DM.UserProfiles.UserProfileDetail>(), countAdded);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, ex.Message);
+
+                throw new CannotCreateRecordsException(ex);
+            }
+        }
+
+        /// <summary>
+        /// Updates existing User Profile Details in the Data Source.
+        /// </summary>
+        /// <param name="requestedUpdates"></param>
+        /// <param name="actioningUserId"></param>
+        /// <param name="returnRecords"></param>
+        /// <returns></returns>
+        public async Task<IUpdateResult<List<DM.UserProfiles.UserProfileDetail>>> UpdateProfileDetailsAsync(IEnumerable<DM.UserProfiles.UserProfileDetail> requestedUpdates, Guid actioningUserId, bool returnRecords = true)
+        {
+            ValidateActioningUserId(actioningUserId);
+
+            var countUpdated = 0;
+            var updatedUserProfileDetailIds = new List<Guid>();
+
+            try
+            {
+                var now = DateTime.UtcNow;
+
+                foreach (var update in requestedUpdates)
+                {
+                    var existingUserProfileDetailEntity = await databaseSession.UserProfileDetails.FirstOrDefaultAsync(o => o.Id == update.UserProfileDetailId);
+
+                    if (existingUserProfileDetailEntity == null)
+                        continue;
+
+                    // Update entity fields
+
+                    existingUserProfileDetailEntity.Label = update.Label.Trim();
+                    existingUserProfileDetailEntity.Value = update.Value.Trim();
+                    existingUserProfileDetailEntity.IconName = update.IconName.Trim();
+
+                    existingUserProfileDetailEntity.LastModifiedBy = actioningUserId;
+                    existingUserProfileDetailEntity.LastModifiedTimestamp = now;
+
+                    // Save changes to records.
+                    databaseSession.UserProfileDetails.Update(existingUserProfileDetailEntity);
+
+                    await databaseSession.SaveChangesAsync();
+
+                    countUpdated++;
+
+                    updatedUserProfileDetailIds.Add(existingUserProfileDetailEntity.Id);
+                }
+
+                logger.LogInformation(string.Format(MessageSuccessfullyUpdatedEntity, updatedUserProfileDetailIds.Count, nameof(UserProfile) + "(s)"));
+
+                // Return the current records.
+                if (returnRecords)
+                    return new UpdateSuccessResult<List<DM.UserProfiles.UserProfileDetail>>((await GetUserProfileDetailsAsync(new UserProfileDetailQueryOptions<Guid, Guid> { Ids = updatedUserProfileDetailIds })).Data, countUpdated);
+
+                return new UpdateSuccessResult<List<DM.UserProfiles.UserProfileDetail>>(new List<DM.UserProfiles.UserProfileDetail>(), countUpdated);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, ex.Message);
+
+                throw new CannotUpdateRecordsException(ex);
+            }
+        }
+
+        public Task<IDeleteResult<List<Guid>>> DeleteProfileDetailsAsync(IEnumerable<Guid> validatedUserProfileDetailsToRemoveIds, Guid actioningUserId)
         {
             throw new NotImplementedException();
         }

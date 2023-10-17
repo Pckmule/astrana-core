@@ -18,41 +18,76 @@ namespace Astrana.Core.Configuration
         {
             base.Load(stream);
 
-            Data[ApplicationConfigurationKeys.ConnectionStringsPostgreSql] = EncryptionUtility.DecryptString(Data[ApplicationConfigurationKeys.ConnectionStringsPostgreSql]);
-            Data[ApplicationConfigurationKeys.ConnectionStringsMySql] = EncryptionUtility.DecryptString(Data[ApplicationConfigurationKeys.ConnectionStringsMySql]);
-            Data[ApplicationConfigurationKeys.ConnectionStringsMsSqlServer] = EncryptionUtility.DecryptString(Data[ApplicationConfigurationKeys.ConnectionStringsMsSqlServer]);
+            // NOTE: Setup Mode
+            /*  The setup mode setting should only exist in the application settings during the initial installation
+                and setup of the Astrana application.                
 
-            var serilogPostgreSqlIndex = GetSerilogSinkIndex(ApplicationConfigurationKeys.SerilogSinkPostgreSqlName);
+                Application settings are temporarily stored in plain text at the start of the installation process, 
+                and are encrypted during the installation process.
+
+                Therefore, if the setup mode setting is detected, decryption of protected settings is not required and 
+                will not be performed.
+            */
+
+            if (Data.ContainsKey(ApplicationConfigurationKeys.SetupMode))
+                return;
+
+            if(Data.ContainsKey(ApplicationConfigurationKeys.ConnectionStringsPostgreSql))
+                Data[ApplicationConfigurationKeys.ConnectionStringsPostgreSql] = EncryptionUtility.DecryptString(Data[ApplicationConfigurationKeys.ConnectionStringsPostgreSql] ?? string.Empty);
+
+            if (Data.ContainsKey(ApplicationConfigurationKeys.ConnectionStringsMySql))
+                Data[ApplicationConfigurationKeys.ConnectionStringsMySql] = EncryptionUtility.DecryptString(Data[ApplicationConfigurationKeys.ConnectionStringsMySql] ?? string.Empty);
+
+            if (Data.ContainsKey(ApplicationConfigurationKeys.ConnectionStringsMsSqlServer))
+                Data[ApplicationConfigurationKeys.ConnectionStringsMsSqlServer] = EncryptionUtility.DecryptString(Data[ApplicationConfigurationKeys.ConnectionStringsMsSqlServer] ?? string.Empty);
+
+            GetSerilogSinkIndex(ApplicationConfigurationKeys.SerilogSinkPostgreSqlName, out var serilogPostgreSqlIndex);
             if (serilogPostgreSqlIndex != null)
             {
-                Data[string.Format(ApplicationConfigurationKeys.SerilogWriteToPostgreSqlArgsConnectionString, serilogPostgreSqlIndex)] = EncryptionUtility.DecryptString(Data[string.Format(ApplicationConfigurationKeys.SerilogWriteToPostgreSqlArgsConnectionString, serilogPostgreSqlIndex)]);
+                var sinkKey = string.Format(ApplicationConfigurationKeys.SerilogWriteToPostgreSqlArgsConnectionString, serilogPostgreSqlIndex);
+                if (Data.ContainsKey(sinkKey))
+                {
+                    Data[sinkKey] = EncryptionUtility.DecryptString(Data[sinkKey] ?? string.Empty);
+                }
             }
 
-            var serilogMySqlIndex = GetSerilogSinkIndex(ApplicationConfigurationKeys.SerilogSinkMySqlName);
+            GetSerilogSinkIndex(ApplicationConfigurationKeys.SerilogSinkMySqlName, out var serilogMySqlIndex);
             if (serilogMySqlIndex != null)
             {
-                Data[string.Format(ApplicationConfigurationKeys.SerilogWriteToMySqlArgsConnectionString, serilogMySqlIndex)] = EncryptionUtility.DecryptString(Data[string.Format(ApplicationConfigurationKeys.SerilogWriteToMySqlArgsConnectionString, serilogMySqlIndex)]);
+                var sinkKey = string.Format(ApplicationConfigurationKeys.SerilogWriteToMySqlArgsConnectionString, serilogMySqlIndex);
+                if (Data.ContainsKey(sinkKey))
+                {
+                    Data[sinkKey] = EncryptionUtility.DecryptString(Data[sinkKey] ?? string.Empty);
+                }
             }
 
-            var serilogMsSqlIndex = GetSerilogSinkIndex(ApplicationConfigurationKeys.SerilogSinkMsSqlServerName);
+            GetSerilogSinkIndex(ApplicationConfigurationKeys.SerilogSinkMsSqlServerName, out var serilogMsSqlIndex);
             if (serilogMsSqlIndex != null)
             {
-                Data[string.Format(ApplicationConfigurationKeys.SerilogWriteToMsSqlServerArgsConnectionString, serilogMsSqlIndex)] = EncryptionUtility.DecryptString(Data[string.Format(ApplicationConfigurationKeys.SerilogWriteToMsSqlServerArgsConnectionString, serilogMsSqlIndex)]);
+                var sinkKey = string.Format(ApplicationConfigurationKeys.SerilogWriteToMsSqlServerArgsConnectionString, serilogMsSqlIndex);
+                if (Data.ContainsKey(sinkKey))
+                {
+                    Data[sinkKey] = EncryptionUtility.DecryptString(Data[sinkKey] ?? string.Empty);
+                }
             }
         }
 
-        private string? GetSerilogSinkIndex(string sinkName)
+        private bool GetSerilogSinkIndex(string sinkName, out string? serilogSinkIndex)
         {
             try
             {
                 var setting = Data.FirstOrDefault(o => o.Key.StartsWith($"{ApplicationConfigurationKeys.SerilogWriteTo}:") && o.Key.EndsWith(":Name") && o.Value == sinkName);
 
-                return setting.Key.Replace($"{ApplicationConfigurationKeys.SerilogWriteTo}:", "").Replace(":Name", "");
+                serilogSinkIndex = setting.Key.Replace($"{ApplicationConfigurationKeys.SerilogWriteTo}:", "").Replace(":Name", "");
+                
+                return true;
             }
             catch (Exception)
             {
-                return null;
+                serilogSinkIndex = null;
             }
+
+            return false;
         }
     }
 

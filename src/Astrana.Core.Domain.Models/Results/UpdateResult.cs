@@ -11,7 +11,7 @@ namespace Astrana.Core.Domain.Models.Results
 {
     public class UpdateResult : IUpdateResult
     {
-        public UpdateResult(ResultOutcome outcome, long resultCount = 0, string message = "", string? resultCode = null)
+        public UpdateResult(ResultOutcome outcome, long resultCount = 0, string? message = "", string? resultCode = null)
         {
             Outcome = outcome;
             Count = resultCount;
@@ -23,7 +23,7 @@ namespace Astrana.Core.Domain.Models.Results
 
         public long Count { get; set; }
 
-        public string Message { get; set; }
+        public string? Message { get; set; }
 
         public string? ResultCode { get; set; }
 
@@ -32,7 +32,7 @@ namespace Astrana.Core.Domain.Models.Results
 
     public class UpdateResult<TData> : UpdateResult, IUpdateResult<TData>
     {
-        public UpdateResult(ResultOutcome outcome, TData resultData, long resultCount = 0, string message = "", string? resultCode = null): base(outcome, resultCount, message, resultCode)
+        public UpdateResult(ResultOutcome outcome, TData resultData, long resultCount = 0, string? message = "", string? resultCode = null): base(outcome, resultCount, message, resultCode)
         {
             Data = resultData;
         }
@@ -42,21 +42,21 @@ namespace Astrana.Core.Domain.Models.Results
 
     public class UpdateSuccessResult : UpdateResult
     {
-        public UpdateSuccessResult(long resultCount = 0, string message = "", string? resultCode = null) : base(ResultOutcome.Success, resultCount, message, resultCode) { }
+        public UpdateSuccessResult(long resultCount = 0, string? message = "", string? resultCode = null) : base(ResultOutcome.Success, resultCount, message, resultCode) { }
     }
 
     public class UpdateSuccessResult<TData> : UpdateResult<TData>
     {
-        public UpdateSuccessResult(TData resultData, long resultCount = 0, string message = "", string? resultCode = null) : base(ResultOutcome.Success, resultData, resultCount, message, resultCode) { }
+        public UpdateSuccessResult(TData? resultData, long resultCount = 0, string? message = "", string? resultCode = null) : base(ResultOutcome.Success, resultData, resultCount, message, resultCode) { }
     }
 
     public class UpdateFailResult : UpdateResult
     {
-        public UpdateFailResult(long resultCount = 0, string message = "", string? resultCode = null) : base(ResultOutcome.Success, resultCount, message, resultCode) { }
+        public UpdateFailResult(long resultCount = 0, string? message = "", string? resultCode = null) : base(ResultOutcome.Success, resultCount, message, resultCode) { }
     }
 
     public class UpdateFailResult<TData> : UpdateResult<TData>
     {
-        public UpdateFailResult(TData resultData, long resultCount = 0, string message = "", string? resultCode = null) : base(ResultOutcome.Success, resultData, resultCount, message, resultCode) { }
+        public UpdateFailResult(TData? resultData, long resultCount = 0, string? message = "", string? resultCode = null) : base(ResultOutcome.Success, resultData, resultCount, message, resultCode) { }
     }
 }

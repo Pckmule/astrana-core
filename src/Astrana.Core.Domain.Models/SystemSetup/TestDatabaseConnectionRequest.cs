@@ -4,16 +4,16 @@
 * file, You can obtain one at https://mozilla.org/MPL/2.0/.
 */
 
-using Astrana.Core.Domain.Models.System.Constants;
-using Astrana.Core.Enums;
-using Astrana.Core.Validation;
-using Astrana.Core.Validation.Attributes;
-using System.ComponentModel.DataAnnotations;
 using Astrana.Core.Domain.Models.SystemSetup.Constants;
+using Astrana.Core.Enums;
+using Astrana.Core.Framework.Domain;
+using Astrana.Core.Framework.Model.Validation;
+using Astrana.Core.Framework.Model.Validation.Attributes;
+using System.ComponentModel.DataAnnotations;
 
 namespace Astrana.Core.Domain.Models.SystemSetup
 {
-    public class TestDatabaseConnectionRequest : BaseDomainModel, ITestDatabaseConnectionRequest
+    public class TestDatabaseConnectionRequest : DomainEntity, ITestDatabaseConnectionRequest
     {
         [RequiredEnum]
         public DatabaseProvider DatabaseProvider { get; set; }

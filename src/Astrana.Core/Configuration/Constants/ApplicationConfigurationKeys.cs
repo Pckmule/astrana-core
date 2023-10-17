@@ -11,6 +11,8 @@ namespace Astrana.Core.Configuration.Constants
     [ExcludeFromCodeCoverage]
     public static class ApplicationConfigurationKeys
     {
+        public const string SetupMode = "SetupMode";
+
         public const string DatabaseProvider = "DatabaseProvider";
 
         public const string ConnectionStringsMsSqlServer = "ConnectionStrings:MSSqlServer";

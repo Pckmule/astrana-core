@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Astrana.Core.Domain.Framework\Astrana.Core.Framework.csproj" />
+    <ProjectReference Include="..\Astrana.Core.Domain.Models\Astrana.Core.Domain.Models.csproj" />
+  </ItemGroup>
+
+</Project>

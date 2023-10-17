@@ -14,8 +14,11 @@ using DomainModelProperties = Astrana.Core.Domain.Models.Images.Constants.ModelP
 namespace Astrana.Core.Data.Entities.Content
 {
     [Table("Images", Schema = SchemaNames.Content)]
-    public class Image : BaseDeactivatableEntity<Guid, Guid>
+    public class Image
     {
+        [Key, Column(Order = 0)]
+        public Guid ImageId { get; set; }
+
         [Required]
         [MinLength(DomainModelProperties.Image.MinimumLocationLength)]
         [MaxLength(DomainModelProperties.Image.MaximumLocationLength)]
@@ -31,5 +34,27 @@ namespace Astrana.Core.Data.Entities.Content
         [MaxLength(DomainModelProperties.Image.MaximumCopyrightLength)]
         [Column(Order = 3)]
         public string Copyright { get; set; }
+
+
+        [Column(Order = 99993)]
+        public DateTimeOffset? DeactivatedTimestamp { get; set; }
+
+        [Column(Order = 99994)]
+        public string? DeactivatedReason { get; set; } = null;
+
+        [Column(Order = 99995)]
+        public Guid? DeactivatedBy { get; set; }
+
+        [Required, Column(Order = 99996)]
+        public Guid CreatedBy { get; set; }
+
+        [Required, Column(Order = 99997)]
+        public Guid LastModifiedBy { get; set; }
+
+        [Required, Column(Order = 99998)]
+        public DateTimeOffset CreatedTimestamp { get; set; } = DateTimeOffset.UtcNow;
+
+        [Required, Column(Order = 99999)]
+        public DateTimeOffset LastModifiedTimestamp { get; set; } = DateTimeOffset.UtcNow;
     }
 }

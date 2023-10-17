@@ -21,11 +21,27 @@ namespace Astrana.Core.ModelMapper
             Mapper = Configuration.CreateMapper();
         }
 
+        /// <summary>
+        /// Maps a lists of models to a list other models.
+        /// </summary>
+        /// <typeparam name="TNewModel"></typeparam>
+        /// <typeparam name="TCurrentModel"></typeparam>
+        /// <param name="currentModels"></param>
+        /// <returns></returns>
         public IEnumerable<TNewModel> MapModels<TNewModel, TCurrentModel>(IEnumerable<TCurrentModel> currentModels) where TNewModel : class where TCurrentModel : class
         {
             return currentModels.Select(model => Mapper.Map<TCurrentModel, TNewModel>(model)).ToList();
         }
 
+        /// <summary>
+        /// Maps one class model to another.
+        /// </summary>
+        /// <typeparam name="TNewModel"></typeparam>
+        /// <typeparam name="TCurrentModel"></typeparam>
+        /// <param name="currentModel"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ModelMappingException"></exception>
         public TNewModel MapModel<TNewModel, TCurrentModel>(TCurrentModel currentModel) where TNewModel : class where TCurrentModel : class
         {
             if (currentModel == null)

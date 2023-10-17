@@ -5,12 +5,19 @@
 
 #See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
-FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+# Switch to the configuration directory
+WORKDIR /etc
+
+# Copy the configuration files
+COPY /config/.astrana /etc/astrana/
+COPY /config/ssl-certificate/* /etc/astrana/ssl/
+
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
 COPY ["src/Astrana.Core.Application/Astrana.Core.Application.csproj", "src/Astrana.Core.Application/"]
 RUN dotnet restore "src/Astrana.Core.Application/Astrana.Core.Application.csproj"

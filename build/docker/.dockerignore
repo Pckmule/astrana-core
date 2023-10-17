@@ -1,0 +1,12 @@
+/*.exe
+/*.pdb
+/*.Development.json
+
+/src
+/runtimes
+
+# Ignore unnecessary files inside allowed directories
+**/*~
+**/*.log
+**/.DS_Store
+**/Thumbs.db

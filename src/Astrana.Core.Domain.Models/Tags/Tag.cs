@@ -4,15 +4,16 @@
 * file, You can obtain one at https://mozilla.org/MPL/2.0/.
 */
 
-using Astrana.Core.Domain.Models.System.Contracts;
 using Astrana.Core.Domain.Models.Tags.Constants;
 using Astrana.Core.Domain.Models.Tags.Contracts;
-using Astrana.Core.Validation;
+using Astrana.Core.Framework.Domain;
+using Astrana.Core.Framework.Model;
+using Astrana.Core.Framework.Model.Validation;
 using System.ComponentModel.DataAnnotations;
 
 namespace Astrana.Core.Domain.Models.Tags
 {
-    public sealed class Tag : BaseDomainModel, ITag, IEditableEntity<Guid>, IAuditable<Guid>, IDeactivatable<Guid>
+    public sealed class Tag : DomainEntity, ITag, IAuditable<Guid>, IDeactivatable<Guid>
     {
         public Tag()
         {
@@ -22,7 +23,7 @@ namespace Astrana.Core.Domain.Models.Tags
         }
 
         [Required]
-        public Guid Id { get; set; }
+        public Guid TagId { get; set; }
 
         [Required]
         [MinLength(ModelProperties.Tag.MinimumTextLength)]

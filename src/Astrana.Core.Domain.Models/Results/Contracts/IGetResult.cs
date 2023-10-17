@@ -27,5 +27,7 @@ namespace Astrana.Core.Domain.Models.Results.Contracts
         int LastPage { get; }
 
         string Message { get; }
+
+        bool HasData { get; }
     }
 }

@@ -21,27 +21,27 @@ namespace Astrana.Core.Domain.Models.AstranaApi.Responses
         }
 
         [DataMember(EmitDefaultValue = false, IsRequired = false, Order = 0)]
-        public long? ResultSetCount { get; set; }
+        public long? ResultSetCount { get; set; } = 0;
 
         [DataMember(EmitDefaultValue = false, IsRequired = false, Order = 1)]
-        public long? ResultCount { get; set; }
+        public long? ResultCount { get; set; } = 0;
 
         [DataMember(EmitDefaultValue = false, IsRequired = false, Order = 2)]
-        public long? PageSize { get; set; }
+        public long? PageSize { get; set; } = 10;
 
         [DataMember(EmitDefaultValue = false, IsRequired = false, Order = 3)]
-        public long? PageCount { get; set; }
+        public long? PageCount { get; set; } = 0;
 
         [DataMember(EmitDefaultValue = false, IsRequired = false, Order = 4)]
-        public long? CurrentPage { get; set; }
+        public long? CurrentPage { get; set; } = 1;
 
         [DataMember(EmitDefaultValue = false, IsRequired = false, Order = 5)]
-        public string NextPage { get; set; }
+        public string? NextPage { get; set; }
 
         [DataMember(EmitDefaultValue = false, IsRequired = false, Order = 6)]
-        public string PreviousPage { get; set; }
+        public string? PreviousPage { get; set; }
 
         [DataMember(EmitDefaultValue = false, IsRequired = false, Order = 7)]
-        public string LastPage { get; set; }
+        public string? LastPage { get; set; }
     }
 }

@@ -4,6 +4,7 @@
 * file, You can obtain one at https://mozilla.org/MPL/2.0/.
 */
 
+using Astrana.Core.Domain.Models.Attachments.Enums;
 using Astrana.Core.Domain.Models.Tags.Enums;
 
 namespace Astrana.Core.Domain.Models.Posts.Options
@@ -13,5 +14,7 @@ namespace Astrana.Core.Domain.Models.Posts.Options
         List<string> Tags { get; set; }
 
         TagFilterMode TagsFilterMode { get; set; }
+
+        List<AttachmentType>? AttachmentTypes { get; set; }
     }
 }

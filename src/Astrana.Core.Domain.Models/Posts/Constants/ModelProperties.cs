@@ -16,10 +16,10 @@ namespace Astrana.Core.Domain.Models.Posts.Constants
             public static readonly string NameSingularForm = nameof(Post).SplitOnUpperCase();
             public static readonly string NamePluralForm = $"{nameof(Post)}s".SplitOnUpperCase();
 
-            public const int IdMinLength = 1;
+            public const int IdMinLength = 0;
             public const int IdMaxLength = int.MaxValue;
 
-            public const int MinimumTextLength = 1;
+            public const int MinimumTextLength = 0;
             public const int MaximumTextLength = 1000;
         }
 
@@ -28,6 +28,9 @@ namespace Astrana.Core.Domain.Models.Posts.Constants
             public static readonly string NameUnique = nameof(PostAttachment).SplitOnUpperCase();
             public static readonly string NameSingularForm = nameof(PostAttachment).SplitOnUpperCase();
             public static readonly string NamePluralForm = $"{nameof(PostAttachment)}s".SplitOnUpperCase();
+
+            public const int MinimumContentIdLength = 1;
+            public const int MaximumContentIdLength = 100;
 
             public const int MinimumAddressLength = 1;
             public const int MaximumAddressLength = 2000;

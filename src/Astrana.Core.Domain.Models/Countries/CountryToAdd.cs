@@ -7,12 +7,13 @@
 using Astrana.Core.Domain.Models.Countries.Constants;
 using Astrana.Core.Domain.Models.Countries.Contracts;
 using Astrana.Core.Domain.Models.Languages;
-using Astrana.Core.Validation;
 using System.ComponentModel.DataAnnotations;
+using Astrana.Core.Framework.Domain;
+using Astrana.Core.Framework.Model.Validation;
 
 namespace Astrana.Core.Domain.Models.Countries
 {
-    public class CountryToAdd : BaseDomainModel, ICountryToAdd
+    public class CountryToAdd : DomainEntity, ICountryToAdd
     {
         public CountryToAdd()
         {
@@ -26,6 +27,7 @@ namespace Astrana.Core.Domain.Models.Countries
         [MaxLength(ModelProperties.Country.MaximumNameLength)]
         public string Name { get; set; }
 
+        [Required]
         [MinLength(ModelProperties.Country.MinimumNameTrxCodeLength)]
         [MaxLength(ModelProperties.Country.MaximumNameTrxCodeLength)]
         public string NameTrxCode { get; set; }

@@ -6,16 +6,16 @@
 
 using Astrana.Core.Attributes;
 using Astrana.Core.Constants;
-using Astrana.Core.Domain.Models.System.Constants;
-using Astrana.Core.Domain.Models.UserProfiles.Enums;
-using Astrana.Core.Validation;
-using Astrana.Core.Validation.Attributes;
-using System.ComponentModel.DataAnnotations;
 using Astrana.Core.Domain.Models.SystemSetup.Constants;
+using Astrana.Core.Domain.Models.UserProfiles.Enums;
+using Astrana.Core.Framework.Domain;
+using Astrana.Core.Framework.Model.Validation;
+using Astrana.Core.Framework.Model.Validation.Attributes;
+using System.ComponentModel.DataAnnotations;
 
 namespace Astrana.Core.Domain.Models.SystemSetup
 {
-    public class InstanceSetupRequest : BaseDomainModel, IInstanceSetupRequest
+    public class InstanceSetupRequest : DomainEntity, IInstanceSetupRequest
     {
         [Required]
         [MinLength(ApplicationUser.MinimumUsernameLength)]
@@ -54,7 +54,7 @@ namespace Astrana.Core.Domain.Models.SystemSetup
         public DateTimeOffset InstanceUserDateOfBirth { get; set; }
 
         [RequiredEnum]
-        public Gender InstanceUserGender { get; set; }
+        public Sex InstanceUserSex { get; set; }
 
         [Required]
         [MinLength(ModelProperties.InstanceSetupRequest.MinimumPhoneCountryCodeISOLength)]

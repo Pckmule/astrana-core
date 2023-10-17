@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32526.322
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Astrana.Core.Application", "src\Astrana.Core.Application\Astrana.Core.Application.csproj", "{01FE7D90-62FD-4E2A-8013-EE3212C2B42A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Astrana", "src\Astrana.Core.Application\Astrana.csproj", "{01FE7D90-62FD-4E2A-8013-EE3212C2B42A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{6FB09B8E-5883-4D64-A146-54601D0DCAFC}"
 EndProject
@@ -65,6 +65,19 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{480475B4-1F7F-49D8-B3A0-482B234AB53D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Astrana.Tools", "tools\Astrana.Tools\Astrana.Tools.csproj", "{20049D6C-0E6E-41F1-AB1E-C6C0CBF1D240}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docker", "docker", "{CAF653E1-E08E-4C42-9DFD-E4A13708DAEE}"
+	ProjectSection(SolutionItems) = preProject
+		build\docker\.dockerignore = build\docker\.dockerignore
+		build\docker\build-image.ps1 = build\docker\build-image.ps1
+		build\docker\Dockerfile = build\docker\Dockerfile
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "webserver", "webserver", "{FB4E43D1-287F-44E4-9816-7EBB1D761ED3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Astrana.Infrastructure", "src\Astrana.Infrastructure\Astrana.Infrastructure.csproj", "{E33CBAD4-5E54-489D-9B5E-EDDEB1E0EA0C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Astrana.Core.Framework", "src\Astrana.Core.Domain.Framework\Astrana.Core.Framework.csproj", "{AABBE1CD-34BA-402E-81D4-C995CE1D278A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -144,6 +157,14 @@ Global
 		{20049D6C-0E6E-41F1-AB1E-C6C0CBF1D240}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{20049D6C-0E6E-41F1-AB1E-C6C0CBF1D240}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{20049D6C-0E6E-41F1-AB1E-C6C0CBF1D240}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E33CBAD4-5E54-489D-9B5E-EDDEB1E0EA0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E33CBAD4-5E54-489D-9B5E-EDDEB1E0EA0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E33CBAD4-5E54-489D-9B5E-EDDEB1E0EA0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E33CBAD4-5E54-489D-9B5E-EDDEB1E0EA0C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AABBE1CD-34BA-402E-81D4-C995CE1D278A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AABBE1CD-34BA-402E-81D4-C995CE1D278A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AABBE1CD-34BA-402E-81D4-C995CE1D278A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AABBE1CD-34BA-402E-81D4-C995CE1D278A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -168,6 +189,9 @@ Global
 		{360CBAD4-919F-4EFE-B04A-320CA837A68D} = {68B8FD5D-2D11-41FE-BA42-CC9B33AD164F}
 		{8ABE3587-3BB8-4276-9E25-BF18E2625B7C} = {6FB09B8E-5883-4D64-A146-54601D0DCAFC}
 		{20049D6C-0E6E-41F1-AB1E-C6C0CBF1D240} = {480475B4-1F7F-49D8-B3A0-482B234AB53D}
+		{CAF653E1-E08E-4C42-9DFD-E4A13708DAEE} = {68B8FD5D-2D11-41FE-BA42-CC9B33AD164F}
+		{FB4E43D1-287F-44E4-9816-7EBB1D761ED3} = {68B8FD5D-2D11-41FE-BA42-CC9B33AD164F}
+		{AABBE1CD-34BA-402E-81D4-C995CE1D278A} = {6FB09B8E-5883-4D64-A146-54601D0DCAFC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F4DBE3E0-7395-4D6D-ABD2-FB802F2B575C}

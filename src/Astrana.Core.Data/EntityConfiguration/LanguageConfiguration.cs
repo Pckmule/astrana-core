@@ -17,6 +17,7 @@ namespace Astrana.Core.Data.EntityConfiguration
             {
                 Name = Internationalization.DefaultLanguageName,
                 NameTrxCode = Internationalization.DefaultLanguageNameTrxCode,
+                Code = Internationalization.DefaultLanguageTwoLetterCode,
                 TwoLetterCode = Internationalization.DefaultLanguageTwoLetterCode,
                 ThreeLetterCode = Internationalization.DefaultLanguageThreeLetterCode,
                 Direction = Internationalization.DefaultLanguageDirection
@@ -24,8 +25,19 @@ namespace Astrana.Core.Data.EntityConfiguration
 
             _settingsToSeed.Add(new DM.Language
             {
+                Name = "Afrikaans",
+                NameTrxCode = "language_name_af",
+                Code = "af",
+                TwoLetterCode = "af",
+                ThreeLetterCode = "afr",
+                Direction = LanguageDirection.Ltr
+            });
+
+            _settingsToSeed.Add(new DM.Language
+            {
                 Name = "French",
                 NameTrxCode = "language_name_fr",
+                Code = "fr",
                 TwoLetterCode = "fr",
                 ThreeLetterCode = "fra",
                 Direction = LanguageDirection.Ltr
@@ -35,6 +47,7 @@ namespace Astrana.Core.Data.EntityConfiguration
             {
                 Name = "Chinese",
                 NameTrxCode = "language_name_zh",
+                Code = "zh",
                 TwoLetterCode = "zh",
                 ThreeLetterCode = "zho",
                 Direction = LanguageDirection.Ltr
@@ -44,6 +57,7 @@ namespace Astrana.Core.Data.EntityConfiguration
             {
                 Name = "Hebrew",
                 NameTrxCode = "language_name_he",
+                Code = "he",
                 TwoLetterCode = "he",
                 ThreeLetterCode = "heb",
                 Direction = LanguageDirection.Rtl
@@ -53,6 +67,7 @@ namespace Astrana.Core.Data.EntityConfiguration
             {
                 Name = "Hindi",
                 NameTrxCode = "language_name_hi",
+                Code = "hi",
                 TwoLetterCode = "hi",
                 ThreeLetterCode = "hin",
                 Direction = LanguageDirection.Ltr
@@ -62,6 +77,7 @@ namespace Astrana.Core.Data.EntityConfiguration
             {
                 Name = "Russian",
                 NameTrxCode = "language_name_ru",
+                Code = "ru",
                 TwoLetterCode = "ru",
                 ThreeLetterCode = "rus",
                 Direction = LanguageDirection.Ltr
@@ -71,15 +87,28 @@ namespace Astrana.Core.Data.EntityConfiguration
             {
                 Name = "Spanish",
                 NameTrxCode = "language_name_es",
+                Code = "es",
                 TwoLetterCode = "es",
                 ThreeLetterCode = "esp",
                 Direction = LanguageDirection.Ltr
             });
+
+            _settingsToSeed.Add(new DM.Language
+            {
+                Name = "Zulu",
+                NameTrxCode = "language_name_zu",
+                Code = "zu",
+                TwoLetterCode = "zu",
+                ThreeLetterCode = "zul",
+                Direction = LanguageDirection.Ltr
+            });
+
         }
 
         public void Configure(EntityTypeBuilder<Language> entityTypeBuilder)
         {
             entityTypeBuilder.HasIndex(p => p.NameTrxCode).IsUnique();
+            entityTypeBuilder.HasIndex(p => p.Code).IsUnique();
             entityTypeBuilder.HasIndex(p => p.TwoLetterCode).IsUnique();
             entityTypeBuilder.HasIndex(p => p.ThreeLetterCode).IsUnique();
 
@@ -94,13 +123,13 @@ namespace Astrana.Core.Data.EntityConfiguration
             var now = DateTime.UtcNow;
             var systemId = Guid.Parse(SystemUser.Id);
 
-            var i = 1;
             return _settingsToSeed.Select(s => new Language
             {
                 Id = Guid.NewGuid(),
                 Name = s.Name,
                 NameTrxCode = s.NameTrxCode,
                 Direction = s.Direction,
+                Code = s.Code,
                 TwoLetterCode = s.TwoLetterCode,
                 ThreeLetterCode = s.ThreeLetterCode,
                 CreatedBy = systemId,

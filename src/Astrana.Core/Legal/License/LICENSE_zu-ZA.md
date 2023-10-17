@@ -1,0 +1,9 @@
+﻿# Ilayisensi ye-Astrana
+
+Leli yifayela lelayisense le-Astrana.
+
+I-Lorem Ipsum imane iwumbhalo oyidumi wemboni yokunyathelisa nokuhlela izinhlobo. I-Lorem Ipsum ibiwumbhalo ojwayelekile wemboni kusukela ngeminyaka yawo-1500s, lapho iphrinta engaziwa ithatha igalaji yohlobo futhi yayifaka ikhodi ukuze yenze isampula yohlobo lwebhuku. Ayisindanga nje kuphela emakhulwini amahlanu eminyaka, kodwa futhi nokugxumela ekuhleleni izinhlobo ze-electronic, ihlale ingashintshile. Yaduma ngeminyaka yawo-1960s ngokukhishwa kwamashidi eLetraset aqukethe izindinyana ze-Lorem Ipsum, futhi muva nje ngesoftware yokushicilela yedeskithophu efana ne-Aldus PageMaker, ehlanganisa izinguqulo ze-Lorem Ipsum.
+
+Ngokuphambene nenkolelo evamile, i-Lorem Ipsum akuwona nje umbhalo ongahleliwe. Inezimpande zayo ocezwini lwezincwadi zesiLatini zakudala kusukela ngo-45 B.C. C., ngakho-ke ineminyaka engaphezu kuka-2000 ubudala. URichard McClintock, uprofesa wesiLatini e-Hampden-Sydney College eVirginia, wabheka elinye lamagama esiLatini angacacile, elithi consectetur, endimeni evela ku-Lorem Ipsum, futhi ngokubukeza izingcaphuno zaleli gama ezincwadini zakudala, wathola umthombo ongangabazeki. . I-Lorem Ipsum ivela ezigabeni 1.10.32 kanye no-1.10.33 ze-Cicero ethi "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil), eyabhalwa ngo-45 BC. Le ncwadi iyincwadi ephathelene nethiyori yezimiso zokuziphatha, edume kakhulu ngesikhathi seRenaissance. Umugqa wokuqala we-Lorem Ipsum, "Lorem ipsum dolor sit amet..", uphuma emgqeni osesigabeni 1.10.32.
+
+Ucezu olujwayelekile lwe-Lorem Ipsum olusetshenziswe kusukela ngekhulu le-16 luphinde lwakhiqizwa ngezansi kulabo abanentshisekelo. Izigaba 1.10.32 kanye no-1.10.33 ze-"de Finibus Bonorum et Malorum" ka-Cicero nazo zenziwe kabusha ngendlela yazo yangempela, ziphelezelwa izinguqulo zesiNgisi zokuhumusha kuka-H. Rackham ngo-1914.

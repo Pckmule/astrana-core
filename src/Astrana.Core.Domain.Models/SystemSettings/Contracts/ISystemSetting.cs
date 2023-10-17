@@ -10,9 +10,11 @@ namespace Astrana.Core.Domain.Models.SystemSettings.Contracts
 {
     public interface ISystemSetting
     {
-        Guid Id { get; set; }
+        Guid SystemSettingId { get; set; }
 
         string Name { get; set; }
+
+        string NameTrxCode { get; set; }
 
         SystemDataType DataType { get; set; }
 
@@ -21,6 +23,8 @@ namespace Astrana.Core.Domain.Models.SystemSettings.Contracts
         string? Value { get; set; }
 
         string? ShortDescription { get; set; }
+
+        string? ShortDescriptionTrxCode { get; set; }
 
         string? HelpText { get; set; }
 

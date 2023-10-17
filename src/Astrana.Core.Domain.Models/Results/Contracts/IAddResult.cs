@@ -14,7 +14,7 @@ namespace Astrana.Core.Domain.Models.Results.Contracts
 
         long Count { get; set; }
 
-        string Message { get; set; }
+        string? Message { get; set; }
 
         string? ResultCode { get; set; }
 
@@ -24,5 +24,7 @@ namespace Astrana.Core.Domain.Models.Results.Contracts
     public interface IAddResult<TData>: IAddResult
     {
         TData Data { get; set; }
+
+        bool HasData { get; }
     }
 }

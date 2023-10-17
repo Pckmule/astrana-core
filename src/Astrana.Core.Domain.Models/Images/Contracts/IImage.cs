@@ -8,7 +8,7 @@ namespace Astrana.Core.Domain.Models.Images.Contracts
 {
     public interface IImage
     {
-        Guid Id { get; set; }
+        Guid ImageId { get; set; }
 
         string Location { get; set; }
 

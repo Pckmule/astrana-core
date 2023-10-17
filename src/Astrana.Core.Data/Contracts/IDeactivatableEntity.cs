@@ -4,7 +4,7 @@
 * file, You can obtain one at https://mozilla.org/MPL/2.0/.
 */
 
-using Astrana.Core.Domain.Models.System.Contracts;
+using Astrana.Core.Framework.Model;
 
 namespace Astrana.Core.Data.Contracts
 {

@@ -79,19 +79,21 @@ namespace Astrana.Core.Domain.SystemSetup.Queries
             if (string.IsNullOrWhiteSpace(connectionString))
                 return false;
 
+            var decryptedConnectionString = appSettings.SetupMode == null ? EncryptionUtility.DecryptString(connectionString) : connectionString;
+
             ConnectionString connectionStringModel;
             switch (appSettings.DatabaseProvider)
             {
                 case Enums.DatabaseProvider.PostgreSQL:
-                    connectionStringModel = new PostgreSqlConnectionString(EncryptionUtility.DecryptString(connectionString));
+                    connectionStringModel = new PostgreSqlConnectionString(decryptedConnectionString);
                     break;
 
                 case Enums.DatabaseProvider.MySQL:
-                    connectionStringModel = new MySqlConnectionString(EncryptionUtility.DecryptString(connectionString));
+                    connectionStringModel = new MySqlConnectionString(decryptedConnectionString);
                     break;
 
                 case Enums.DatabaseProvider.MSSqlServer:
-                    connectionStringModel = new MsSqlServerConnectionString(EncryptionUtility.DecryptString(connectionString));
+                    connectionStringModel = new MsSqlServerConnectionString(decryptedConnectionString);
                     break;
 
                 default:
@@ -138,12 +140,12 @@ namespace Astrana.Core.Domain.SystemSetup.Queries
         {
             var result = await _systemSettingRepository.GetSystemSettingsAsync(new SystemSettingQueryOptions<Guid, Guid>()
             {
-                Names = new List<string>() { SystemSettingDefinitions.Names.HostName }
+                Names = new List<string> { SystemSettingDefinitions.Names.HostName }
             });
 
             var hostName = result.Data.FirstOrDefault(o => o.Name == SystemSettingDefinitions.Names.HostName)?.ValueOrDefault;
 
-            return string.IsNullOrWhiteSpace(hostName);
+            return !string.IsNullOrWhiteSpace(hostName);
         }
     }
 }

@@ -4,8 +4,9 @@
 * file, You can obtain one at https://mozilla.org/MPL/2.0/.
 */
 
-using System.Reflection;
 using Astrana.Core.Configuration;
+using Astrana.Core.Utilities;
+using System.Reflection;
 
 namespace Astrana.Tools;
 
@@ -18,6 +19,8 @@ public class Program
     private const string CmdId_EncryptAppSettingsFile = "4";
 
     private const string CmdId_GenerateApiIssuerSigningKey = "5";
+
+    private const string CmdId_GenerateEmojiConfigFile = "6";
 
     private static async Task Main(string[] args)
     {
@@ -77,6 +80,27 @@ public class Program
                 }
                     break;
 
+                case CmdId_GenerateEmojiConfigFile:
+                {
+                    //  D:\repos\Astrana\Pckmule\astrana-core\src\Astrana.Core\Emoji\emoji.config.json
+                    Console.WriteLine("Enter path to the config file: ");
+                    var configFilePath = "D:\\repos\\Astrana\\Pckmule\\astrana-core\\src\\Astrana.Core\\Emoji\\emoji.config.json"; //Console.ReadLine();
+
+                    //  D:\repos\Astrana\Pckmule\astrana-core\src\Astrana.Core\Emoji\openmoji.json
+                    Console.WriteLine("Enter path to the source data file: ");
+                    var sourceFilePath = "D:\\repos\\Astrana\\Pckmule\\astrana-core\\src\\Astrana.Core\\Emoji\\openmoji.json"; // Console.ReadLine();
+
+                    var outputDirectoryPath = Path.Join(workingDirectory, "output");
+
+                    Directory.CreateDirectory(Path.Join(workingDirectory, "output"));
+
+                    new GenerateEmojiConfig(configFilePath, sourceFilePath, outputDirectoryPath).Execute();
+
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine("Emoji configuration has been generated.");
+                    Console.ResetColor();
+                }
+                    break;
             }
 
             Console.WriteLine();
@@ -92,8 +116,22 @@ public class Program
         Console.WriteLine($"{CmdId_StoreInitializationVector}. Store Initialization Vector");
         Console.WriteLine($"{CmdId_EncryptAppSettingsFile}. Encrypt the AppSettings.json");
         Console.WriteLine($"{CmdId_GenerateApiIssuerSigningKey}. Generate API Issuer Signing Key");
+        Console.WriteLine($"{CmdId_GenerateEmojiConfigFile}. Generate Emoji Configuration File");
         Console.WriteLine();
 
         return Console.ReadLine();
+    }
+
+
+    public static void Parse()
+    {
+        var data = File.ReadAllLines("D:\\repos\\Astrana\\Pckmule\\astrana-core\\tools\\Astrana.Tools\\temp.txt");
+
+        var list = data.Select(line => line.Split(" ")[0].Trim()).Order().ToList();
+
+        foreach (var line in list)
+        {
+            Console.WriteLine("new(Guid.NewGuid(), \"" + line.ToTitleCase() + "\", \"feeling_name_" + line + "\", \"" + line + "\", \"\", \"\"),");
+        }
     }
 }

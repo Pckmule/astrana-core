@@ -10,6 +10,6 @@ namespace Astrana.Core.Domain.Models.Posts.Contracts
     {
         string Text { get; set; }
 
-        PostAttachmentToAdd? Attachment { get; set; }
+        List<PostAttachmentToAdd> Attachments { get; set; }
     }
 }

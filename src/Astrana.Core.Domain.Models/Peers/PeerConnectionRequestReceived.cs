@@ -8,14 +8,16 @@ using Astrana.Core.Domain.Models.Peers.Constants;
 using Astrana.Core.Domain.Models.Peers.Contracts;
 using Astrana.Core.Domain.Models.Peers.Enums;
 using Astrana.Core.Domain.Models.System.Contracts;
+using Astrana.Core.Framework.Domain;
+using Astrana.Core.Framework.Model.Validation;
+using Astrana.Core.Framework.Model.Validation.Attributes;
 using Astrana.Core.Utilities;
-using Astrana.Core.Validation;
-using Astrana.Core.Validation.Attributes;
 using System.ComponentModel.DataAnnotations;
+using Astrana.Core.Framework.Model;
 
 namespace Astrana.Core.Domain.Models.Peers
 {
-    public class PeerConnectionRequestReceived : BaseDomainModel, IPeerConnectionRequestReceived, IEditableEntity<Guid>, IAuditable<Guid>, IDeactivatable<Guid>
+    public class PeerConnectionRequestReceived : DomainEntity, IPeerConnectionRequestReceived, IAuditable<Guid>, IDeactivatable<Guid>
     {
         private string _address = "";
 
@@ -26,7 +28,7 @@ namespace Astrana.Core.Domain.Models.Peers
             NamePluralForm = ModelProperties.PeerConnectionRequestReceived.NamePluralForm;
         }
 
-        public Guid Id { get; set; }
+        public Guid PeerConnectionRequestReceivedId { get; set; }
 
         /// <summary>
         /// The first name of owner of the Astrana peer instance requesting to connect.

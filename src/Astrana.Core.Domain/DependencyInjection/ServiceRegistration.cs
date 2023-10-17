@@ -20,18 +20,43 @@ namespace Astrana.Core.Domain.DependencyInjection
                 throw new ArgumentNullException(nameof(configuration));
 
             Database.DependencyInjection.Register(services);
+            Files.DependencyInjection.Register(services);
+
             SystemSettings.DependencyInjection.Register(services);
+
             IdentityAccessManagement.DependencyInjection.Register(services);
+
             AstranaApi.DependencyInjection.Register(services);
+            
             Lookups.DependencyInjection.Register(services);
             Languages.DependencyInjection.Register(services);
             Countries.DependencyInjection.Register(services);
+            Feelings.DependencyInjection.Register(services);
+
             UserAccounts.DependencyInjection.Register(services);
+            
             UserProfiles.DependencyInjection.Register(services);
+            ProfilePicture.DependencyInjection.Register(services);
+            ProfileCoverPicture.DependencyInjection.Register(services);
             UserPreferences.DependencyInjection.Register(services);
+            
             SystemSetup.DependencyInjection.Register(services);
+            
             Peers.DependencyInjection.Register(services);
+            Audiences.DependencyInjection.Register(services);
+
+            NewContentWorkflowStages.DependencyInjection.Register(services);
+
+            Files.DependencyInjection.Register(services);
+            Links.DependencyInjection.Register(services);
+            Images.DependencyInjection.Register(services);
+            Videos.DependencyInjection.Register(services);
+            AudioClips.DependencyInjection.Register(services);
+            ContentCollections.DependencyInjection.Register(services);
+            Albums.DependencyInjection.Register(services);
             Posts.DependencyInjection.Register(services);
+            Comments.DependencyInjection.Register(services);
+
             MainFeed.DependencyInjection.Register(services);
 
             return services;

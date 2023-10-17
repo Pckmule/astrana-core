@@ -6,12 +6,13 @@
 
 using Astrana.Core.Domain.Models.Tags.Constants;
 using Astrana.Core.Domain.Models.Tags.Contracts;
-using Astrana.Core.Validation;
 using System.ComponentModel.DataAnnotations;
+using Astrana.Core.Framework.Domain;
+using Astrana.Core.Framework.Model.Validation;
 
 namespace Astrana.Core.Domain.Models.Tags
 {
-    public class TagToAdd : BaseDomainModel, ITagToAdd
+    public class TagToAdd : DomainEntity, ITagToAdd
     {
         public TagToAdd()
         {

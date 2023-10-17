@@ -33,19 +33,25 @@ namespace Astrana.Core.Data.Entities.Configuration
         public string NameTrxCode { get; set; }
 
         [Required]
+        [MinLength(DomainModelProperties.Language.MinimumCodeLength)]
+        [MaxLength(DomainModelProperties.Language.MaximumCodeLength)]
+        [Column(Order = 3)]
+        public string Code { get; set; }
+
+        [Required]
         [MinLength(DomainModelProperties.Language.MinimumTwoLetterCodeLength)]
         [MaxLength(DomainModelProperties.Language.MaximumTwoLetterCodeLength)]
-        [Column(Order = 3)]
+        [Column(Order = 4)]
         public string TwoLetterCode { get; set; }
 
         [Required]
         [MinLength(DomainModelProperties.Language.MinimumThreeLetterCodeLength)]
         [MaxLength(DomainModelProperties.Language.MaximumThreeLetterCodeLength)]
-        [Column(Order = 4)]
+        [Column(Order = 5)]
         public string ThreeLetterCode { get; set; }
 
         [Required]
-        [Column(Order = 5)]
+        [Column(Order = 6)]
         public LanguageDirection Direction { get; set; }
 
         [Required]

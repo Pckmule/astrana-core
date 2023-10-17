@@ -22,8 +22,8 @@ namespace Astrana.Core.Domain.Models.Languages.Constants
             public const int MinimumNameTrxCodeLength = 1;
             public const int MaximumNameTrxCodeLength = 100;
 
-            public const int MinimumLanguageCodeLength = 2;
-            public const int MaximumLanguageCodeLength = 5;
+            public const int MinimumCodeLength = 2;
+            public const int MaximumCodeLength = 5;
 
             public const int MinimumTwoLetterCodeLength = 2;
             public const int MaximumTwoLetterCodeLength = 2;

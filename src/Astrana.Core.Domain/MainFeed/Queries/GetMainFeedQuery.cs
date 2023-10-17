@@ -1,8 +1,8 @@
-﻿using Astrana.Core.Data.Repositories.Posts;
-using Astrana.Core.Domain.Models.MainFeed;
+﻿using Astrana.Core.Domain.Models.MainFeed;
 using Astrana.Core.Domain.Models.MainFeed.Options;
 using Astrana.Core.Domain.Models.Posts.Options;
 using Astrana.Core.Domain.Models.Results;
+using Astrana.Core.Domain.Posts.Repositories;
 using Astrana.Core.Utilities;
 using Microsoft.Extensions.Logging;
 

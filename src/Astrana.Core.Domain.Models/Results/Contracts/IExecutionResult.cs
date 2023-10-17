@@ -12,7 +12,7 @@ namespace Astrana.Core.Domain.Models.Results.Contracts
     {
         ResultOutcome Outcome { get; set; }
 
-        string Message { get; set; }
+        string? Message { get; set; }
 
         string? ResultCode { get; set; }
 

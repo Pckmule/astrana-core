@@ -9,10 +9,8 @@ namespace Astrana.Core.Data
         public static WebApplication MigrateDatabase(this WebApplication webApplication)
         {
             using var scope = webApplication.Services.CreateScope();
-            using (var appContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
-            {
-                appContext.Database.Migrate();
-            }
+            using var appContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            appContext.Database.Migrate();
 
             return webApplication;
         }

@@ -6,12 +6,14 @@
 
 using Astrana.Core.Domain.Models.Posts.Constants;
 using Astrana.Core.Domain.Models.Posts.Contracts;
-using Astrana.Core.Validation;
 using System.ComponentModel.DataAnnotations;
+using Astrana.Core.Framework.Domain;
+using Astrana.Core.Framework.Model.Validation;
+using Astrana.Core.Framework.Model.Validation.Attributes;
 
 namespace Astrana.Core.Domain.Models.Posts
 {
-    public class PostToAdd : BaseDomainModel, IPostToAdd
+    public class PostToAdd : DomainEntity, IPostToAdd
     {
         public PostToAdd()
         {
@@ -20,12 +22,12 @@ namespace Astrana.Core.Domain.Models.Posts
             NamePluralForm = ModelProperties.Post.NamePluralForm;
         }
 
-        [Required]
+        [RequiredOnCondition(nameof(Attachments), Condition.ItemCountLessThan, 1)]
         [MinLength(ModelProperties.Post.MinimumTextLength)]
         [MaxLength(ModelProperties.Post.MaximumTextLength)]
         public string Text { get; set; } = "";
 
-        public PostAttachmentToAdd? Attachment { get; set; }
+        public List<PostAttachmentToAdd> Attachments { get; set; } = new();
 
         public override EntityValidationResult Validate()
         {

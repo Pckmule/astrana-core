@@ -41,6 +41,12 @@ namespace Astrana.Core.Domain.Peers
             services.AddScoped<IGetPeerProfileQuery, GetPeerProfileQuery>();
             services.AddTransient<IGetPeerProfileQuery, GetPeerProfileQuery>();
 
+            services.AddScoped<IGetInstancePeerSummaryQuery, GetInstancePeerSummaryQuery>();
+            services.AddTransient<IGetInstancePeerSummaryQuery, GetInstancePeerSummaryQuery>();
+
+            services.AddScoped<IGetPeerSummaryQuery, GetPeerSummaryQuery>();
+            services.AddTransient<IGetPeerSummaryQuery, GetPeerSummaryQuery>();
+
             return services;
         }
     }

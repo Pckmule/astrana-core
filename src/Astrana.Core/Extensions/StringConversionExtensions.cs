@@ -49,5 +49,10 @@ namespace Astrana.Core.Extensions
 
             return dictionary;
         }
+
+        public static List<string> ToTrimmedList(this string text, char separatorCharacter = ',')
+        {
+            return text.Split(separatorCharacter, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries).ToList();
+        }
     }
 }

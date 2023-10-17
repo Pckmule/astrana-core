@@ -8,7 +8,7 @@ namespace Astrana.Core.Domain.Models.Tags.Contracts
 {
     public interface ITag
     {
-        Guid Id { get; set; }
+        Guid TagId { get; set; }
 
         string Text { get; set; }
     }

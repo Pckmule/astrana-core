@@ -11,7 +11,7 @@ namespace Astrana.Core.Domain.Models.Results
 {
     public class ExecutionResult : IExecutionResult
     {
-        public ExecutionResult(ResultOutcome outcome, string message = "", string? resultCode = null)
+        public ExecutionResult(ResultOutcome outcome, string? message = "", string? resultCode = null)
         {
             Outcome = outcome;
             Message = message;
@@ -20,7 +20,7 @@ namespace Astrana.Core.Domain.Models.Results
 
         public ResultOutcome Outcome { get; set; }
 
-        public string Message { get; set; }
+        public string? Message { get; set; }
 
         public string? ResultCode { get; set; }
 
@@ -29,17 +29,17 @@ namespace Astrana.Core.Domain.Models.Results
 
     public class ExecutionSuccessResult : ExecutionResult
     {
-        public ExecutionSuccessResult(string message = "", string? resultCode = null) : base(ResultOutcome.Success, message, resultCode) { }
+        public ExecutionSuccessResult(string? message = "", string? resultCode = null) : base(ResultOutcome.Success, message, resultCode) { }
     }
 
     public class ExecutionFailResult: ExecutionResult
     {
-        public ExecutionFailResult(string message = "", string? resultCode = null) : base(ResultOutcome.Failure, message, resultCode) { }
+        public ExecutionFailResult(string? message = "", string? resultCode = null) : base(ResultOutcome.Failure, message, resultCode) { }
     }
 
     public class ExecutionResult<TData> : ExecutionResult, IExecutionResult<TData>
     {
-        public ExecutionResult(ResultOutcome outcome, TData queuedData, string message = "", string? resultCode = null) : base(outcome, message, resultCode)
+        public ExecutionResult(ResultOutcome outcome, TData queuedData, string? message = "", string? resultCode = null) : base(outcome, message, resultCode)
         {
             Data = queuedData;
         }
@@ -49,11 +49,11 @@ namespace Astrana.Core.Domain.Models.Results
 
     public class ExecutionSuccessResult<TData> : ExecutionResult<TData>
     {
-        public ExecutionSuccessResult(TData queuedData, string message = "", string? resultCode = null) : base(ResultOutcome.Success, queuedData, message, resultCode) { }
+        public ExecutionSuccessResult(TData queuedData, string? message = "", string? resultCode = null) : base(ResultOutcome.Success, queuedData, message, resultCode) { }
     }
 
     public class ExecutionFailResult<TData> : ExecutionResult<TData>
     {
-        public ExecutionFailResult(TData queuedData, string message = "", string? resultCode = null) : base(ResultOutcome.Failure, queuedData, message, resultCode) { }
+        public ExecutionFailResult(TData queuedData, string? message = "", string? resultCode = null) : base(ResultOutcome.Failure, queuedData, message, resultCode) { }
     }
 }

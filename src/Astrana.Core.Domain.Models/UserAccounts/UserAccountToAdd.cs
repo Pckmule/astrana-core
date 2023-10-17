@@ -7,13 +7,14 @@
 using Astrana.Core.Domain.Models.UserAccounts.Constants;
 using Astrana.Core.Domain.Models.UserAccounts.Contracts;
 using Astrana.Core.Domain.Models.UserAccounts.Enums;
-using Astrana.Core.Validation;
-using Astrana.Core.Validation.Attributes;
+using Astrana.Core.Framework.Domain;
+using Astrana.Core.Framework.Model.Validation;
 using System.ComponentModel.DataAnnotations;
+using Astrana.Core.Framework.Model.Validation.Attributes;
 
 namespace Astrana.Core.Domain.Models.UserAccounts
 {
-    public class UserAccountToAdd : BaseDomainModel, IUserAccountToAdd
+    public class UserAccountToAdd : DomainEntity, IUserAccountToAdd
     {
         public UserAccountToAdd()
         {

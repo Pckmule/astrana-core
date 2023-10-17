@@ -9,8 +9,8 @@ Astrana is built with the following awesome open source projects, frameworks, to
 
 #### Frameworks, Components and Packages
 
-- [.NET Core](https://dotnet.microsoft.com) - <small>Developer Platform</small>
-- [Entity Framework Core](https://github.com/dotnet/efcore) - <small>Object-Database Mapper</small>
+- [.NET Core](https://dotnet.microsoft.com) - <small>Application Development Platform</small>
+- [Entity Framework (EF) Core](https://github.com/dotnet/efcore) - <small>Object-Database Mapper</small>
   - [Npgsql PostgreSQL](https://github.com/npgsql/efcore.pg) - <small>EF Provider</small>
   - [Microsoft SqlServer](https://github.com/dotnet/efcore/tree/main/src/EFCore.SqlServer) - <small>EF Provider</small>
 - [SignalR](https://signalr.net) - <small>Realtime Notifications Library</small>
@@ -18,7 +18,11 @@ Astrana is built with the following awesome open source projects, frameworks, to
 - [Serilog](https://serilog.net) - <small>Diagnostic Logging Library</small>
 - [AutoMapper](https://automapper.org) - <small>Object-Object Mapper</small>
 - [SpecFlow](https://specflow.org) - <small>BDD-Framework</small>
-- [Markdig](https://github.com/xoofx/markdig) - <small>Markdig</small>
+- [Markdig](https://github.com/xoofx/markdig) - <small>Markdown Processor</small>
+- [Bootstrap](https://getbootstrap.com) - <small>Web Frontend/UI Toolkit</small>
+- [Pictogrammers Material Design Icons](https://pictogrammers.com) - <small>Icons & Fonts</small>
+- [Openmoji](https://openmoji.org) - <small>Emoji</small>
+- [SortableJS](https://github.com/SortableJS) - <small>DOM Element Sorting Library</small>
 
 #### Databases
 

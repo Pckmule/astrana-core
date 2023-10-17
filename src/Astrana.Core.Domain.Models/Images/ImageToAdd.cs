@@ -6,12 +6,13 @@
 
 using Astrana.Core.Domain.Models.Images.Constants;
 using Astrana.Core.Domain.Models.Images.Contracts;
-using Astrana.Core.Validation;
 using System.ComponentModel.DataAnnotations;
+using Astrana.Core.Framework.Domain;
+using Astrana.Core.Framework.Model.Validation;
 
 namespace Astrana.Core.Domain.Models.Images
 {
-    public class ImageToAdd : BaseDomainModel, IImageToAdd
+    public class ImageToAdd : DomainEntity, IImageToAdd
     {
         public ImageToAdd()
         {

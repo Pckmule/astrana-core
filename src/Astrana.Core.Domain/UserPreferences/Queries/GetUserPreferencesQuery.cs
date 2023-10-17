@@ -43,7 +43,7 @@ namespace Astrana.Core.Domain.UserPreferences.Queries
 
             var preferences = new Models.Preferences.UserPreferences
             {
-                UserAccountId = userAccount.Id,
+                UserAccountId = userAccount.UserAccountId,
                 Language = new LanguageLite(language),
                 Country = new CountryLite(country)
             };

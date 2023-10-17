@@ -13,8 +13,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Astrana.Core.Data.Entities.Content
 {
     [Table("Videos", Schema = SchemaNames.Content)]
-    public class Video : BaseDeactivatableEntity<Guid, Guid>
+    public class Video
     {
+        [Key, Column(Order = 0)]
+        public Guid VideoId { get; set; }
+
         [Required]
         [Column(Order = 1)]
         public string Location { get; set; }
@@ -27,5 +30,27 @@ namespace Astrana.Core.Data.Entities.Content
         [MaxLength(250)]
         [Column(Order = 3)]
         public string Copyright { get; set; }
+
+
+        [Column(Order = 99993)]
+        public DateTimeOffset? DeactivatedTimestamp { get; set; }
+
+        [Column(Order = 99994)]
+        public string? DeactivatedReason { get; set; } = null;
+
+        [Column(Order = 99995)]
+        public Guid? DeactivatedBy { get; set; }
+
+        [Required, Column(Order = 99996)]
+        public Guid CreatedBy { get; set; }
+
+        [Required, Column(Order = 99997)]
+        public Guid LastModifiedBy { get; set; }
+
+        [Required, Column(Order = 99998)]
+        public DateTimeOffset CreatedTimestamp { get; set; } = DateTimeOffset.UtcNow;
+
+        [Required, Column(Order = 99999)]
+        public DateTimeOffset LastModifiedTimestamp { get; set; } = DateTimeOffset.UtcNow;
     }
 }

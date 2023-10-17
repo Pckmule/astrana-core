@@ -8,7 +8,7 @@ namespace Astrana.Core.Domain.Models.ApiAccessTokens.Contracts
 {
     public interface IApiAccessToken
     {
-        Guid Id { get; set; }
+        Guid ApiAccessTokenId { get; set; }
 
         string Token { get; set; }
     }

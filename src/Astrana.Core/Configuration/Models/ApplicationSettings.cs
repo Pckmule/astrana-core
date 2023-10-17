@@ -14,6 +14,10 @@ namespace Astrana.Core.Configuration.Models
 {
     public class ApplicationSettings
     {
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("SetupMode")]
+        public string SetupMode { get; set; }
+
         [JsonPropertyName("AllowedHosts")]
         public string AllowedHosts { get; set; } = "*";
 
@@ -47,6 +51,7 @@ namespace Astrana.Core.Configuration.Models
             if(applicationSettings == null)
                 throw new ArgumentNullException(nameof(applicationSettings));
 
+            SetupMode = applicationSettings.SetupMode;
             AllowedHosts = applicationSettings.AllowedHosts;
             Logging = new ReadOnlyApplicationLoggingSettings(applicationSettings.Logging);
             Ssl = new ReadOnlySslSettings(applicationSettings.Ssl);
@@ -56,6 +61,9 @@ namespace Astrana.Core.Configuration.Models
             Columns = new ReadOnlyDictionary<string, object>(applicationSettings.Columns);
             Authentication = new ReadOnlyApplicationAuthenticationSettings(applicationSettings.Authentication);
         }
+
+        [JsonPropertyName("SetupMode")]
+        public readonly string? SetupMode;
 
         [JsonPropertyName("AllowedHosts")]
         public readonly string AllowedHosts;

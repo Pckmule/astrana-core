@@ -6,12 +6,15 @@
 
 using Astrana.Core.Domain.Models.Results.Contracts;
 using Astrana.Core.Domain.Models.Results.Enums;
+using Astrana.Core.Framework.Domain;
+using Astrana.Core.Framework.Model;
+using System.Collections;
 
 namespace Astrana.Core.Domain.Models.Results
 {
     public class AddResult : IAddResult
     {
-        public AddResult(ResultOutcome outcome, long resultCount = 0, string message = "", string? resultCode = null)
+        public AddResult(ResultOutcome outcome, long resultCount = 0, string? message = "", string? resultCode = null)
         {
             Outcome = outcome;
             Count = resultCount;
@@ -23,7 +26,7 @@ namespace Astrana.Core.Domain.Models.Results
 
         public long Count { get; set; }
 
-        public string Message { get; set; }
+        public string? Message { get; set; }
 
         public string? ResultCode { get; set; }
 
@@ -32,41 +35,43 @@ namespace Astrana.Core.Domain.Models.Results
 
     public class AddResult<TData> : AddResult, IAddResult<TData>
     {
-        public AddResult(ResultOutcome outcome, TData resultData, long resultCount = 0, string message = "", string? resultCode = null) :base(outcome, resultCount, message, resultCode)
+        public AddResult(ResultOutcome outcome, TData resultData, long resultCount = 0, string? message = "", string? resultCode = null) :base(outcome, resultCount, message, resultCode)
         {
             Data = resultData;
         }
 
         public TData Data { get; set; }
-    }
 
+        public bool HasData => Data != null;
+    }
+    
     public class AddSuccessResult : AddResult
     {
-        public AddSuccessResult(long resultCount = 0, string message = "", string? resultCode = null) : base(ResultOutcome.Success, resultCount, message, resultCode) { }
+        public AddSuccessResult(long resultCount = 0, string? message = "", string? resultCode = null) : base(ResultOutcome.Success, resultCount, message, resultCode) { }
     }
 
     public class AddSuccessResult<TQueuedData> : AddResult<TQueuedData>
     {
-        public AddSuccessResult(TQueuedData resultData, long resultCount = 0, string message = "", string? resultCode = null) : base(ResultOutcome.Success, resultData, resultCount, message, resultCode) { }
+        public AddSuccessResult(TQueuedData resultData, long resultCount = 0, string? message = "", string? resultCode = null) : base(ResultOutcome.Success, resultData, resultCount, message, resultCode) { }
     }
 
     public class AddPartialSuccessResult : AddResult
     {
-        public AddPartialSuccessResult(long resultCount = 0, string message = "", string? resultCode = null) : base(ResultOutcome.PartialSuccess, resultCount, message, resultCode) { }
+        public AddPartialSuccessResult(long resultCount = 0, string? message = "", string? resultCode = null) : base(ResultOutcome.PartialSuccess, resultCount, message, resultCode) { }
     }
 
     public class AddPartialSuccessResult<TQueuedData> : AddResult<TQueuedData>
     {
-        public AddPartialSuccessResult(TQueuedData resultData, long resultCount = 0, string message = "", string? resultCode = null) : base(ResultOutcome.PartialSuccess, resultData, resultCount, message, resultCode) { }
+        public AddPartialSuccessResult(TQueuedData resultData, long resultCount = 0, string? message = "", string? resultCode = null) : base(ResultOutcome.PartialSuccess, resultData, resultCount, message, resultCode) { }
     }
 
     public class AddFailResult : AddResult
     {
-        public AddFailResult(long resultCount = 0, string message = "", string? resultCode = null) : base(ResultOutcome.Failure, resultCount, message, resultCode) { }
+        public AddFailResult(long resultCount = 0, string? message = "", string? resultCode = null) : base(ResultOutcome.Failure, resultCount, message, resultCode) { }
     }
 
     public class AddFailResult<TQueuedData> : AddResult<TQueuedData>
     {
-        public AddFailResult(TQueuedData resultData, long resultCount = 0, string message = "", string? resultCode = null) : base(ResultOutcome.Failure, resultData, resultCount, message, resultCode) { }
+        public AddFailResult(TQueuedData resultData, long resultCount = 0, string? message = "", string? resultCode = null) : base(ResultOutcome.Failure, resultData, resultCount, message, resultCode) { }
     }
 }

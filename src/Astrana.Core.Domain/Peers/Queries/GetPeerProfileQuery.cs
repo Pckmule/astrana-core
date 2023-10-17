@@ -27,7 +27,7 @@ namespace Astrana.Core.Domain.Peers.Queries
             if (peerId.IsEmpty())
                 throw new ArgumentException($"{nameof(peerId)} cannot be empty.");
 
-            var peer = await _peerRepository.GetPeerByIdAsync(peerId);
+            var peer = await _peerRepository.GetPeerByProfileIdAsync(peerId);
 
             if (peer == null)
                 throw new PermissionDeniedException("Not connected to Peer.");

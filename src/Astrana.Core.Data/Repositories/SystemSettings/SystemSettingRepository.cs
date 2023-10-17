@@ -32,11 +32,14 @@ namespace Astrana.Core.Data.Repositories.SystemSettings
         {
             options ??= new SystemSettingQueryOptions<Guid, Guid>();
 
-            var query = ctx.Settings.AsQueryable();
+            var query = databaseSession.Settings.AsQueryable();
 
             // Add Filters
             if (options.Ids.Any())
                 query = query.Where(o => options.Ids.Contains(o.Id));
+
+            if (options.ExcludeIds.Any())
+                query = query.Where(o => !options.ExcludeIds.Contains(o.Id));
 
             if (options.Names.Any())
                 query = query.Where(o => options.Names.Contains(o.Name));
@@ -51,7 +54,7 @@ namespace Astrana.Core.Data.Repositories.SystemSettings
             query = query.OrderByDescending(o => o.CreatedTimestamp);
 
             // Add Paging
-            if (!options.PagingDisabled && options.PageSize.HasValue && options.CurrentPage.HasValue)
+            if (options is { PagingDisabled: false, PageSize: { }, CurrentPage: { } })
                 query = query.Skip(options.PageSize.Value * (options.CurrentPage.Value - 1)).Take(options.PageSize.Value);
 
             return query;
@@ -130,7 +133,7 @@ namespace Astrana.Core.Data.Repositories.SystemSettings
 
                 foreach (var update in requestedUpdates)
                 {
-                    var existingSystemSettingEntity = await ctx.Settings.FirstOrDefaultAsync(o => o.Id == update.Id);
+                    var existingSystemSettingEntity = await databaseSession.Settings.FirstOrDefaultAsync(o => o.Id == update.SystemSettingId);
 
                     if (existingSystemSettingEntity == null)
                         continue;
@@ -144,9 +147,9 @@ namespace Astrana.Core.Data.Repositories.SystemSettings
                     existingSystemSettingEntity.LastModifiedTimestamp = now;
 
                     // Save changes to records.
-                    ctx.Settings.Update(existingSystemSettingEntity);
+                    databaseSession.Settings.Update(existingSystemSettingEntity);
 
-                    await ctx.SaveChangesAsync();
+                    await databaseSession.SaveChangesAsync();
 
                     countUpdated++;
 

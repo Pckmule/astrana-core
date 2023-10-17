@@ -10,7 +10,7 @@ namespace Astrana.Core.Domain.Models.Peers.Contracts
 {
     public interface IPeerConnectionRequestReceived
     {
-        Guid Id { get; set; }
+        Guid PeerConnectionRequestReceivedId { get; set; }
 
         string FirstName { get; set; }
 

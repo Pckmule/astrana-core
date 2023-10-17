@@ -10,15 +10,20 @@ using Astrana.Core.Data.Entities.Content;
 using Astrana.Core.Data.Entities.Identity;
 using Astrana.Core.Data.Entities.Peers;
 using Astrana.Core.Data.Entities.User;
+using Astrana.Core.Domain.Models.ContentCollections.Contracts;
 using Astrana.Core.Domain.Models.ApiAccessTokens.Contracts;
 using Astrana.Core.Domain.Models.Countries.Contracts;
+using Astrana.Core.Domain.Models.Feelings.Contracts;
+using Astrana.Core.Domain.Models.Images.Contracts;
 using Astrana.Core.Domain.Models.Languages.Contracts;
+using Astrana.Core.Domain.Models.Links.Contracts;
 using Astrana.Core.Domain.Models.Peers.Contracts;
 using Astrana.Core.Domain.Models.Posts.Contracts;
 using Astrana.Core.Domain.Models.SystemSettings.Contracts;
 using Astrana.Core.Domain.Models.Tags.Contracts;
 using Astrana.Core.Domain.Models.UserAccounts.Contracts;
 using Astrana.Core.Domain.Models.UserProfiles.Contracts;
+using Astrana.Core.Domain.Models.Videos.Contracts;
 using AutoMapper;
 using DomainModels = Astrana.Core.Domain.Models;
 
@@ -44,7 +49,16 @@ namespace Astrana.Core.Data
                 
                 cfg.CreateMap<DomainModels.SystemSettings.SystemSetting, ISystemSetting>();
                 cfg.CreateMap<ISystemSetting, DomainModels.SystemSettings.SystemSetting>();
-                
+
+                cfg.CreateMap<DomainModels.SystemSettings.SystemSettingCategory, SystemSettingCategory>();
+                cfg.CreateMap<SystemSettingCategory, DomainModels.SystemSettings.SystemSettingCategory>();
+
+                cfg.CreateMap<ISystemSettingCategory, SystemSettingCategory>();
+                cfg.CreateMap<SystemSettingCategory, ISystemSettingCategory>();
+
+                cfg.CreateMap<DomainModels.SystemSettings.SystemSettingCategory, ISystemSettingCategory>();
+                cfg.CreateMap<ISystemSettingCategory, DomainModels.SystemSettings.SystemSettingCategory>();
+
                 // ### Languages ###
 
                 cfg.CreateMap<DomainModels.Languages.Language, Language>();
@@ -136,6 +150,63 @@ namespace Astrana.Core.Data
                 cfg.CreateMap<IUserProfileToAdd, UserProfile>();
                 cfg.CreateMap<UserProfile, IUserProfileToAdd>();
 
+                // ### User Profile Details ###
+
+                cfg.CreateMap<DomainModels.UserProfiles.UserProfileDetail, UserProfileDetail>();
+                cfg.CreateMap<UserProfileDetail, DomainModels.UserProfiles.UserProfileDetail>();
+
+                cfg.CreateMap<DomainModels.UserProfiles.UserProfileDetail, IUserProfileDetail>();
+                cfg.CreateMap<IUserProfileDetail, DomainModels.UserProfiles.UserProfileDetail>();
+
+                cfg.CreateMap<DomainModels.UserProfiles.UserProfileDetailToAdd, IUserProfileDetailToAdd>();
+                cfg.CreateMap<IUserProfileDetailToAdd, DomainModels.UserProfiles.UserProfileDetailToAdd>();
+
+                cfg.CreateMap<IUserProfileDetail, UserProfileDetail>();
+                cfg.CreateMap<UserProfileDetail, IUserProfileDetail>();
+
+                cfg.CreateMap<IUserProfileDetailToAdd, UserProfileDetail>();
+                cfg.CreateMap<UserProfileDetail, IUserProfileDetailToAdd>();
+
+                // ### Images ###
+
+                cfg.CreateMap<DomainModels.Images.Image, Image>();
+                cfg.CreateMap<Image, DomainModels.Images.Image>();
+
+                cfg.CreateMap<DomainModels.Images.Image, IImage>();
+                cfg.CreateMap<IImage, DomainModels.Images.Image>();
+
+                cfg.CreateMap<DomainModels.Images.ImageToAdd, IImageToAdd>();
+                cfg.CreateMap<IImageToAdd, DomainModels.Images.ImageToAdd>();
+
+                cfg.CreateMap<IImage, Image>();
+                cfg.CreateMap<Image, IImage>();
+
+                cfg.CreateMap<IImageToAdd, Image>();
+                cfg.CreateMap<Image, IImageToAdd>();
+
+                cfg.CreateMap<DomainModels.Images.ImageToAdd, Image>();
+                cfg.CreateMap<Image, DomainModels.Images.ImageToAdd>();
+
+                // ### Videos ###
+
+                cfg.CreateMap<DomainModels.Videos.Video, Video>();
+                cfg.CreateMap<Video, DomainModels.Videos.Video>();
+
+                cfg.CreateMap<DomainModels.Videos.Video, IVideo>();
+                cfg.CreateMap<IVideo, DomainModels.Videos.Video>();
+
+                cfg.CreateMap<DomainModels.Videos.VideoToAdd, IVideoToAdd>();
+                cfg.CreateMap<IVideoToAdd, DomainModels.Videos.VideoToAdd>();
+
+                cfg.CreateMap<IVideo, Video>();
+                cfg.CreateMap<Video, IVideo>();
+
+                cfg.CreateMap<IVideoToAdd, Video>();
+                cfg.CreateMap<Video, IVideoToAdd>();
+
+                cfg.CreateMap<DomainModels.Videos.VideoToAdd, Video>();
+                cfg.CreateMap<Video, DomainModels.Videos.VideoToAdd>();
+
                 // ### Peers ###
 
                 cfg.CreateMap<DomainModels.Peers.Peer, Peer>();
@@ -212,15 +283,18 @@ namespace Astrana.Core.Data
                 cfg.CreateMap<IPost, DomainModels.Posts.Post>();
                 cfg.CreateMap<DomainModels.Posts.Post, IPost>();
 
-                cfg.CreateMap<IPostToAdd, DomainModels.Posts.PostToAdd>();
-                cfg.CreateMap<DomainModels.Posts.PostToAdd, IPostToAdd>();
+                //cfg.CreateMap<IPostToAdd, DomainModels.Posts.PostToAdd>();
+                //cfg.CreateMap<DomainModels.Posts.PostToAdd, IPostToAdd>();
 
-                cfg.CreateMap<IPost, Post>();
-                cfg.CreateMap<Post, IPost>();
+                //cfg.CreateMap<IPost, Post>();
+                //cfg.CreateMap<Post, IPost>();
 
-                cfg.CreateMap<IPostToAdd, Post>();
-                cfg.CreateMap<Post, IPostToAdd>();
-                
+                //cfg.CreateMap<IPostToAdd, Post>();
+                //cfg.CreateMap<Post, IPostToAdd>();
+
+                //cfg.CreateMap<DomainModels.Posts.PostToAdd, Post>();
+                //cfg.CreateMap<Post, DomainModels.Posts.PostToAdd>();
+
                 // ### Post Attachments ###
 
                 cfg.CreateMap<DomainModels.Posts.PostAttachment, PostAttachment>();
@@ -240,6 +314,63 @@ namespace Astrana.Core.Data
 
                 cfg.CreateMap<DomainModels.Posts.PostAttachmentToAdd, IPostAttachmentToAdd>();
                 cfg.CreateMap<IPostAttachmentToAdd, DomainModels.Posts.PostAttachmentToAdd>();
+
+                cfg.CreateMap<DomainModels.Posts.PostAttachment, DomainModels.Posts.PostAttachmentToAdd>();
+                cfg.CreateMap<DomainModels.Posts.PostAttachmentToAdd, DomainModels.Posts.PostAttachment>();
+
+                // ### Links ###
+
+                cfg.CreateMap<DomainModels.Links.Link, Link>();
+                cfg.CreateMap<Link, DomainModels.Links.Link>();
+
+                cfg.CreateMap<DomainModels.Links.Link, ILink>();
+                cfg.CreateMap<ILink, DomainModels.Links.Link>();
+
+                cfg.CreateMap<DomainModels.Links.LinkToAdd, ILinkToAdd>();
+                cfg.CreateMap<ILinkToAdd, DomainModels.Links.LinkToAdd>();
+
+                cfg.CreateMap<ILink, Link>();
+                cfg.CreateMap<Link, ILink>();
+
+                cfg.CreateMap<ILinkToAdd, Link>();
+                cfg.CreateMap<Link, ILinkToAdd>();
+
+                // ### Feelings ###
+
+                cfg.CreateMap<DomainModels.Feelings.Feeling, Feeling>();
+                cfg.CreateMap<Feeling, DomainModels.Feelings.Feeling>();
+
+                cfg.CreateMap<DomainModels.Feelings.Feeling, IFeeling>();
+                cfg.CreateMap<IFeeling, DomainModels.Feelings.Feeling>();
+
+                cfg.CreateMap<DomainModels.Feelings.FeelingToAdd, IFeelingToAdd>();
+                cfg.CreateMap<IFeelingToAdd, DomainModels.Feelings.FeelingToAdd>();
+
+                cfg.CreateMap<IFeeling, Feeling>();
+                cfg.CreateMap<Feeling, IFeeling>();
+
+                cfg.CreateMap<IFeelingToAdd, Feeling>();
+                cfg.CreateMap<Feeling, IFeelingToAdd>();
+
+                cfg.CreateMap<DomainModels.Feelings.FeelingToAdd, Feeling>();
+                cfg.CreateMap<Feeling, DomainModels.Feelings.FeelingToAdd>();
+
+                // ### ContentCollections ###
+
+                cfg.CreateMap<DomainModels.ContentCollections.ContentCollection, ContentCollection>();
+                cfg.CreateMap<ContentCollection, DomainModels.ContentCollections.ContentCollection>();
+
+                cfg.CreateMap<DomainModels.ContentCollections.ContentCollection, IContentCollection>();
+                cfg.CreateMap<IContentCollection, DomainModels.ContentCollections.ContentCollection>();
+
+                //cfg.CreateMap<DomainModels.ContentCollections.ContentCollectionToAdd, IContentCollectionToAdd>();
+                //cfg.CreateMap<IContentCollectionToAdd, DomainModels.ContentCollections.ContentCollectionToAdd>();
+
+                cfg.CreateMap<IContentCollection, ContentCollection>();
+                cfg.CreateMap<ContentCollection, IContentCollection>();
+
+                //cfg.CreateMap<IContentCollectionToAdd, ContentCollection>();
+                //cfg.CreateMap<ContentCollection, IContentCollectionToAdd>();
             });
         }
     }

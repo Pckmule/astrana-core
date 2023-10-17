@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Astrana.Core.Domain.Models\Astrana.Core.Domain.Models.csproj" />
     <ProjectReference Include="..\..\src\Astrana.Core\Astrana.Core.csproj" />
   </ItemGroup>
 

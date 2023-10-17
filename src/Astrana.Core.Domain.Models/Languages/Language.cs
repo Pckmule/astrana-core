@@ -7,15 +7,17 @@
 using Astrana.Core.Domain.Models.Languages.Constants;
 using Astrana.Core.Domain.Models.Languages.Contracts;
 using Astrana.Core.Domain.Models.Lookups.Attributes;
-using Astrana.Core.Domain.Models.System.Contracts;
 using Astrana.Core.Enums;
-using Astrana.Core.Validation;
+using Astrana.Core.Framework.Domain;
+using Astrana.Core.Framework.Model;
+using Astrana.Core.Framework.Model.Validation;
 using System.ComponentModel.DataAnnotations;
 
 namespace Astrana.Core.Domain.Models.Languages
 {
-    public class Language : BaseDomainModel, ILanguage, IEditableEntity<Guid>, IAuditable<Guid>, IDeactivatable<Guid>
+    public class Language : DomainEntity, ILanguage, IAuditable<Guid>, IDeactivatable<Guid>
     {
+        private string _code;
         private string _twoLetterCode;
         private string _threeLetterCode;
 
@@ -26,7 +28,7 @@ namespace Astrana.Core.Domain.Models.Languages
             NamePluralForm = ModelProperties.Language.NamePluralForm;
         }
 
-        public Guid Id { get; set; }
+        public Guid LanguageId { get; set; }
 
         [Required]
         [MinLength(ModelProperties.Language.MinimumNameLength)]
@@ -41,9 +43,18 @@ namespace Astrana.Core.Domain.Models.Languages
         public string NameTrxCode { get; set; }
 
         [Required]
+        [MinLength(ModelProperties.Language.MinimumCodeLength)]
+        [MaxLength(ModelProperties.Language.MaximumCodeLength)]
+        [LookupOptionValue]
+        public string Code
+        {
+            get => _code;
+            set => _code = value.ToUpperInvariant();
+        }
+
+        [Required]
         [MinLength(ModelProperties.Language.MinimumTwoLetterCodeLength)]
         [MaxLength(ModelProperties.Language.MaximumTwoLetterCodeLength)]
-        [LookupOptionValue]
         public string TwoLetterCode
         {
             get => _twoLetterCode;

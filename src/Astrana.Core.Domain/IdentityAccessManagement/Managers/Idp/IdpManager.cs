@@ -8,7 +8,6 @@ using Astrana.Core.Data.Repositories.SystemSettings;
 using Astrana.Core.Domain.IdentityAccessManagement.Exceptions;
 using Astrana.Core.Domain.Models.IdentityAccessManagement.Models;
 using Astrana.Core.Domain.Models.System.Constants;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -19,14 +18,13 @@ namespace Astrana.Core.Domain.IdentityAccessManagement.Managers.Idp
 {
     public class IdpManager : IIdpManager
     {
-        private readonly IConfiguration _configuration;
         private readonly ILogger<IIdpManager> _logger;
         private readonly ISystemSettingRepository<Guid> _systemSettingRepository;
 
-        public IdpManager(IConfiguration configuration, ILogger<IIdpManager> logger, ISystemSettingRepository<Guid> systemSettingRepository)
+        public IdpManager(ILogger<IIdpManager> logger, ISystemSettingRepository<Guid> systemSettingRepository)
         {
-            _configuration = configuration;
             _logger = logger;
+
             _systemSettingRepository = systemSettingRepository;
         }
 

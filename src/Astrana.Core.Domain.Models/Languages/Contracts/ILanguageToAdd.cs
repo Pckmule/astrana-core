@@ -12,6 +12,8 @@ namespace Astrana.Core.Domain.Models.Languages.Contracts
 
         public string Name { get; set; }
 
+        public string Code { get; set; }
+
         public string TwoLetterCode { get; set; }
 
         public string ThreeLetterCode { get; set; }

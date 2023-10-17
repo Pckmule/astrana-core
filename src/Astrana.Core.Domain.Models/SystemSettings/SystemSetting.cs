@@ -4,17 +4,18 @@
 * file, You can obtain one at https://mozilla.org/MPL/2.0/.
 */
 
-using Astrana.Core.Domain.Models.System.Contracts;
 using Astrana.Core.Domain.Models.System.Enums;
 using Astrana.Core.Domain.Models.SystemSettings.Constants;
 using Astrana.Core.Domain.Models.SystemSettings.Contracts;
-using Astrana.Core.Validation;
+using Astrana.Core.Framework.Domain;
+using Astrana.Core.Framework.Model;
+using Astrana.Core.Framework.Model.Validation;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
 namespace Astrana.Core.Domain.Models.SystemSettings
 {
-    public sealed class SystemSetting : BaseDomainModel, ISystemSetting, IEditableEntity<Guid>, IAuditable<Guid>, IDeactivatable<Guid>
+    public sealed class SystemSetting : DomainEntity, ISystemSetting, IAuditable<Guid>, IDeactivatable<Guid>
     {
         [JsonConstructor]
         public SystemSetting() { }
@@ -33,17 +34,20 @@ namespace Astrana.Core.Domain.Models.SystemSettings
 
             ShortDescription = shortDescription;
             HelpText = helpText;
-
-
         }
 
         [Required]
-        public Guid Id { get; set; }
+        public Guid SystemSettingId { get; set; }
 
         [Required]
         [MinLength(ModelProperties.SystemSetting.MinimumNameLength)]
         [MaxLength(ModelProperties.SystemSetting.MaximumNameLength)]
         public string Name { get; set; }
+
+        [Required]
+        [MinLength(ModelProperties.SystemSetting.MinimumNameTrxCodeLength)]
+        [MaxLength(ModelProperties.SystemSetting.MaximumNameTrxCodeLength)]
+        public string NameTrxCode { get; set; }
 
         [Required]
         public SystemDataType DataType { get; set; }
@@ -64,6 +68,10 @@ namespace Astrana.Core.Domain.Models.SystemSettings
         [MinLength(ModelProperties.SystemSetting.MinimumShortDescriptionLength)]
         [MaxLength(ModelProperties.SystemSetting.MaximumShortDescriptionLength)]
         public string? ShortDescription { get; set; }
+
+        [MinLength(ModelProperties.SystemSetting.MinimumShortDescriptionTrxCodeLength)]
+        [MaxLength(ModelProperties.SystemSetting.MaximumShortDescriptionTrxCodeLength)]
+        public string? ShortDescriptionTrxCode { get; set; }
 
         [MinLength(ModelProperties.SystemSetting.MinimumHelpTextLength)]
         [MaxLength(ModelProperties.SystemSetting.MaximumHelpTextLength)]

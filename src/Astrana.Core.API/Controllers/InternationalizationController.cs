@@ -11,24 +11,20 @@ using Astrana.Core.Localization;
 using Astrana.Core.Localization.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System.ComponentModel.DataAnnotations;
 
 namespace Astrana.Core.API.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
     public class InternationalizationController : BaseController<InternationalizationController>
     {
         private readonly ILogger<InternationalizationController> _logger;
-        private readonly IConfiguration _configuration;
 
         private readonly IGetLanguagesQuery _getLanguagesQuery;
 
-        public InternationalizationController(IConfiguration configuration, ILogger<InternationalizationController> logger, ISignInManager signInManager, IGetLanguagesQuery getLanguagesQuery) : base(logger, signInManager)
+        public InternationalizationController(ILogger<InternationalizationController> logger, ISignInManager signInManager, IGetLanguagesQuery getLanguagesQuery) : base(logger, signInManager)
         {
-            _configuration = configuration;
             _logger = logger;
             
             _getLanguagesQuery = getLanguagesQuery;
@@ -100,13 +96,13 @@ namespace Astrana.Core.API.Controllers
         [HttpGet("languages")]
         public async Task<IActionResult> GetLanguagesAsync(LanguageQueryOptions<Guid, Guid>? queryOptions = null)
         {
-            var actioningUserId = GetActioningUserId(true);
+            var actioningUserId = GetActioningUserId(ActioningUserOptions.Anonymous);
 
             queryOptions ??= new LanguageQueryOptions<Guid, Guid>();
 
             try
             {
-                return UnpagedGetResponse(await _getLanguagesQuery.ExecuteAsync(actioningUserId, queryOptions));
+                return UnpagedGetResponse((await _getLanguagesQuery.ExecuteAsync(actioningUserId, queryOptions)).Data);
             }
             catch (Exception ex)
             {

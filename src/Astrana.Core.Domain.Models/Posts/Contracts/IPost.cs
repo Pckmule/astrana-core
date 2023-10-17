@@ -8,10 +8,8 @@ namespace Astrana.Core.Domain.Models.Posts.Contracts
 {
     public interface IPost
     {
-        long Id { get; set; }
-
         string Text { get; set; }
 
-        PostAttachment? Attachment { get; set; }
+        List<PostAttachment>? Attachments { get; set; }
     }
 }

@@ -4,16 +4,17 @@
 * file, You can obtain one at https://mozilla.org/MPL/2.0/.
 */
 
-using Astrana.Core.Domain.Models.System.Contracts;
 using Astrana.Core.Domain.Models.UserAccounts.Constants;
 using Astrana.Core.Domain.Models.UserAccounts.Contracts;
 using Astrana.Core.Domain.Models.UserAccounts.Enums;
-using Astrana.Core.Validation;
+using Astrana.Core.Framework.Domain;
+using Astrana.Core.Framework.Model;
+using Astrana.Core.Framework.Model.Validation;
 using System.ComponentModel.DataAnnotations;
 
 namespace Astrana.Core.Domain.Models.UserAccounts
 {
-    public sealed class UserAccount : BaseDomainModel, IUserAccount, IEditableEntity<Guid>, IAuditable<Guid>, IDeactivatable<Guid>
+    public sealed class UserAccount : DomainEntity, IUserAccount, IAuditable<Guid>, IDeactivatable<Guid>
     {
         public UserAccount()
         {
@@ -23,7 +24,11 @@ namespace Astrana.Core.Domain.Models.UserAccounts
         }
 
         [Required]
-        public Guid Id { get; set; }
+        public Guid UserAccountId
+        {
+            get => Id;
+            set => Id = value;
+        }
 
         [Required]
         public UserAccountType Type { get; set; }

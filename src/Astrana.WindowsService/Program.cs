@@ -5,10 +5,7 @@
 */
 
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Logging.EventLog;
-using System.Net;
-using System.Security.Cryptography.X509Certificates;
 using ProgramBuilder = Astrana.Core.API.ProgramBuilder;
 
 var options = new WebApplicationOptions
@@ -23,23 +20,14 @@ var builder = programBuilder.ConfigureWebApplicationBuilder(options);
 
 //builder.Host.UseWindowsService();
 
-builder.Services.Configure<EventLogSettings>(config =>
+if (OperatingSystem.IsWindows())
 {
-    config.LogName = string.Empty;
-    config.SourceName = $"{Astrana.Core.Constants.Application.Name} Windows Service";
-});
-
-// TODO: Move to config / registry / env variable
-var pfxPath = "D:\\repos\\Astrana\\astrana-core\\src\\Astrana.WindowsService\\conf\\ssl-certificate";
-var sslCertificatePfx = new X509Certificate2(Path.Combine(pfxPath, "astrana.pfx"), "astrana");
-
-builder.WebHost.UseKestrel(kestrelServerOptions =>
-{
-    kestrelServerOptions.Listen(IPAddress.Loopback, 9001, listenOptions =>
+    builder.Services.Configure<EventLogSettings>(config =>
     {
-        listenOptions.UseHttps(sslCertificatePfx);
+        config.LogName = string.Empty;
+        config.SourceName = $"{Astrana.Core.Constants.Application.Name} Windows Service";
     });
-});
+}
 
 var app = programBuilder.Build(builder);
 

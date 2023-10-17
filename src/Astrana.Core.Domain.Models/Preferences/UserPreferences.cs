@@ -8,12 +8,13 @@ using Astrana.Core.Domain.Models.Countries;
 using Astrana.Core.Domain.Models.Languages;
 using Astrana.Core.Domain.Models.Preferences.Constants;
 using Astrana.Core.Domain.Models.Preferences.Contracts;
-using Astrana.Core.Validation;
 using System.ComponentModel.DataAnnotations;
+using Astrana.Core.Framework.Domain;
+using Astrana.Core.Framework.Model.Validation;
 
 namespace Astrana.Core.Domain.Models.Preferences
 {
-    public sealed class UserPreferences : BaseDomainModel, IUserPreferences
+    public sealed class UserPreferences : DomainEntity, IUserPreferences
     {
         public UserPreferences()
         {

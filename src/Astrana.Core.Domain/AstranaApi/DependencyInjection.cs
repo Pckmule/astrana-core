@@ -14,8 +14,8 @@ namespace Astrana.Core.Domain.AstranaApi
     {
         public static IServiceCollection Register(this IServiceCollection services)
         {
-            services.AddScoped<IAstranaApiCaller, AstranaApiCaller>();
-            services.AddTransient<IAstranaApiCaller, AstranaApiCaller>();
+            services.AddScoped<IAstranaApiCaller, AstranaApiClient>();
+            services.AddTransient<IAstranaApiCaller, AstranaApiClient>();
 
             services.AddScoped<ICreateApiAccessTokenCommand, CreateApiAccessTokenCommand>();
             services.AddTransient<ICreateApiAccessTokenCommand, CreateApiAccessTokenCommand>();

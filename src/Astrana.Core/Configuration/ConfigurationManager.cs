@@ -14,14 +14,38 @@ namespace Astrana.Core.Configuration
 {
     public class ConfigurationManager
     {
+        private readonly string _applicationSettingsFilePath;
+
         private ApplicationSettings _applicationSettings = new();
 
         public ConfigurationManager(string applicationSettingsFilePath)
         {
+            _applicationSettingsFilePath = applicationSettingsFilePath;
+
             LoadApplicationSettingsAsync(applicationSettingsFilePath).Wait();
         }
 
         public ReadOnlyApplicationSettings ApplicationSettings => new(_applicationSettings);
+
+        public async Task<bool> SecureAfterSetupAsync()
+        {
+            LoadApplicationSettingsAsync(_applicationSettingsFilePath).Wait();
+            
+            await EncryptApplicationSettingsFileAsync(_applicationSettingsFilePath);
+
+            await RemoveSetupModeAsync();
+
+            return true;
+        }
+
+        public async Task RemoveSetupModeAsync()
+        {
+            var applicationSettings = await ReadAppSettingsJsonFileAsync(_applicationSettingsFilePath);
+
+            applicationSettings.SetupMode = null;
+
+            await SaveAppSettingsJsonFileAsync(_applicationSettingsFilePath, applicationSettings);
+        }
 
         public static ApplicationSettings EncryptApplicationSettings(ApplicationSettings settings)
         {
@@ -54,16 +78,11 @@ namespace Astrana.Core.Configuration
             return settings;
         }
 
-        public async Task EncryptApplicationSettingsFile(string filePath)
+        public async Task EncryptApplicationSettingsFileAsync(string applicationSettingsFilePath)
         {
             try
             {
-                await File.WriteAllTextAsync(filePath, JsonSerializer.Serialize(EncryptApplicationSettings(_applicationSettings), new JsonSerializerOptions
-                    {
-                        Converters = { new JsonStringEnumConverter() },
-                        WriteIndented = true
-                    })
-                );
+                await SaveAppSettingsJsonFileAsync(applicationSettingsFilePath, EncryptApplicationSettings(_applicationSettings));
             }
             catch (Exception ex)
             {
@@ -76,17 +95,35 @@ namespace Astrana.Core.Configuration
             if (string.IsNullOrWhiteSpace(applicationSettingsFilePath))
                 throw new ArgumentNullException(nameof(applicationSettingsFilePath));
 
-            _applicationSettings = await ReadAppSettingsJsonFile(applicationSettingsFilePath);
+            _applicationSettings = await ReadAppSettingsJsonFileAsync(applicationSettingsFilePath);
         }
 
-        private static async Task<ApplicationSettings> ReadAppSettingsJsonFile(string filePath)
+        private static async Task<ApplicationSettings> ReadAppSettingsJsonFileAsync(string filePath)
         {
             await using var fileStream = File.OpenRead(filePath);
-            return await JsonSerializer.DeserializeAsync<ApplicationSettings>(fileStream, new JsonSerializerOptions()
+            return await JsonSerializer.DeserializeAsync<ApplicationSettings>(fileStream, new JsonSerializerOptions
             {
                 Converters = { new JsonStringEnumConverter() }
 
             }) ?? new();
         }
+
+        private async Task SaveAppSettingsJsonFileAsync(string filePath, ApplicationSettings applicationSettings)
+        {
+            try
+            {
+                await File.WriteAllTextAsync(filePath, JsonSerializer.Serialize(applicationSettings, new JsonSerializerOptions
+                    {
+                        Converters = { new JsonStringEnumConverter() },
+                        WriteIndented = true,
+                    })
+                );
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
     }
 }

@@ -19,7 +19,6 @@ using Astrana.Core.Domain.Models.UserProfiles;
 using Astrana.Core.Domain.UserAccounts.Commands.CreateUserAccounts;
 using Astrana.Core.Domain.UserProfiles.Commands.CreateUserProfiles;
 using Astrana.Core.Extensions;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using MRB = Astrana.Core.Domain.ResultMessageBuilder;
 
@@ -27,7 +26,6 @@ namespace Astrana.Core.Domain.IdentityAccessManagement.Managers.User
 {
     public class UserManager : IUserManager
     {
-        private readonly IConfiguration _configuration;
         private readonly ILogger<ISignInManager> _logger;
 
         private readonly IUserAccountRepository<Guid> _userAccountRepository;
@@ -36,13 +34,12 @@ namespace Astrana.Core.Domain.IdentityAccessManagement.Managers.User
         private readonly ICreateUserAccountCommand _createUserAccountCommand;
         private readonly ICreateUserProfileCommand _createUserProfileCommand;
 
-        public UserManager(IConfiguration configuration, ILogger<ISignInManager> logger, 
+        public UserManager(ILogger<ISignInManager> logger, 
             IUserAccountRepository<Guid> userAccountRepository, 
             IUserProfileRepository<Guid> userProfileRepository, 
             ICreateUserAccountCommand createUserAccountCommand, 
             ICreateUserProfileCommand createUserProfileCommand)
         {
-            _configuration = configuration;
             _logger = logger;
 
             _userAccountRepository = userAccountRepository;
@@ -56,7 +53,10 @@ namespace Astrana.Core.Domain.IdentityAccessManagement.Managers.User
         {
             var userAccount = await _userAccountRepository.GetInstanceUserAccountAsync();
 
-            var userProfile = await _userProfileRepository.GetUserProfileByUserAccountIdAsync(userAccount.Id);
+            if (userAccount == null)
+                return null;
+
+            var userProfile = await _userProfileRepository.GetUserProfileByUserAccountIdAsync(userAccount.UserAccountId);
 
             if (userProfile == null)
                 return null;
@@ -71,7 +71,7 @@ namespace Astrana.Core.Domain.IdentityAccessManagement.Managers.User
             if (userAccount == null)
                 return null;
 
-            var userProfile = await _userProfileRepository.GetUserProfileByUserAccountIdAsync(userAccount.Id);
+            var userProfile = await _userProfileRepository.GetUserProfileByUserAccountIdAsync(userAccount.UserAccountId);
 
             if (userProfile == null)
                 return null;
@@ -86,7 +86,7 @@ namespace Astrana.Core.Domain.IdentityAccessManagement.Managers.User
             if (userAccount == null)
                 return null;
 
-            var userProfile = await _userProfileRepository.GetUserProfileByUserAccountIdAsync(userAccount.Id);
+            var userProfile = await _userProfileRepository.GetUserProfileByUserAccountIdAsync(userAccount.UserAccountId);
 
             if (userProfile == null)
                 return null;
@@ -135,14 +135,14 @@ namespace Astrana.Core.Domain.IdentityAccessManagement.Managers.User
 
             var userProfileToAdd = new UserProfileToAdd
             {
-                UserAccountId = userAccountResult.Data.Id,
+                UserAccountId = userAccountResult.Data.UserAccountId,
 
                 FirstName = userToAdd.FirstName,
                 MiddleNames = userToAdd.MiddleNames,
                 LastName = userToAdd.LastName,
 
                 DateOfBirth = userToAdd.DateOfBirth,
-                Gender = userToAdd.Gender
+                Sex = userToAdd.Sex
             };
 
             var userProfileResult = await _createUserProfileCommand.ExecuteAsync(userProfileToAdd, actioningUserId);

@@ -9,13 +9,14 @@ using Astrana.Core.Domain.Models.Images;
 using Astrana.Core.Domain.Models.UserProfiles.Constants;
 using Astrana.Core.Domain.Models.UserProfiles.Contracts;
 using Astrana.Core.Domain.Models.UserProfiles.Enums;
-using Astrana.Core.Validation;
-using Astrana.Core.Validation.Attributes;
+using Astrana.Core.Framework.Domain;
+using Astrana.Core.Framework.Model.Validation;
+using Astrana.Core.Framework.Model.Validation.Attributes;
 using System.ComponentModel.DataAnnotations;
 
 namespace Astrana.Core.Domain.Models.UserProfiles
 {
-    public class UserProfileToAdd : BaseDomainModel, IUserProfileToAdd
+    public class UserProfileToAdd : DomainEntity, IUserProfileToAdd
     {
         public UserProfileToAdd()
         {
@@ -46,7 +47,7 @@ namespace Astrana.Core.Domain.Models.UserProfiles
         public DateTimeOffset DateOfBirth { get; set; }
 
         [Required]
-        public Gender Gender { get; set; }
+        public Sex Sex { get; set; }
 
         [MinLength(ModelProperties.UserProfile.MinimumIntroductionLength)]
         [MaxLength(ModelProperties.UserProfile.MaximumIntroductionLength)]

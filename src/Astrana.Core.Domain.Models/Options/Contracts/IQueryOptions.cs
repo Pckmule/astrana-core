@@ -12,9 +12,9 @@ namespace Astrana.Core.Domain.Models.Options.Contracts
         where TRecordId : struct
         where TOwnerUserId : struct
     {
-        List<TRecordId> Ids { get; set; }
+        List<TRecordId>? Ids { get; set; }
 
-        List<TOwnerUserId> OwnerUserIds { get; set; }
+        List<TOwnerUserId>? OwnerUserIds { get; set; }
 
         DateTimeOffset? CreatedBefore { get; set; }
 
@@ -31,7 +31,7 @@ namespace Astrana.Core.Domain.Models.Options.Contracts
 
         string? SortBy { get; set; }
 
-        SortDirection SortDirection { get; set; }
+        OrderByDirection OrderByDirection { get; set; }
 
         List<string> ToQueryStringList();
 

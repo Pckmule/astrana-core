@@ -4,6 +4,8 @@
 * file, You can obtain one at https://mozilla.org/MPL/2.0/.
 */
 
+// ReSharper disable InconsistentNaming
+
 namespace Astrana.Core.Constants
 {
     public static class ErrorCodes
@@ -13,7 +15,8 @@ namespace Astrana.Core.Constants
         public const string OnlyOneAllowed = "0x1";
         public const string UniqueValueRequired = "0x2";
 
-        public const string PrerequisitesNotSatisfied = "0x3";
+        public const string PrerequisitesNotSatisfied = "0x301";
+        public const string ConditionsNotMet = "0x302";
 
         public const string CannotConnect = "0x400";
         public const string CannotConnect_NetworkError = "0x401";

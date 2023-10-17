@@ -6,6 +6,7 @@
 
 using Astrana.Core.Data.Entities.Content;
 using Astrana.Core.Data.Exceptions;
+using Astrana.Core.Domain.Models.Attachments.Enums;
 using Astrana.Core.Domain.Models.Posts.Contracts;
 using Astrana.Core.Domain.Models.Posts.Options;
 using Astrana.Core.Domain.Models.Results;
@@ -32,11 +33,21 @@ namespace Astrana.Core.Data.Repositories.Posts
         {
             options ??= new PostQueryOptions<long, Guid>();
 
-            var query = ctx.Posts.Include(o => o.Attachment).AsQueryable();
+            var query = databaseSession.Posts.Include(o => o.Attachments)
+                .ThenInclude(attachment => attachment.Link)
+                .ThenInclude(attachment => attachment.PreviewImage)
+                .Include(o => o.Attachments)
+                .ThenInclude(attachment => attachment.Image)
+                .Include(o => o.Attachments)
+                .ThenInclude(attachment => attachment.ContentCollection)
+                .AsQueryable();
 
             // Add Filters
             if (options.Ids.Any())
-                query = query.Where(o => options.Ids.Contains(o.Id));
+                query = query.Where(o => options.Ids.Contains(o.PostId));
+
+            if (options.ExcludeIds.Any())
+                query = query.Where(o => !options.ExcludeIds.Contains(o.PostId));
 
             if (options.CreatedBefore.HasValue)
                 query = query.Where(o => o.CreatedTimestamp < options.CreatedBefore.Value);
@@ -51,7 +62,7 @@ namespace Astrana.Core.Data.Repositories.Posts
             query = query.OrderByDescending(o => o.CreatedTimestamp);
 
             // Add Paging
-            if (!options.PagingDisabled && options.PageSize.HasValue && options.CurrentPage.HasValue)
+            if (options is { PagingDisabled: false, PageSize: { }, CurrentPage: { } })
                 query = query.Skip(options.PageSize.Value * (options.CurrentPage.Value - 1)).Take(options.PageSize.Value);
 
             return query;
@@ -130,6 +141,27 @@ namespace Astrana.Core.Data.Repositories.Posts
 
                 foreach (var addition in requestedAdditions)
                 {
+                    foreach (var attachment in addition.Attachments)
+                    {
+                        if (attachment.Type == AttachmentType.Image)
+                        {
+                            var attachmentEntity = await databaseSession.Images.FirstOrDefaultAsync(o => o.ImageId.ToString().ToLower() == attachment.ContentId.ToLower());
+
+                            if (attachmentEntity != null)
+                            {
+                                attachment.ImageId = Guid.Parse(attachment.ContentId);
+
+                                attachment.Image = new DM.Images.Image
+                                {
+                                    ImageId = Guid.Parse(attachment.ContentId),
+                                    Location = ""
+                                };
+                            }
+                        }
+                    }
+
+                    ModelMapper.MapModel<Post, IPostToAdd>(addition);
+
                     var newPostEntity = ModelMapper.MapModel<Post, IPostToAdd>(addition);
 
                     if (newPostEntity == null)
@@ -142,19 +174,19 @@ namespace Astrana.Core.Data.Repositories.Posts
                     newPostEntity.LastModifiedTimestamp = now;
 
                     // Save records.
-                    ctx.Posts.Add(newPostEntity);
-                    await ctx.SaveChangesAsync();
+                    databaseSession.Posts.Add(newPostEntity);
+                    await databaseSession.SaveChangesAsync();
 
                     countAdded++;
 
-                    newPostIds.Add(newPostEntity.Id);
+                    newPostIds.Add(newPostEntity.PostId);
                 }
 
                 logger.LogInformation(string.Format(MessageSuccessfullyCreatedEntity, newPostIds.Count, nameof(Post) + "(s)"));
 
                 // Return the current records.
                 if (returnRecords)
-                    return new AddSuccessResult<List<DM.Posts.Post>>((await GetPostsAsync(new PostQueryOptions<long, Guid>() { Ids = newPostIds })).Data, countAdded);
+                    return new AddSuccessResult<List<DM.Posts.Post>>((await GetPostsAsync(new PostQueryOptions<long, Guid> { Ids = newPostIds })).Data, countAdded);
                 
                 return new AddSuccessResult<List<DM.Posts.Post>>(new List<DM.Posts.Post>(), countAdded);
             }
@@ -186,26 +218,26 @@ namespace Astrana.Core.Data.Repositories.Posts
 
                 foreach (var update in requestedUpdates)
                 {
-                    var existingPostEntity = await ctx.Posts.FirstOrDefaultAsync(o => o.Id == update.Id);
+                    //var existingPostEntity = await ctx.Posts.FirstOrDefaultAsync(o => o.Id == update.Id);
 
-                    if (existingPostEntity == null)
-                        continue;
+                    //if (existingPostEntity == null)
+                    //    continue;
 
-                    // Update entity fields
+                    //// Update entity fields
 
-                    existingPostEntity.Text = update.Text.Trim();
+                    //existingPostEntity.Text = update.Text.Trim();
 
-                    existingPostEntity.LastModifiedBy = actioningUserId;
-                    existingPostEntity.LastModifiedTimestamp = now;
+                    //existingPostEntity.LastModifiedBy = actioningUserId;
+                    //existingPostEntity.LastModifiedTimestamp = now;
 
-                    // Save changes to records.
-                    ctx.Posts.Update(existingPostEntity);
+                    //// Save changes to records.
+                    //ctx.Posts.Update(existingPostEntity);
 
-                    await ctx.SaveChangesAsync();
+                    //await ctx.SaveChangesAsync();
 
-                    countUpdated++;
+                    //countUpdated++;
 
-                    updatedPostIds.Add(existingPostEntity.Id);
+                    //updatedPostIds.Add(existingPostEntity.Id);
                 }
 
                 logger.LogInformation(string.Format(MessageSuccessfullyUpdatedEntity, updatedPostIds.Count, nameof(Post) + "(s)"));

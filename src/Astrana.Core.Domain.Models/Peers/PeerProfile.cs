@@ -9,13 +9,14 @@ using Astrana.Core.Domain.Models.Images;
 using Astrana.Core.Domain.Models.Peers.Constants;
 using Astrana.Core.Domain.Models.Peers.Contracts;
 using Astrana.Core.Domain.Models.UserProfiles.Enums;
-using Astrana.Core.Validation;
-using Astrana.Core.Validation.Attributes;
+using Astrana.Core.Framework.Domain;
+using Astrana.Core.Framework.Model.Validation;
+using Astrana.Core.Framework.Model.Validation.Attributes;
 using System.ComponentModel.DataAnnotations;
 
 namespace Astrana.Core.Domain.Models.Peers
 {
-    public sealed class PeerProfile : BaseDomainModel, IPeerProfile
+    public sealed class PeerProfile : DomainEntity, IPeerProfile
     {
         public PeerProfile()
         {
@@ -44,7 +45,7 @@ namespace Astrana.Core.Domain.Models.Peers
         public DateTimeOffset DateOfBirth { get; set; }
 
         [Required]
-        public Gender Gender { get; set; }
+        public Sex Sex { get; set; }
 
         [MinLengthWhenSet(ModelProperties.PeerProfile.MinimumIntroductionLength)]
         [MaxLengthWhenSet(ModelProperties.PeerProfile.MaximumIntroductionLength)]

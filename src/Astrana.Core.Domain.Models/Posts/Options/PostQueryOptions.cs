@@ -4,6 +4,7 @@
 * file, You can obtain one at https://mozilla.org/MPL/2.0/.
 */
 
+using Astrana.Core.Domain.Models.Attachments.Enums;
 using Astrana.Core.Domain.Models.Options;
 using Astrana.Core.Domain.Models.Tags.Enums;
 using Astrana.Core.Utilities;
@@ -23,7 +24,9 @@ namespace Astrana.Core.Domain.Models.Posts.Options
         public List<string> Tags { get; set; } = new();
 
         public TagFilterMode TagsFilterMode { get; set; } = TagFilterMode.Default;
-        
+
+        public List<AttachmentType>? AttachmentTypes { get; set; }
+
         public override List<string> ToQueryStringList()
         {
             var propertyValues = base.ToQueryStringList();

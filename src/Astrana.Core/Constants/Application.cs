@@ -12,5 +12,6 @@ namespace Astrana.Core.Constants
 
         public const string Name = "Astrana";
         public const string WebsiteUrl = "www.astrana.org";
+        public const string UserAgentString = "Mozilla/5.0 (compatible; Astrana/1.0)";
     }
 }

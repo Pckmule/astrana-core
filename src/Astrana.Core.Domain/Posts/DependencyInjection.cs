@@ -4,10 +4,11 @@
 * file, You can obtain one at https://mozilla.org/MPL/2.0/.
 */
 
-using Astrana.Core.Domain.Posts.Commands.CreatePosts;
-using Astrana.Core.Domain.Posts.Commands.DeletePosts;
-using Astrana.Core.Domain.Posts.Commands.UpdatePosts;
+using Astrana.Core.Domain.Posts.Commands.Handlers.CreatePosts;
+using Astrana.Core.Domain.Posts.Commands.Handlers.DeletePosts;
+using Astrana.Core.Domain.Posts.Commands.Handlers.UpdatePosts;
 using Astrana.Core.Domain.Posts.Queries;
+using Astrana.Core.Domain.Posts.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Astrana.Core.Domain.Posts
@@ -16,17 +17,20 @@ namespace Astrana.Core.Domain.Posts
     {
         public static IServiceCollection Register(this IServiceCollection services)
         {
+            services.AddScoped<IPostRepository<Guid>, PostRepository>();
+            services.AddTransient<IPostRepository<Guid>, PostRepository>();
+
             services.AddScoped<IGetPostsQuery, GetPostsQuery>();
             services.AddTransient<IGetPostsQuery, GetPostsQuery>();
 
-            services.AddScoped<ICreatePostsCommand, CreatePostsCommand>();
-            services.AddTransient<ICreatePostsCommand, CreatePostsCommand>();
+            services.AddScoped<ICreatePostsCommandHandler, CreatePostsCommandHandler>();
+            services.AddTransient<ICreatePostsCommandHandler, CreatePostsCommandHandler>();
 
-            services.AddScoped<IUpdatePostsCommand, UpdatePostsCommand>();
-            services.AddTransient<IUpdatePostsCommand, UpdatePostsCommand>();
+            services.AddScoped<IUpdatePostsCommandHandler, UpdatePostsCommandHandler>();
+            services.AddTransient<IUpdatePostsCommandHandler, UpdatePostsCommandHandler>();
 
-            services.AddScoped<IDeletePostsCommand, DeletePostsCommand>();
-            services.AddTransient<IDeletePostsCommand, DeletePostsCommand>();
+            services.AddScoped<IDeletePostsCommandHandler, DeletePostsCommandHandler>();
+            services.AddTransient<IDeletePostsCommandHandler, DeletePostsCommandHandler>();
 
             services.AddScoped<IDiscoverPostsQuery, DiscoverPostsQuery>();
             services.AddTransient<IDiscoverPostsQuery, DiscoverPostsQuery>();

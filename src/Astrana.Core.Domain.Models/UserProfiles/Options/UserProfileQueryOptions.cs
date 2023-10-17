@@ -19,6 +19,6 @@ namespace Astrana.Core.Domain.Models.UserProfiles.Options
 
         public List<string> LastNames { get; set; } = new();
 
-        public List<Gender> Genders { get; set; } = new();
+        public List<Sex> Genders { get; set; } = new();
     }
 }

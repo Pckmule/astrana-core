@@ -32,11 +32,14 @@ namespace Astrana.Core.Data.Repositories.Countries
         {
             options ??= new CountryQueryOptions<long, Guid>();
 
-            var query = ctx.Countries.AsQueryable();
+            var query = databaseSession.Countries.AsQueryable();
 
             // Add Filters
             if (options.Ids.Any())
                 query = query.Where(o => options.Ids.Contains(o.Id));
+
+            if (options.ExcludeIds.Any())
+                query = query.Where(o => !options.ExcludeIds.Contains(o.Id));
 
             if (options.CreatedBefore.HasValue)
                 query = query.Where(o => o.CreatedTimestamp < options.CreatedBefore.Value);
@@ -51,14 +54,14 @@ namespace Astrana.Core.Data.Repositories.Countries
             query = query.OrderByDescending(o => o.CreatedTimestamp);
 
             // Add Paging
-            if (!options.PagingDisabled && options.PageSize.HasValue && options.CurrentPage.HasValue)
+            if (options is { PagingDisabled: false, PageSize: { }, CurrentPage: { } })
                 query = query.Skip(options.PageSize.Value * (options.CurrentPage.Value - 1)).Take(options.PageSize.Value);
 
             return query;
         }
 
         /// <summary>
-        /// Returns a count of Countries according to the specified filter criteria.
+        /// Returns a count of countries according to the specified filter criteria.
         /// </summary>
         /// <param name="queryOptions"></param>
         /// <returns></returns>
@@ -72,7 +75,7 @@ namespace Astrana.Core.Data.Repositories.Countries
         }
 
         /// <summary>
-        /// Returns a list of Countries according to the specified filter criteria.
+        /// Returns a list of countries according to the specified filter criteria.
         /// </summary>
         /// <param name="queryOptions"></param>
         /// <returns></returns>
@@ -101,7 +104,7 @@ namespace Astrana.Core.Data.Repositories.Countries
         }
 
         /// <summary>
-        /// Finds and returns a Country by it's Id.
+        /// Finds and returns a country by it's Id.
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -111,7 +114,7 @@ namespace Astrana.Core.Data.Repositories.Countries
         }
 
         /// <summary>
-        /// Finds and returns a Country by it's Code.
+        /// Finds and returns a country by it's Code.
         /// </summary>
         /// <param name="code"></param>
         /// <returns></returns>
@@ -121,7 +124,7 @@ namespace Astrana.Core.Data.Repositories.Countries
         }
 
         /// <summary>
-        /// Adds new Countries to the Data Source.
+        /// Adds new countries to the Data Source.
         /// </summary>
         /// <param name="requestedAdditions"></param>
         /// <param name="actioningUserId"></param>
@@ -155,8 +158,8 @@ namespace Astrana.Core.Data.Repositories.Countries
                     newCountryEntity.LastModifiedTimestamp = now;
 
                     // Save records.
-                    ctx.Countries.Add(newCountryEntity);
-                    await ctx.SaveChangesAsync();
+                    databaseSession.Countries.Add(newCountryEntity);
+                    await databaseSession.SaveChangesAsync();
 
                     countAdded++;
 
@@ -180,7 +183,7 @@ namespace Astrana.Core.Data.Repositories.Countries
         }
 
         /// <summary>
-        /// Updates existing Countries in the Data Source.
+        /// Updates existing countries in the Data Source.
         /// </summary>
         /// <param name="requestedUpdates"></param>
         /// <param name="actioningUserId"></param>
@@ -199,7 +202,7 @@ namespace Astrana.Core.Data.Repositories.Countries
 
                 foreach (var update in requestedUpdates)
                 {
-                    var existingCountryEntity = await ctx.Countries.FirstOrDefaultAsync(o => o.Id == update.Id);
+                    var existingCountryEntity = await databaseSession.Countries.FirstOrDefaultAsync(o => o.Id == update.CountryId);
 
                     if (existingCountryEntity == null)
                         continue;
@@ -214,9 +217,9 @@ namespace Astrana.Core.Data.Repositories.Countries
                     existingCountryEntity.LastModifiedTimestamp = now;
 
                     // Save changes to records.
-                    ctx.Countries.Update(existingCountryEntity);
+                    databaseSession.Countries.Update(existingCountryEntity);
 
-                    await ctx.SaveChangesAsync();
+                    await databaseSession.SaveChangesAsync();
 
                     countUpdated++;
 

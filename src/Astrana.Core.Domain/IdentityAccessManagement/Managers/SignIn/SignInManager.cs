@@ -7,7 +7,6 @@
 using Astrana.Core.Domain.IdentityAccessManagement.Managers.Idp;
 using Astrana.Core.Domain.IdentityAccessManagement.Managers.User;
 using Astrana.Core.Domain.Models.Results;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System.IdentityModel.Tokens.Jwt;
 
@@ -15,15 +14,13 @@ namespace Astrana.Core.Domain.IdentityAccessManagement.Managers.SignIn
 {
     public class SignInManager : ISignInManager
     {
-        private readonly IConfiguration _configuration;
         private readonly ILogger<ISignInManager> _logger;
 
         private readonly IIdpManager _idpManager;
         private readonly IUserManager _userManager;
 
-        public SignInManager(IConfiguration configuration, ILogger<ISignInManager> logger, IIdpManager idpManager, IUserManager userManager)
+        public SignInManager(ILogger<ISignInManager> logger, IIdpManager idpManager, IUserManager userManager)
         {
-            _configuration = configuration;
             _logger = logger;
 
             _idpManager = idpManager;

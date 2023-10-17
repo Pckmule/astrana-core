@@ -1,0 +1,9 @@
+﻿# Astrana-lisensie
+
+Dit is die Astrana-lisensielêer.
+
+Lorem Ipsum is bloot 'n skynteks van die druk- en setwerkbedryf. Lorem Ipsum is die industrie se standaard dummy teks sedert die 1500's, toe 'n onbekende drukker 'n kombuis van tipe geneem het en dit gekodeer het om 'n tipe voorbeeldboek te maak. Dit het nie net vyf eeue oorleef nie, maar ook die sprong na elektroniese setwerk, wat in wese onveranderd gebly het. Dit is in die 1960's gewild gemaak met die vrystelling van Letraset-blaaie wat Lorem Ipsum-gedeeltes bevat, en meer onlangs met rekenaarpubliseringsagteware soos Aldus PageMaker, wat Lorem Ipsum-weergawes ingesluit het.
+
+In teenstelling met die algemene opvatting, is Lorem Ipsum nie net willekeurige teks nie. Dit het sy wortels in 'n stuk klassieke Latynse literatuur van 45 v.C. C., dus is dit meer as 2000 jaar oud. Richard McClintock, 'n professor in Latyn aan die Hampden-Sydney College in Virginia, het een van die meer obskure Latynse woorde, consectetur, opgesoek in 'n gedeelte van Lorem Ipsum, en deur aanhalings van die woord in klassieke literatuur te hersien, het hy die ongetwyfelde bron ontdek. . Lorem Ipsum kom uit afdelings 1.10.32 en 1.10.33 van Cicero se "de Finibus Bonorum et Malorum" (Die uiterstes van goed en kwaad), geskryf in 45 vC. Hierdie boek is 'n verhandeling oor die teorie van etiek, baie gewild tydens die Renaissance. Die eerste reël van Lorem Ipsum, "Lorem ipsum dolor sit amet..", kom van 'n reël in afdeling 1.10.32.
+
+Die standaard Lorem Ipsum-fragment wat sedert die 16de eeu gebruik is, word hieronder weergegee vir belangstellendes. Afdelings 1.10.32 en 1.10.33 van Cicero se "de Finibus Bonorum et Malorum" word ook in hul presiese oorspronklike vorm weergegee, vergesel van Engelse weergawes van H. Rackham se 1914-vertaling.

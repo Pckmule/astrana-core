@@ -5,39 +5,45 @@
 */
 
 using Astrana.Core.Constants;
+using Astrana.Core.Data.Repositories.Peers;
+using Astrana.Core.Domain.AstranaApi.Services;
 using Astrana.Core.Domain.IdentityAccessManagement.Managers.SignIn;
+using Astrana.Core.Domain.Models.Attachments.Enums;
+using Astrana.Core.Domain.Models.ContentCollections.Options;
 using Astrana.Core.Domain.Models.Posts;
+using Astrana.Core.Domain.Models.Posts.DomainTransferObjects;
 using Astrana.Core.Domain.Models.Posts.Options;
 using Astrana.Core.Domain.Models.Results.Enums;
-using Astrana.Core.Domain.Posts.Commands.CreatePosts;
-using Astrana.Core.Domain.Posts.Commands.DeletePosts;
-using Astrana.Core.Domain.Posts.Commands.UpdatePosts;
+using Astrana.Core.Domain.Models.System.Enums;
+using Astrana.Core.Domain.Posts.Commands.Handlers.CreatePosts;
+using Astrana.Core.Domain.Posts.Commands.Handlers.DeletePosts;
+using Astrana.Core.Domain.Posts.Commands.Handlers.UpdatePosts;
 using Astrana.Core.Domain.Posts.Queries;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using ApiConstants = Astrana.Core.Constants.Api;
 
 namespace Astrana.Core.API.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
     public class PostsController : BaseController<PostsController>
     {
         private readonly ILogger<PostsController> _logger;
-        private readonly IConfiguration _configuration;
+
+        private readonly IPeerRepository<Guid> _peerRepository;
 
         private readonly IDiscoverPostsQuery _discoverPostsQuery;
 
         private readonly IGetPostsQuery _getPostsQuery;
-        private readonly ICreatePostsCommand _createPostsCommand;
-        private readonly IUpdatePostsCommand _updatePostsCommand;
-        private readonly IDeletePostsCommand _deletePostsCommand;
+        private readonly ICreatePostsCommandHandler _createPostsCommand;
+        private readonly IUpdatePostsCommandHandler _updatePostsCommand;
+        private readonly IDeletePostsCommandHandler _deletePostsCommand;
 
-        public PostsController(IConfiguration configuration, ILogger<PostsController> logger, ISignInManager signInManager, IDiscoverPostsQuery discoverPostsQuery, IGetPostsQuery getPostsQuery, ICreatePostsCommand addPostsCommand, IUpdatePostsCommand updatePostsCommand, IDeletePostsCommand deletePostsCommand) : base(logger, signInManager)
+        public PostsController(ILogger<PostsController> logger, ISignInManager signInManager, IPeerRepository<Guid> peerRepository, IDiscoverPostsQuery discoverPostsQuery, IGetPostsQuery getPostsQuery, ICreatePostsCommandHandler addPostsCommand, IUpdatePostsCommandHandler updatePostsCommand, IDeletePostsCommandHandler deletePostsCommand) : base(logger, signInManager)
         {
-            _configuration = configuration;
             _logger = logger;
+
+            _peerRepository = peerRepository;
 
             _discoverPostsQuery = discoverPostsQuery;
             
@@ -55,12 +61,16 @@ namespace Astrana.Core.API.Controllers
         /// <param name="createdById"></param>
         /// <param name="page"></param>
         /// <param name="pageSize"></param>
+        /// <param name="attachmentTypes"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="orderByDirection"></param>
+        /// <param name="peerProfileId"></param>
         /// <returns></returns>
         /// <response code="200">Post(s) successfully retrieved.</response>
         /// <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
         /// <response code="500">Something went wrong.</response>
         [HttpGet]
-        public async Task<IActionResult> GetAsync(DateTime? createdAfter = null, DateTime? createdBefore = null, Guid? createdById = null, int page = Pagination.DefaultPage, int pageSize = Pagination.DefaultPageSize)
+        public async Task<IActionResult> GetAsync([FromQuery] AttachmentType[]? attachmentTypes = null, DateTime ? createdAfter = null, DateTime? createdBefore = null, Guid? createdById = null, int page = Pagination.DefaultPage, int pageSize = Pagination.DefaultPageSize, string? orderBy = null, OrderByDirection orderByDirection = OrderByDirection.Default, Guid? peerProfileId = null)
         {
             var actioningUserId = GetActioningUserId();
 
@@ -68,16 +78,45 @@ namespace Astrana.Core.API.Controllers
             {
                 OwnerUserIds = createdById.HasValue ? new List<Guid> { createdById.Value } : new List<Guid>(),
 
+                AttachmentTypes = attachmentTypes?.Distinct().ToList(),
+
                 CreatedAfter = createdAfter,
                 CreatedBefore = createdBefore,
 
                 PageSize = pageSize,
-                CurrentPage = page
+                CurrentPage = page,
+
+                OrderByDirection = orderByDirection,
+                OrderBy = orderBy
             };
+
+            if (peerProfileId.HasValue)
+            {
+                var peerId = await _peerRepository.GetPeerIdByPeerProfileIdAsync(peerProfileId.Value);
+
+                var peer = await _peerRepository.GetPeerByProfileIdAsync(peerId);
+
+                if(peer == null)
+                    return ErrorResponse("Peer Not Found");
+
+                var peerApi = new AstranaApiClient();
+                    peerApi.SetAuthorizationToken(peer.PeerAccessToken);
+
+                var peerApiResult = await peerApi.GetAsync<List<Post>>(peer.Address, "posts", "", queryOptions.ToQueryStringList());
+
+                if (peerApiResult.IsSuccess)
+                {
+                    var peerResult = ConvertToGetResult<PostQueryOptions<long, Guid>, long, Guid, Post>(peerApiResult, queryOptions);
+
+                    return PagedGetResponse2(peerResult, peerResult.Data.Select(o => o.ToDomainTransferObject(includeAuditData: true)).ToList(), page, pageSize, peerApiResult.Message);
+                }
+
+                return ErrorResponse(peerApiResult.Message);
+            }
 
             var result = await _getPostsQuery.ExecuteAsync(actioningUserId, queryOptions);
 
-            return PagedGetResponse(result, page, pageSize, result.Message);
+            return PagedGetResponse2(result, result.Data.Select(o => o.ToDomainTransferObject(includeAuditData: true)).ToList(), queryOptions.CurrentPage.Value, queryOptions.PageSize.Value, result.Message);
         }
 
         /// <summary>
@@ -144,7 +183,7 @@ namespace Astrana.Core.API.Controllers
         /// <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
         /// <response code="500">Something went wrong.</response>
         [HttpPut]
-        public async Task<IActionResult> CreatePosts(IList<PostToAdd> posts)
+        public async Task<IActionResult> CreatePosts(IList<PostDto> posts)
         {
             var actioningUserId = GetActioningUserId();
 
@@ -153,9 +192,7 @@ namespace Astrana.Core.API.Controllers
                 var result = await _createPostsCommand.ExecuteAsync(posts, actioningUserId);
 
                 if (result.Outcome == ResultOutcome.Success)
-                {
                     return CreatedSuccessResponse(result, result.Message);
-                }
 
                 return ErrorResponse(result, result.Message);
             }

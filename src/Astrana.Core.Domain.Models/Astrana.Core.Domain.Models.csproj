@@ -7,10 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Magick.NET.Core" Version="13.2.0" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Astrana.Core.Domain.Framework\Astrana.Core.Framework.csproj" />
     <ProjectReference Include="..\Astrana.Core\Astrana.Core.csproj" />
   </ItemGroup>
 

@@ -24,9 +24,7 @@ namespace Astrana.Core.Extensions
             if (field == null) 
                 return value.ToString();
 
-            var attr = Attribute.GetCustomAttribute(field, typeof(DescriptionAttribute)) as DescriptionAttribute;
-            
-            return attr != null ? attr.Description : value.ToString();
+            return Attribute.GetCustomAttribute(field, typeof(DescriptionAttribute)) is DescriptionAttribute attr ? attr.Description : value.ToString();
         }
 
         public static string GetDisplayText(this Enum value)

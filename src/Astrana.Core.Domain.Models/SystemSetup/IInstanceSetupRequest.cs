@@ -24,7 +24,7 @@ namespace Astrana.Core.Domain.Models.SystemSetup
 
         DateTimeOffset InstanceUserDateOfBirth { get; set; }
 
-        Gender InstanceUserGender { get; set; }
+        Sex InstanceUserSex { get; set; }
 
         string InstancePhoneCountryCodeISO { get; set; }
 

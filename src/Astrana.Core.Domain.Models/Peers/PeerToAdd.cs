@@ -6,12 +6,13 @@
 
 using Astrana.Core.Domain.Models.Peers.Constants;
 using Astrana.Core.Domain.Models.Peers.Contracts;
-using Astrana.Core.Validation;
 using System.ComponentModel.DataAnnotations;
+using Astrana.Core.Framework.Domain;
+using Astrana.Core.Framework.Model.Validation;
 
 namespace Astrana.Core.Domain.Models.Peers
 {
-    public class PeerToAdd : BaseDomainModel, IPeerToAdd
+    public class PeerToAdd : DomainEntity, IPeerToAdd
     {
         public PeerToAdd()
         {

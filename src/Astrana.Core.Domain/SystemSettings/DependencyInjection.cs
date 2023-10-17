@@ -17,6 +17,9 @@ namespace Astrana.Core.Domain.SystemSettings
             services.AddScoped<IGetSystemSettingsQuery, GetSystemSettingsQuery>();
             services.AddTransient<IGetSystemSettingsQuery, GetSystemSettingsQuery>();
 
+            services.AddScoped<IGetSettingCategoriesQuery, GetSettingCategoriesQuery>();
+            services.AddTransient<IGetSettingCategoriesQuery, GetSettingCategoriesQuery>();
+
             services.AddScoped<IUpdateSystemSettingsCommand, UpdateSystemSettingsCommand>();
             services.AddTransient<IUpdateSystemSettingsCommand, UpdateSystemSettingsCommand>();
 

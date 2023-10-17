@@ -1,0 +1,52 @@
+[
+  {
+    "id": "smileys-emotion",
+    "nameTrxCode": "emoji_group_smileys_emotion",
+    "iconName": "emoticon-outline"
+  },
+  {
+    "id": "people-body",
+    "nameTrxCode": "emoji_group_people_body",
+    "iconName": ""
+  },
+  {
+    "id": "component",
+    "nameTrxCode": "emoji_group_component",
+    "iconName": ""
+  },
+  {
+    "id": "animals-nature",
+    "nameTrxCode": "emoji_group_animals_nature",
+    "iconName": "paw-outline"
+  },
+  {
+    "id": "food-drink",
+    "nameTrxCode": "emoji_group_food_drink",
+    "iconName": "food-apple-outline"
+  },
+  {
+    "id": "travel-places",
+    "nameTrxCode": "emoji_group_travel_places",
+    "iconName": "umbrella-beach-outline"
+  },
+  {
+    "id": "activities",
+    "nameTrxCode": "emoji_group_activities",
+    "iconName": "soccer"
+  },
+  {
+    "id": "objects",
+    "nameTrxCode": "emoji_group_objects",
+    "iconName": "lightbulb-outline"
+  },
+  {
+    "id": "symbols",
+    "nameTrxCode": "emoji_group_symbols",
+    "iconName": "at"
+  },
+  {
+    "id": "flags",
+    "nameTrxCode": "emoji_group_flags",
+    "iconName": "flag-outline"
+  }
+]

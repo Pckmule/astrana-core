@@ -2,12 +2,13 @@
 using Astrana.Core.Domain.Models.IdentityAccessManagement.Constants;
 using Astrana.Core.Domain.Models.UserAccounts.Enums;
 using Astrana.Core.Domain.Models.UserProfiles.Enums;
-using Astrana.Core.Validation;
 using System.ComponentModel.DataAnnotations;
+using Astrana.Core.Framework.Domain;
+using Astrana.Core.Framework.Model.Validation;
 
 namespace Astrana.Core.Domain.Models.IdentityAccessManagement.Models
 {
-    public sealed class ApplicationUserToAdd : BaseDomainModel
+    public sealed class ApplicationUserToAdd : DomainEntity
     {
         public ApplicationUserToAdd()
         {
@@ -76,7 +77,7 @@ namespace Astrana.Core.Domain.Models.IdentityAccessManagement.Models
         public DateTimeOffset DateOfBirth { get; set; }
 
         [Required]
-        public Gender Gender { get; set; }
+        public Sex Sex { get; set; }
 
         public override EntityValidationResult Validate()
         {

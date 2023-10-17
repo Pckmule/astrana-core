@@ -35,11 +35,14 @@ namespace Astrana.Core.Data.Repositories.Peers
         {
             options ??= new PeerQueryOptions<Guid, Guid>();
 
-            var query = ctx.Peers.AsQueryable();
+            var query = databaseSession.Peers.AsQueryable();
 
             // Add Filters
             if (options.Ids.Any())
-                query = query.Where(o => options.Ids.Contains(o.Id));
+                query = query.Where(o => options.Ids.Contains(o.PeerId));
+
+            if (options.ExcludeIds.Any())
+                query = query.Where(o => !options.ExcludeIds.Contains(o.PeerId));
 
             if (options.CreatedBefore.HasValue)
                 query = query.Where(o => o.CreatedTimestamp < options.CreatedBefore.Value);
@@ -54,7 +57,7 @@ namespace Astrana.Core.Data.Repositories.Peers
             query = query.OrderByDescending(o => o.CreatedTimestamp);
 
             // Add Paging
-            if (!options.PagingDisabled && options.PageSize.HasValue && options.CurrentPage.HasValue)
+            if (options is { PagingDisabled: false, PageSize: { }, CurrentPage: { } })
                 query = query.Skip(options.PageSize.Value * (options.CurrentPage.Value - 1)).Take(options.PageSize.Value);
 
             return query;
@@ -96,11 +99,26 @@ namespace Astrana.Core.Data.Repositories.Peers
             else
                 resultSetCount = queryResults.Count;
 
-            var peers = queryResults.Select(peer => ModelMapper.MapModel<DM.Peers.Peer, Peer>(peer)).ToList();
+            var peers = queryResults.Select(Entities.Peers.ModelMappings.Peer.MapToDomainModel).ToList();
 
             logger.LogInformation(string.Format(MessageRetrievedEntity, nameof(Peer)), queryOptions);
 
             return CreateGetResultWithPagination(peers, queryOptions, resultSetCount);
+        }
+
+        /// <summary>
+        /// Finds and returns a Peer ID by it's corresponding Peer Profile ID.
+        /// </summary>
+        /// <param name="profileId"></param>
+        /// <returns></returns>
+        public async Task<Guid> GetPeerIdByPeerProfileIdAsync(Guid profileId)
+        {
+            var peerProfileEntity = await databaseSession.Peers.FirstOrDefaultAsync(p => p.VirtualProfileId == profileId);
+
+            if (peerProfileEntity == null)
+                throw new EntityNotFoundException("Peer Entity");
+            
+            return peerProfileEntity.PeerId;
         }
 
         /// <summary>
@@ -110,7 +128,27 @@ namespace Astrana.Core.Data.Repositories.Peers
         /// <returns></returns>
         public async Task<DM.Peers.Peer?> GetPeerByIdAsync(Guid id)
         {
-            return (await GetPeersAsync(new PeerQueryOptions<Guid, Guid>(new List<Guid> { id }))).Data.FirstOrDefault();
+            var peerProfileEntity = await databaseSession.Peers.FirstOrDefaultAsync(p => p.PeerId == id);
+
+            if (peerProfileEntity != null)
+                return Entities.Peers.ModelMappings.Peer.MapToDomainModel(peerProfileEntity);
+
+            return null;
+        }
+
+        /// <summary>
+        /// Finds and returns a Peer by it's Profile Id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<DM.Peers.Peer?> GetPeerByProfileIdAsync(Guid profileId)
+        {
+            var peerProfileEntity = await databaseSession.Peers.FirstOrDefaultAsync(p => p.VirtualProfileId == profileId);
+
+            if (peerProfileEntity != null)
+                return Entities.Peers.ModelMappings.Peer.MapToDomainModel(peerProfileEntity);
+            
+            return null;
         }
 
         /// <summary>
@@ -142,12 +180,12 @@ namespace Astrana.Core.Data.Repositories.Peers
                     newPeerEntity.LastModifiedTimestamp = now;
 
                     // Save records.
-                    ctx.Peers.Add(newPeerEntity);
-                    await ctx.SaveChangesAsync();
+                    databaseSession.Peers.Add(newPeerEntity);
+                    await databaseSession.SaveChangesAsync();
 
                     countAdded++;
 
-                    newPeerIds.Add(newPeerEntity.Id);
+                    newPeerIds.Add(newPeerEntity.PeerId);
                 }
 
                 logger.LogInformation(string.Format(MessageSuccessfullyCreatedEntity, newPeerIds.Count, nameof(Peer) + "(s)"));
@@ -186,7 +224,7 @@ namespace Astrana.Core.Data.Repositories.Peers
 
                 foreach (var update in requestedUpdates)
                 {
-                    var existingPeerEntity = await ctx.Peers.FirstOrDefaultAsync(o => o.Id == update.Id);
+                    var existingPeerEntity = await databaseSession.Peers.FirstOrDefaultAsync(o => o.PeerId == update.PeerId);
 
                     if (existingPeerEntity == null)
                         continue;
@@ -202,13 +240,13 @@ namespace Astrana.Core.Data.Repositories.Peers
                     existingPeerEntity.LastModifiedTimestamp = now;
 
                     // Save changes to records.
-                    ctx.Peers.Update(existingPeerEntity);
+                    databaseSession.Peers.Update(existingPeerEntity);
 
-                    await ctx.SaveChangesAsync();
+                    await databaseSession.SaveChangesAsync();
 
                     countUpdated++;
 
-                    updatedPeerIds.Add(existingPeerEntity.Id);
+                    updatedPeerIds.Add(existingPeerEntity.PeerId);
                 }
 
                 logger.LogInformation(string.Format(MessageSuccessfullyUpdatedEntity, updatedPeerIds.Count, nameof(Peer) + "(s)"));
@@ -248,11 +286,14 @@ namespace Astrana.Core.Data.Repositories.Peers
         {
             options ??= new ReceivedPeerConnectionRequestQueryOptions<Guid, Guid>();
 
-            var query = ctx.PeerConnectionRequestsReceived.AsQueryable();
+            var query = databaseSession.PeerConnectionRequestsReceived.AsQueryable();
 
             // Add Filters
             if (options.Ids.Any() || options.IdsMatchMode == QueryOptionsMatchMode.Strict)
                 query = query.Where(o => options.Ids.Contains(o.Id));
+
+            if (options.ExcludeIds.Any())
+                query = query.Where(o => !options.ExcludeIds.Contains(o.Id));
 
             if (options.CreatedBefore.HasValue)
                 query = query.Where(o => o.CreatedTimestamp < options.CreatedBefore.Value);
@@ -263,11 +304,14 @@ namespace Astrana.Core.Data.Repositories.Peers
             if (!options.IncludeDeactivated)
                 query = query.Where(o => !o.DeactivatedTimestamp.HasValue);
 
+            if (options.Status.HasValue)
+                query = query.Where(o => o.Status == options.Status.Value);
+
             // Add Ordering
             query = query.OrderByDescending(o => o.CreatedTimestamp);
 
             // Add Paging
-            if (!options.PagingDisabled && options.PageSize.HasValue && options.CurrentPage.HasValue)
+            if (options is { PagingDisabled: false, PageSize: { }, CurrentPage: { } })
                 query = query.Skip(options.PageSize.Value * (options.CurrentPage.Value - 1)).Take(options.PageSize.Value);
 
             return query;
@@ -348,8 +392,8 @@ namespace Astrana.Core.Data.Repositories.Peers
                     newPeerConnectionRequestEntity.LastModifiedTimestamp = now;
 
                     // Save records.
-                    ctx.PeerConnectionRequestsReceived.Add(newPeerConnectionRequestEntity);
-                    await ctx.SaveChangesAsync();
+                    databaseSession.PeerConnectionRequestsReceived.Add(newPeerConnectionRequestEntity);
+                    await databaseSession.SaveChangesAsync();
 
                     countAdded++;
 
@@ -390,7 +434,7 @@ namespace Astrana.Core.Data.Repositories.Peers
             {
                 var now = DateTime.UtcNow;
 
-                var existingPeerConnectionRequestEntity = await ctx.PeerConnectionRequestsReceived.FirstOrDefaultAsync(o => o.Id == requestedUpdateId);
+                var existingPeerConnectionRequestEntity = await databaseSession.PeerConnectionRequestsReceived.FirstOrDefaultAsync(o => o.Id == requestedUpdateId);
 
                 if (existingPeerConnectionRequestEntity == null)
                     throw new EntityNotFoundException();
@@ -400,7 +444,7 @@ namespace Astrana.Core.Data.Repositories.Peers
                     return new UpdateSuccessResult<List<DM.Peers.PeerConnectionRequestReceived>>(new List<DM.Peers.PeerConnectionRequestReceived>(), countUpdated);
                 }
 
-                await using (var transaction = await ctx.Database.BeginTransactionAsync())
+                await using (var transaction = await databaseSession.Database.BeginTransactionAsync())
                 {
                     // Update entity fields
 
@@ -410,9 +454,9 @@ namespace Astrana.Core.Data.Repositories.Peers
                     existingPeerConnectionRequestEntity.LastModifiedTimestamp = now;
 
                     // Save changes to records.
-                    ctx.PeerConnectionRequestsReceived.Update(existingPeerConnectionRequestEntity);
+                    databaseSession.PeerConnectionRequestsReceived.Update(existingPeerConnectionRequestEntity);
 
-                    await ctx.SaveChangesAsync();
+                    await databaseSession.SaveChangesAsync();
 
                     // Build Peer record.
                     var newPeerEntity = new Peer
@@ -431,8 +475,8 @@ namespace Astrana.Core.Data.Repositories.Peers
                     newPeerEntity.LastModifiedTimestamp = now;
 
                     // Save Peer record.
-                    ctx.Peers.Add(newPeerEntity);
-                    await ctx.SaveChangesAsync();
+                    databaseSession.Peers.Add(newPeerEntity);
+                    await databaseSession.SaveChangesAsync();
 
                     await transaction.CommitAsync();
 
@@ -518,7 +562,7 @@ namespace Astrana.Core.Data.Repositories.Peers
 
                 foreach (var updateId in requestedUpdateIds)
                 {
-                    var existingPeerConnectionRequestEntity = await ctx.PeerConnectionRequestsReceived.FirstOrDefaultAsync(o => o.Id == updateId);
+                    var existingPeerConnectionRequestEntity = await databaseSession.PeerConnectionRequestsReceived.FirstOrDefaultAsync(o => o.Id == updateId);
 
                     if (existingPeerConnectionRequestEntity == null)
                         continue;
@@ -539,9 +583,9 @@ namespace Astrana.Core.Data.Repositories.Peers
                     existingPeerConnectionRequestEntity.LastModifiedTimestamp = now;
 
                     // Save changes to records.
-                    ctx.PeerConnectionRequestsReceived.Update(existingPeerConnectionRequestEntity);
+                    databaseSession.PeerConnectionRequestsReceived.Update(existingPeerConnectionRequestEntity);
 
-                    await ctx.SaveChangesAsync();
+                    await databaseSession.SaveChangesAsync();
 
                     countUpdated++;
 
@@ -585,11 +629,14 @@ namespace Astrana.Core.Data.Repositories.Peers
         {
             options ??= new SubmittedPeerConnectionRequestQueryOptions<Guid, Guid>();
 
-            var query = ctx.PeerConnectionRequestsSubmitted.AsQueryable();
+            var query = databaseSession.PeerConnectionRequestsSubmitted.AsQueryable();
 
             // Add Filters
             if (options.Ids.Any() || options.IdsMatchMode == QueryOptionsMatchMode.Strict)
                 query = query.Where(o => options.Ids.Contains(o.Id));
+
+            if (options.ExcludeIds.Any())
+                query = query.Where(o => !options.ExcludeIds.Contains(o.Id));
 
             if (options.CreatedBefore.HasValue)
                 query = query.Where(o => o.CreatedTimestamp < options.CreatedBefore.Value);
@@ -604,7 +651,7 @@ namespace Astrana.Core.Data.Repositories.Peers
             query = query.OrderByDescending(o => o.CreatedTimestamp);
 
             // Add Paging
-            if (!options.PagingDisabled && options.PageSize.HasValue && options.CurrentPage.HasValue)
+            if (!options.PagingDisabled && options is { PageSize: { }, CurrentPage: { } })
                 query = query.Skip(options.PageSize.Value * (options.CurrentPage.Value - 1)).Take(options.PageSize.Value);
 
             return query;
@@ -688,8 +735,8 @@ namespace Astrana.Core.Data.Repositories.Peers
                     newPeerConnectionRequestEntity.LastModifiedTimestamp = now;
 
                     // Save records.
-                    ctx.PeerConnectionRequestsSubmitted.Add(newPeerConnectionRequestEntity);
-                    await ctx.SaveChangesAsync();
+                    databaseSession.PeerConnectionRequestsSubmitted.Add(newPeerConnectionRequestEntity);
+                    await databaseSession.SaveChangesAsync();
 
                     countAdded++;
 

@@ -6,13 +6,14 @@
 
 using Astrana.Core.Domain.Models.Database.Constants;
 using Astrana.Core.Domain.Models.Database.Contracts;
-using Astrana.Core.Validation;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
+using Astrana.Core.Framework.Domain;
+using Astrana.Core.Framework.Model.Validation;
 
 namespace Astrana.Core.Domain.Models.Database
 {
-    public abstract class ConnectionString : BaseDomainModel, IConnectionString
+    public abstract class ConnectionString : DomainEntity, IConnectionString
     {
         [JsonConstructor]
         protected ConnectionString() { }

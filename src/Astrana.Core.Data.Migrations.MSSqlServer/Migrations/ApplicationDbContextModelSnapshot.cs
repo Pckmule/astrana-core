@@ -17,7 +17,7 @@ namespace Astrana.Core.Data.Migrations.MSSqlServer.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.0")
+                .HasAnnotation("ProductVersion", "7.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -71,6 +71,74 @@ namespace Astrana.Core.Data.Migrations.MSSqlServer.Migrations
                     b.ToTable("ApiAccessTokens", "iam");
                 });
 
+            modelBuilder.Entity("Astrana.Core.Data.Entities.Configuration.Audience", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(0);
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(99996);
+
+                    b.Property<DateTimeOffset>("CreatedTimestamp")
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnOrder(99998);
+
+                    b.Property<Guid?>("DeactivatedBy")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(99995);
+
+                    b.Property<string>("DeactivatedReason")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnOrder(99994);
+
+                    b.Property<DateTimeOffset?>("DeactivatedTimestamp")
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnOrder(99993);
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)")
+                        .HasColumnOrder(2);
+
+                    b.Property<Guid>("LastModifiedBy")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(99997);
+
+                    b.Property<DateTimeOffset>("LastModifiedTimestamp")
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnOrder(99999);
+
+                    b.Property<short?>("MaximumAge")
+                        .HasColumnType("smallint")
+                        .HasColumnOrder(6);
+
+                    b.Property<short?>("MinimumAge")
+                        .HasColumnType("smallint")
+                        .HasColumnOrder(5);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)")
+                        .HasColumnOrder(1);
+
+                    b.Property<Guid?>("UserProfileDetailId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.HasIndex("UserProfileDetailId");
+
+                    b.ToTable("Audiences", "config");
+                });
+
             modelBuilder.Entity("Astrana.Core.Data.Entities.Configuration.Country", b =>
                 {
                     b.Property<long>("Id")
@@ -79,6 +147,9 @@ namespace Astrana.Core.Data.Migrations.MSSqlServer.Migrations
                         .HasColumnOrder(0);
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<Guid?>("AudienceId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("uniqueidentifier")
@@ -137,6 +208,8 @@ namespace Astrana.Core.Data.Migrations.MSSqlServer.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AudienceId");
+
                     b.HasIndex("LanguageId");
 
                     b.HasIndex("NameTrxCode")
@@ -155,9 +228,9 @@ namespace Astrana.Core.Data.Migrations.MSSqlServer.Migrations
                         {
                             Id = 1L,
                             CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
-                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 1, 29, 4, 39, 17, 907, DateTimeKind.Unspecified).AddTicks(839), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(8423), new TimeSpan(0, 0, 0, 0, 0)),
                             LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
-                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 1, 29, 4, 39, 17, 907, DateTimeKind.Unspecified).AddTicks(839), new TimeSpan(0, 0, 0, 0, 0)),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(8423), new TimeSpan(0, 0, 0, 0, 0)),
                             Name = "Australia",
                             NameTrxCode = "country_name_au",
                             ThreeLetterCode = "AUS",
@@ -167,9 +240,9 @@ namespace Astrana.Core.Data.Migrations.MSSqlServer.Migrations
                         {
                             Id = 2L,
                             CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
-                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 1, 29, 4, 39, 17, 907, DateTimeKind.Unspecified).AddTicks(839), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(8423), new TimeSpan(0, 0, 0, 0, 0)),
                             LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
-                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 1, 29, 4, 39, 17, 907, DateTimeKind.Unspecified).AddTicks(839), new TimeSpan(0, 0, 0, 0, 0)),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(8423), new TimeSpan(0, 0, 0, 0, 0)),
                             Name = "Brazil",
                             NameTrxCode = "country_name_br",
                             ThreeLetterCode = "BRA",
@@ -179,9 +252,9 @@ namespace Astrana.Core.Data.Migrations.MSSqlServer.Migrations
                         {
                             Id = 3L,
                             CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
-                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 1, 29, 4, 39, 17, 907, DateTimeKind.Unspecified).AddTicks(839), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(8423), new TimeSpan(0, 0, 0, 0, 0)),
                             LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
-                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 1, 29, 4, 39, 17, 907, DateTimeKind.Unspecified).AddTicks(839), new TimeSpan(0, 0, 0, 0, 0)),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(8423), new TimeSpan(0, 0, 0, 0, 0)),
                             Name = "China",
                             NameTrxCode = "country_name_cn",
                             ThreeLetterCode = "CHN",
@@ -191,9 +264,9 @@ namespace Astrana.Core.Data.Migrations.MSSqlServer.Migrations
                         {
                             Id = 4L,
                             CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
-                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 1, 29, 4, 39, 17, 907, DateTimeKind.Unspecified).AddTicks(839), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(8423), new TimeSpan(0, 0, 0, 0, 0)),
                             LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
-                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 1, 29, 4, 39, 17, 907, DateTimeKind.Unspecified).AddTicks(839), new TimeSpan(0, 0, 0, 0, 0)),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(8423), new TimeSpan(0, 0, 0, 0, 0)),
                             Name = "France",
                             NameTrxCode = "country_name_fr",
                             ThreeLetterCode = "FRA",
@@ -203,9 +276,9 @@ namespace Astrana.Core.Data.Migrations.MSSqlServer.Migrations
                         {
                             Id = 5L,
                             CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
-                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 1, 29, 4, 39, 17, 907, DateTimeKind.Unspecified).AddTicks(839), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(8423), new TimeSpan(0, 0, 0, 0, 0)),
                             LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
-                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 1, 29, 4, 39, 17, 907, DateTimeKind.Unspecified).AddTicks(839), new TimeSpan(0, 0, 0, 0, 0)),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(8423), new TimeSpan(0, 0, 0, 0, 0)),
                             Name = "India",
                             NameTrxCode = "country_name_in",
                             ThreeLetterCode = "IND",
@@ -215,9 +288,9 @@ namespace Astrana.Core.Data.Migrations.MSSqlServer.Migrations
                         {
                             Id = 6L,
                             CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
-                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 1, 29, 4, 39, 17, 907, DateTimeKind.Unspecified).AddTicks(839), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(8423), new TimeSpan(0, 0, 0, 0, 0)),
                             LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
-                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 1, 29, 4, 39, 17, 907, DateTimeKind.Unspecified).AddTicks(839), new TimeSpan(0, 0, 0, 0, 0)),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(8423), new TimeSpan(0, 0, 0, 0, 0)),
                             Name = "Israel",
                             NameTrxCode = "country_name_il",
                             ThreeLetterCode = "ILR",
@@ -227,9 +300,9 @@ namespace Astrana.Core.Data.Migrations.MSSqlServer.Migrations
                         {
                             Id = 7L,
                             CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
-                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 1, 29, 4, 39, 17, 907, DateTimeKind.Unspecified).AddTicks(839), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(8423), new TimeSpan(0, 0, 0, 0, 0)),
                             LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
-                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 1, 29, 4, 39, 17, 907, DateTimeKind.Unspecified).AddTicks(839), new TimeSpan(0, 0, 0, 0, 0)),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(8423), new TimeSpan(0, 0, 0, 0, 0)),
                             Name = "Russia",
                             NameTrxCode = "country_name_ru",
                             ThreeLetterCode = "RUS",
@@ -239,9 +312,9 @@ namespace Astrana.Core.Data.Migrations.MSSqlServer.Migrations
                         {
                             Id = 8L,
                             CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
-                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 1, 29, 4, 39, 17, 907, DateTimeKind.Unspecified).AddTicks(839), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(8423), new TimeSpan(0, 0, 0, 0, 0)),
                             LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
-                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 1, 29, 4, 39, 17, 907, DateTimeKind.Unspecified).AddTicks(839), new TimeSpan(0, 0, 0, 0, 0)),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(8423), new TimeSpan(0, 0, 0, 0, 0)),
                             Name = "South Africa",
                             NameTrxCode = "country_name_za",
                             ThreeLetterCode = "ZAF",
@@ -251,9 +324,9 @@ namespace Astrana.Core.Data.Migrations.MSSqlServer.Migrations
                         {
                             Id = 9L,
                             CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
-                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 1, 29, 4, 39, 17, 907, DateTimeKind.Unspecified).AddTicks(839), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(8423), new TimeSpan(0, 0, 0, 0, 0)),
                             LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
-                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 1, 29, 4, 39, 17, 907, DateTimeKind.Unspecified).AddTicks(839), new TimeSpan(0, 0, 0, 0, 0)),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(8423), new TimeSpan(0, 0, 0, 0, 0)),
                             Name = "Spain",
                             NameTrxCode = "country_name_es",
                             ThreeLetterCode = "ESP",
@@ -263,9 +336,9 @@ namespace Astrana.Core.Data.Migrations.MSSqlServer.Migrations
                         {
                             Id = 10L,
                             CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
-                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 1, 29, 4, 39, 17, 907, DateTimeKind.Unspecified).AddTicks(839), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(8423), new TimeSpan(0, 0, 0, 0, 0)),
                             LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
-                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 1, 29, 4, 39, 17, 907, DateTimeKind.Unspecified).AddTicks(839), new TimeSpan(0, 0, 0, 0, 0)),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(8423), new TimeSpan(0, 0, 0, 0, 0)),
                             Name = "United Kingdom",
                             NameTrxCode = "country_name_gb",
                             ThreeLetterCode = "GBR",
@@ -275,9 +348,9 @@ namespace Astrana.Core.Data.Migrations.MSSqlServer.Migrations
                         {
                             Id = 11L,
                             CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
-                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 1, 29, 4, 39, 17, 907, DateTimeKind.Unspecified).AddTicks(839), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(8423), new TimeSpan(0, 0, 0, 0, 0)),
                             LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
-                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 1, 29, 4, 39, 17, 907, DateTimeKind.Unspecified).AddTicks(839), new TimeSpan(0, 0, 0, 0, 0)),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(8423), new TimeSpan(0, 0, 0, 0, 0)),
                             Name = "United States",
                             NameTrxCode = "country_name_us",
                             ThreeLetterCode = "USA",
@@ -331,9 +404,9 @@ namespace Astrana.Core.Data.Migrations.MSSqlServer.Migrations
                     b.ToTable("FeatureToggles", "config");
                 });
 
-            modelBuilder.Entity("Astrana.Core.Data.Entities.Configuration.Language", b =>
+            modelBuilder.Entity("Astrana.Core.Data.Entities.Configuration.Feeling", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("FeelingId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
                         .HasColumnOrder(0);
@@ -358,9 +431,2664 @@ namespace Astrana.Core.Data.Migrations.MSSqlServer.Migrations
                         .HasColumnType("datetimeoffset")
                         .HasColumnOrder(99993);
 
+                    b.Property<string>("IconName")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)")
+                        .HasColumnOrder(4);
+
+                    b.Property<Guid>("LastModifiedBy")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(99997);
+
+                    b.Property<DateTimeOffset>("LastModifiedTimestamp")
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnOrder(99999);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnOrder(1);
+
+                    b.Property<string>("NameTrxCode")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnOrder(2);
+
+                    b.Property<string>("ShortCode")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)")
+                        .HasColumnOrder(5);
+
+                    b.Property<string>("UnicodeIcon")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)")
+                        .HasColumnOrder(4);
+
+                    b.HasKey("FeelingId");
+
+                    b.HasIndex("NameTrxCode")
+                        .IsUnique();
+
+                    b.ToTable("Feelings", "config");
+
+                    b.HasData(
+                        new
+                        {
+                            FeelingId = new Guid("b217771f-25b8-4c94-8764-fa9f74e9fee0"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "happy",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Happy",
+                            NameTrxCode = "feeling_name_happy",
+                            ShortCode = "",
+                            UnicodeIcon = "😀"
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("488d123a-caef-4f81-a2ae-0727586ec44e"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "blessed",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Blessed",
+                            NameTrxCode = "feeling_name_blessed",
+                            ShortCode = "",
+                            UnicodeIcon = "😇"
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("abb8a522-c4eb-4160-826f-9ffac9e533e4"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "loved",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Loved",
+                            NameTrxCode = "feeling_name_loved",
+                            ShortCode = "",
+                            UnicodeIcon = "🥰"
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("f7098667-2980-4645-a517-4c59e1fcdac0"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "sad",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Sad",
+                            NameTrxCode = "feeling_name_sad",
+                            ShortCode = "",
+                            UnicodeIcon = "🙁"
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("6acabb97-9237-490a-9ba1-46729256b114"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "lovely",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Lovely",
+                            NameTrxCode = "feeling_name_lovely",
+                            ShortCode = "",
+                            UnicodeIcon = "🥰"
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("178fc7f9-7e8e-4c75-bb5c-6c184e0017fa"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "thankful",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Thankful",
+                            NameTrxCode = "feeling_name_thankful",
+                            ShortCode = "",
+                            UnicodeIcon = "😄"
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("508cfab7-b4aa-4471-82e7-217d7929ab42"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "excited",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Excited",
+                            NameTrxCode = "feeling_name_excited",
+                            ShortCode = "",
+                            UnicodeIcon = "🤩"
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("ab66f514-ee5d-460c-aa07-07861255abb6"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "in love",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "In Love",
+                            NameTrxCode = "feeling_name_in_love",
+                            ShortCode = "",
+                            UnicodeIcon = "🥰"
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("21cd0cc4-4270-495e-a32d-1f2679ae7e83"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "crazy",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Crazy",
+                            NameTrxCode = "feeling_name_crazy",
+                            ShortCode = "",
+                            UnicodeIcon = "🤪"
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("4d9866de-3cfc-41af-9c0a-efc94d5b9cdf"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "grateful",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Grateful",
+                            NameTrxCode = "feeling_name_grateful",
+                            ShortCode = "",
+                            UnicodeIcon = "😄"
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("1991e2fe-9f1d-4bc7-b0d7-43571b22e719"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "blissful",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Blissful",
+                            NameTrxCode = "feeling_name_blissful",
+                            ShortCode = "",
+                            UnicodeIcon = "😊"
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("4e2e2f5f-6c52-44be-abc9-9d1d77445ec8"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "fantastic",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Fantastic",
+                            NameTrxCode = "feeling_name_fantastic",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("ec1745f9-132e-457d-a645-bdc25a80e29d"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "silly",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Silly",
+                            NameTrxCode = "feeling_name_silly",
+                            ShortCode = "",
+                            UnicodeIcon = "😜"
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("039a5b7e-416c-4bd8-b85f-9a622aefc1fe"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "festive",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Festive",
+                            NameTrxCode = "feeling_name_festive",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("59d0ca20-ed26-4a6b-a9e3-07ea87ced22e"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "wonderful",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Wonderful",
+                            NameTrxCode = "feeling_name_wonderful",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("45da6c17-f1f1-4da4-afdc-43229d3ab431"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "cool",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Cool",
+                            NameTrxCode = "feeling_name_cool",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("6f1b6025-8739-4e3c-af26-afdf941ebeb8"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "amused",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Amused",
+                            NameTrxCode = "feeling_name_amused",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("9b4de813-e03b-408d-b08a-21b61979cbdb"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "relaxed",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Relaxed",
+                            NameTrxCode = "feeling_name_relaxed",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("c689f7e0-18a5-4d73-8e67-29ee74192ff3"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "positive",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Positive",
+                            NameTrxCode = "feeling_name_positive",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("3a2b2c70-38c0-45a1-8f9e-1ae433bcb85b"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "chill",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Chill",
+                            NameTrxCode = "feeling_name_chill",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("ce57ff0b-cef5-4bae-8c3d-9bc7f9209019"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "hopeful",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Hopeful",
+                            NameTrxCode = "feeling_name_hopeful",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("c7ad9f6b-b532-41a3-b9ec-e1aaaa54ab0e"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "joyful",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Joyful",
+                            NameTrxCode = "feeling_name_joyful",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("4b09b308-61cf-4a6b-9ae2-f7e6d75285a2"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "tired",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Tired",
+                            NameTrxCode = "feeling_name_tired",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("f8e64c69-4d0b-46b4-99e9-fabee61659ab"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "motivated",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Motivated",
+                            NameTrxCode = "feeling_name_motivated",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("247137cf-1804-414c-b79f-6b3bafce66f5"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "proud",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Proud",
+                            NameTrxCode = "feeling_name_proud",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("f2f3c5ef-538f-4229-991b-00e8dfd0a898"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "alone",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Alone",
+                            NameTrxCode = "feeling_name_alone",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("f9d1df7e-897e-4561-a8ba-ea383d824090"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "thoughtful",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Thoughtful",
+                            NameTrxCode = "feeling_name_thoughtful",
+                            ShortCode = "",
+                            UnicodeIcon = "🤔"
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("392e2172-d4ef-4586-8a33-4874a82d064a"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "OK",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Ok",
+                            NameTrxCode = "feeling_name_OK",
+                            ShortCode = "",
+                            UnicodeIcon = "👌"
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("e2e2bee8-9ece-4242-9b5d-f9ecac067e25"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "nostalgic",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Nostalgic",
+                            NameTrxCode = "feeling_name_nostalgic",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("de7fe26a-fd27-454e-a3af-1219e7fc770b"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "angry",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Angry",
+                            NameTrxCode = "feeling_name_angry",
+                            ShortCode = "",
+                            UnicodeIcon = "😠"
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("032a23e1-45fd-491d-a78c-5699c3411310"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "sick",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Sick",
+                            NameTrxCode = "feeling_name_sick",
+                            ShortCode = "",
+                            UnicodeIcon = "🤢"
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("0e1c6391-310e-40f7-91f9-750ebaf9119a"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "delighted",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Delighted",
+                            NameTrxCode = "feeling_name_delighted",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("db4f499e-bc75-4ad6-a49d-fef3e7c4cba8"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "drained",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Drained",
+                            NameTrxCode = "feeling_name_drained",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("b0e80a2f-2726-492f-a448-cfd7b9b43f17"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "emotional",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Emotional",
+                            NameTrxCode = "feeling_name_emotional",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("20bc5630-85c5-4fd8-986e-ff3b79e65f23"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "confident",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Confident",
+                            NameTrxCode = "feeling_name_confident",
+                            ShortCode = "",
+                            UnicodeIcon = "😏"
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("9d14f560-e42e-4473-8181-53d4d6c547d8"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "awesome",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Awesome",
+                            NameTrxCode = "feeling_name_awesome",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("92294adc-bab5-45b2-881d-6093c46f6ead"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "fresh",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Fresh",
+                            NameTrxCode = "feeling_name_fresh",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("1c6ae0c0-1fbc-4044-a7b1-d76e729268d2"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "determined",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Determined",
+                            NameTrxCode = "feeling_name_determined",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("aa167459-e71b-4f5f-ae0d-96ef469f938b"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "exhausted",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Exhausted",
+                            NameTrxCode = "feeling_name_exhausted",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("eb4f716c-0cb8-4dc4-8301-be0e621ec66d"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "glad",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Glad",
+                            NameTrxCode = "feeling_name_glad",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("12c68453-dce3-4245-b208-1b4a22a4e0ee"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "lucky",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Lucky",
+                            NameTrxCode = "feeling_name_lucky",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("ec5a89b6-cde8-4cbe-90a1-3d122c6489e9"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "heartbroken",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Heartbroken",
+                            NameTrxCode = "feeling_name_heartbroken",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("b32ffdfb-8d06-425b-9552-a7df0817de27"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "bored",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Bored",
+                            NameTrxCode = "feeling_name_bored",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("9ad0529d-c1ea-43eb-a8f7-f62b6679e427"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "sleepy",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Sleepy",
+                            NameTrxCode = "feeling_name_sleepy",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("f7e4024f-2edb-40a6-93ec-4bb81dcd5b1c"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "energised",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Energised",
+                            NameTrxCode = "feeling_name_energised",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("665691db-4644-46df-93c7-9ebdbe6015cc"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "hungry",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Hungry",
+                            NameTrxCode = "feeling_name_hungry",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("5d090bfd-b838-47f9-a432-250ebfe690c4"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "professional",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Professional",
+                            NameTrxCode = "feeling_name_professional",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("049e7c17-4afa-40c4-8fd6-c7d6539602af"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "pained",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Pained",
+                            NameTrxCode = "feeling_name_pained",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("6ffc59ad-1f32-4d7e-bec5-b8052481d0ed"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "peaceful",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Peaceful",
+                            NameTrxCode = "feeling_name_peaceful",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("4ce93986-0d74-4ed9-a3ae-848d96d45e67"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "disappointed",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Disappointed",
+                            NameTrxCode = "feeling_name_disappointed",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("39ae9510-0792-40e9-8493-54f06a4fac40"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "optimistic",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Optimistic",
+                            NameTrxCode = "feeling_name_optimistic",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("c37cdeff-f8db-4815-b90e-7d5017a49da4"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "cold",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Cold",
+                            NameTrxCode = "feeling_name_cold",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("26efdfa1-cb0d-4ff1-a8fe-8302c6a936ee"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "cute",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Cute",
+                            NameTrxCode = "feeling_name_cute",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("31ceab4b-0c74-4282-8953-0e36852aa39b"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "fabulous",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Fabulous",
+                            NameTrxCode = "feeling_name_fabulous",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("0e997549-8dc7-426a-87fc-1e0a0dfb3747"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "great",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Great",
+                            NameTrxCode = "feeling_name_great",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("15fd2687-d97a-4ca3-8d58-7697f8b616b3"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "sorry",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Sorry",
+                            NameTrxCode = "feeling_name_sorry",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("b307cdfd-2d8e-48a8-948a-b498ab6e09a8"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "super",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Super",
+                            NameTrxCode = "feeling_name_super",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("d3acec4c-f3d1-469a-92b9-aa0935c43d72"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "worried",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Worried",
+                            NameTrxCode = "feeling_name_worried",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("f86209e6-01ac-4397-8baf-b946ee518bda"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "funny",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Funny",
+                            NameTrxCode = "feeling_name_funny",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("88dc7329-fc0e-4c5e-b6b1-6342b64c5d41"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "bad",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Bad",
+                            NameTrxCode = "feeling_name_bad",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("9666e08f-eecb-4959-a03c-10c562f65296"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "down",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Down",
+                            NameTrxCode = "feeling_name_down",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("c11ec828-d5f7-41f9-b698-527d81ba3a9f"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "inspired",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Inspired",
+                            NameTrxCode = "feeling_name_inspired",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("40220d1a-e995-438c-ab9f-3916438e6e7e"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "satisfied",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Satisfied",
+                            NameTrxCode = "feeling_name_satisfied",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("55fc1f8d-0e87-45f4-b612-0146934f5f7a"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "pumped",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Pumped",
+                            NameTrxCode = "feeling_name_pumped",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("e10ae517-e081-46f4-ab3d-b59ec37c17fb"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "calm",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Calm",
+                            NameTrxCode = "feeling_name_calm",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("157ff2b1-2c19-451a-9971-6ec4d56140ed"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "confused",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Confused",
+                            NameTrxCode = "feeling_name_confused",
+                            ShortCode = "",
+                            UnicodeIcon = "😕"
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("a564948f-0901-44b6-a639-f85b041d5165"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "goofy",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Goofy",
+                            NameTrxCode = "feeling_name_goofy",
+                            ShortCode = "",
+                            UnicodeIcon = "🤪"
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("e8ab7d91-d052-43eb-9129-9df5683790e8"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "missing",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Missing",
+                            NameTrxCode = "feeling_name_missing",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("2c6cbc74-1294-4ab5-acc0-2c872b20136a"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "good",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Good",
+                            NameTrxCode = "feeling_name_good",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("5c8882e8-6a54-4940-be6e-870799d2d818"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "sarcastic",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Sarcastic",
+                            NameTrxCode = "feeling_name_sarcastic",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("583d0047-ff8f-4caa-9a73-67963e995767"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "lonely",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Lonely",
+                            NameTrxCode = "feeling_name_lonely",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("95c2e255-8df1-4420-965b-07761795872c"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "strong",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Strong",
+                            NameTrxCode = "feeling_name_strong",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("4108c0f2-de82-4af8-a2e2-23a2cbc777ea"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "concerned",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Concerned",
+                            NameTrxCode = "feeling_name_concerned",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("3d8e7f05-4e92-4566-8809-b7bfd62e201e"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "special",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Special",
+                            NameTrxCode = "feeling_name_special",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("58d9ae5c-f841-42c2-bf17-3070a729e586"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "depressed",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Depressed",
+                            NameTrxCode = "feeling_name_depressed",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("bb5cb305-6098-4d51-bcbc-1f5f68469f67"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "jolly",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Jolly",
+                            NameTrxCode = "feeling_name_jolly",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("80dafd45-86a7-4ae9-96ac-a0c65371256d"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "curious",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Curious",
+                            NameTrxCode = "feeling_name_curious",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("c6f7859f-aa9a-460a-8111-ac68a6d497c4"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "low",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Low",
+                            NameTrxCode = "feeling_name_low",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("0cc3ba2f-6251-4d86-ad04-aa4092848149"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "welcome",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Welcome",
+                            NameTrxCode = "feeling_name_welcome",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("a9845a33-e9db-41f3-892b-31493d313dc1"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "broken",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Broken",
+                            NameTrxCode = "feeling_name_broken",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("398dcf20-a336-4fd1-aa49-674b59605e70"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "beautiful",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Beautiful",
+                            NameTrxCode = "feeling_name_beautiful",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("8c9bd845-88ba-4e4a-a050-7136bb5e2e83"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "amazing",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Amazing",
+                            NameTrxCode = "feeling_name_amazing",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("50e8e3d8-4c2e-41c0-a46c-54744dc84719"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "irritated",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Irritated",
+                            NameTrxCode = "feeling_name_irritated",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("ce3df163-2e82-4ec5-a459-c0a2170798bc"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "stressed",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Stressed",
+                            NameTrxCode = "feeling_name_stressed",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("5e7d56b0-4a4e-45ee-a159-1309dc684819"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "incomplete",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Incomplete",
+                            NameTrxCode = "feeling_name_incomplete",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("affd5981-13a5-48bc-bc7c-00d2012b4fcd"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "hyper",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Hyper",
+                            NameTrxCode = "feeling_name_hyper",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("a13d4ed5-9fe6-46ed-8f30-b52440280311"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "mischievous",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Mischievous",
+                            NameTrxCode = "feeling_name_mischievous",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("d989b28d-af3d-4860-8e63-546ce47f1cf4"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "amazed",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Amazed",
+                            NameTrxCode = "feeling_name_amazed",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("813320d6-f554-49db-bb68-4bab1d40c0e5"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "annoyed",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Annoyed",
+                            NameTrxCode = "feeling_name_annoyed",
+                            ShortCode = "",
+                            UnicodeIcon = "😒"
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("07b1b152-84a8-4b16-afba-0f414ec802ae"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "fed",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Fed",
+                            NameTrxCode = "feeling_name_fed",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("1663e528-50df-4e10-a0de-43b6587608fc"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "puzzled",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Puzzled",
+                            NameTrxCode = "feeling_name_puzzled",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("9d300bfa-da23-4a71-a765-7141bfa19616"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "furious",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Furious",
+                            NameTrxCode = "feeling_name_furious",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("ec3181ca-8d6e-43e6-97d7-86a696ebb26c"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "refreshed",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Refreshed",
+                            NameTrxCode = "feeling_name_refreshed",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("a6e448bd-152b-4623-b296-9fc2f25568c4"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "accomplished",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Accomplished",
+                            NameTrxCode = "feeling_name_accomplished",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("5ba8ad5b-6ca1-4eab-88f9-dad3d071f186"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "surprised",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Surprised",
+                            NameTrxCode = "feeling_name_surprised",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("7d4cc6b4-b019-4036-8c94-9eb30223f613"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "perplexed",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Perplexed",
+                            NameTrxCode = "feeling_name_perplexed",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("9ebe71bb-c9bf-44e6-852f-8bcfd7e2b3fc"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "frustrated",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Frustrated",
+                            NameTrxCode = "feeling_name_frustrated",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("06a4c4d7-2c26-440b-9a03-9bd8d60cbf2d"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "meh",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Meh",
+                            NameTrxCode = "feeling_name_meh",
+                            ShortCode = "",
+                            UnicodeIcon = "😐️"
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("f96ff6c3-3d2c-4a16-9d7e-1dafdcce23b0"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "pretty",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Pretty",
+                            NameTrxCode = "feeling_name_pretty",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("b4eba1c4-64bc-41b3-97fd-e7495d32d627"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "better",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Better",
+                            NameTrxCode = "feeling_name_better",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("39f315bf-bfdc-4b27-93ed-b6df251b835a"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "guilty",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Guilty",
+                            NameTrxCode = "feeling_name_guilty",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("2866995a-b8bd-44af-9324-a5179a638d57"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "safe",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Safe",
+                            NameTrxCode = "feeling_name_safe",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("c950cf5b-d210-42df-8dbe-94fcc9a4a0b0"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "free",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Free",
+                            NameTrxCode = "feeling_name_free",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("01f4b5a7-6b92-4b56-83f4-f22f0dc0dc68"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "lost",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Lost",
+                            NameTrxCode = "feeling_name_lost",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("3c019ee5-c36f-4596-832e-5058fb08f19a"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "old",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Old",
+                            NameTrxCode = "feeling_name_old",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("05031baa-975f-403c-9b27-06e0d42f1ece"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "lazy",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Lazy",
+                            NameTrxCode = "feeling_name_lazy",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("d0188b51-0b88-4bb0-9df4-2e84f04d1ba4"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "worse",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Worse",
+                            NameTrxCode = "feeling_name_worse",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("6953aaee-d64d-46c3-92c4-0b9023319fdc"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "horrible",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Horrible",
+                            NameTrxCode = "feeling_name_horrible",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("51700b90-96c9-48fb-bc7b-b1f2ffa7a645"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "comfortable",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Comfortable",
+                            NameTrxCode = "feeling_name_comfortable",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("4b7455ab-48fa-4d72-95a7-fe66bcf74f81"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "stupid",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Stupid",
+                            NameTrxCode = "feeling_name_stupid",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("2879646c-3f03-4da6-8ee7-443b9fcbb7e9"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "ashamed",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Ashamed",
+                            NameTrxCode = "feeling_name_ashamed",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("a8f3f919-f3f7-4cbd-969f-42b42bbd6689"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "terrible",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Terrible",
+                            NameTrxCode = "feeling_name_terrible",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("5fa9a484-3b2e-4c04-8ec6-7d945b642d24"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "asleep",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Asleep",
+                            NameTrxCode = "feeling_name_asleep",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("af572dcd-1163-4ab8-aad5-e6d384f333a1"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "well",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Well",
+                            NameTrxCode = "feeling_name_well",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("a78bdb18-4a2b-4f8b-b10a-c134c538e476"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "alive",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Alive",
+                            NameTrxCode = "feeling_name_alive",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("9caf4251-ff77-4b2d-b8f9-908a3e1d22a3"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "shy",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Shy",
+                            NameTrxCode = "feeling_name_shy",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("81afc527-df85-4f0a-ac38-213defdf09c0"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "rough",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Rough",
+                            NameTrxCode = "feeling_name_rough",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("a161bf66-94de-4bd0-b282-06e954643019"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "weird",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Weird",
+                            NameTrxCode = "feeling_name_weird",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("24d7f6fa-ea49-4b6a-9af8-1f3c9eac2848"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "human",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Human",
+                            NameTrxCode = "feeling_name_human",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("6c44ff37-5272-4ed9-9f03-1f04ec365b31"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "hurt",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Hurt",
+                            NameTrxCode = "feeling_name_hurt",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("b2461671-ca43-45b4-bb03-701b1059b47a"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "awful",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Awful",
+                            NameTrxCode = "feeling_name_awful",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("a0d7db10-3753-45ca-b8da-b7c19ec0bfa0"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "normal",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Normal",
+                            NameTrxCode = "feeling_name_normal",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("7310c379-3538-400a-af8a-b717ac5121cd"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "warm",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Warm",
+                            NameTrxCode = "feeling_name_warm",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("1a2ef40a-b98e-469f-a0a9-3d3930a101d2"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "insecure",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Insecure",
+                            NameTrxCode = "feeling_name_insecure",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("2df5576e-ba9c-47fa-a841-48a8b408c121"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "weak",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Weak",
+                            NameTrxCode = "feeling_name_weak",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("df7a6753-4e2f-4d84-b8cd-30ce979b1958"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "kind",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Kind",
+                            NameTrxCode = "feeling_name_kind",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("da6a01de-1934-4a86-8437-969336ccc9fb"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "fine",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Fine",
+                            NameTrxCode = "feeling_name_fine",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("03a351c3-5c80-44f7-9ab1-5c59b96ba1d9"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "dumb",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Dumb",
+                            NameTrxCode = "feeling_name_dumb",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("48069a7d-316d-4aa1-a287-d4e9caa592aa"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "nice",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Nice",
+                            NameTrxCode = "feeling_name_nice",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("a2d61487-3489-48ab-9f8f-637c9aaedeae"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "important",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Important",
+                            NameTrxCode = "feeling_name_important",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("34637db8-879e-458b-8d26-3e8be1250ab0"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "crappy",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Crappy",
+                            NameTrxCode = "feeling_name_crappy",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("186425b4-777c-4449-b5b2-8096bf764e43"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "uncomfortable",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Uncomfortable",
+                            NameTrxCode = "feeling_name_uncomfortable",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("20f47b26-6b89-4693-908c-41f55942ad22"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "worthless",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Worthless",
+                            NameTrxCode = "feeling_name_worthless",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("6ad0a510-e429-451b-8537-a6e5c9f0e264"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "ready",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Ready",
+                            NameTrxCode = "feeling_name_ready",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("943f26ea-7ab3-4f31-a828-2ec3938051a7"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "different",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Different",
+                            NameTrxCode = "feeling_name_different",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("36000031-ce5c-4231-a4ac-7bc7c2df3a66"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "helpless",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Helpless",
+                            NameTrxCode = "feeling_name_helpless",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("10b89478-8bd2-4ff3-ad11-e692a3039bff"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "awkward",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Awkward",
+                            NameTrxCode = "feeling_name_awkward",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("20fd88df-0d73-4302-839d-e304921dfa0d"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "drunk",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Drunk",
+                            NameTrxCode = "feeling_name_drunk",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("aad91c8c-111a-4e19-a078-c36bed3c58b3"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "overwhelmed",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Overwhelmed",
+                            NameTrxCode = "feeling_name_overwhelmed",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("5c3d61f1-d5bb-4414-8777-1a4c752de1e7"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "hopeless",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Hopeless",
+                            NameTrxCode = "feeling_name_hopeless",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("84afef29-8fcb-4b2e-9aa9-3d0942917c25"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "whole",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Whole",
+                            NameTrxCode = "feeling_name_whole",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("f7ccf555-9e24-4b74-aac9-b8430fae2fa6"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "miserable",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Miserable",
+                            NameTrxCode = "feeling_name_miserable",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("e77867cd-d5c1-4a47-aff8-cb073e9f51bc"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "mad",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Mad",
+                            NameTrxCode = "feeling_name_mad",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("87d870c8-0fc2-4225-8704-224876045619"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "deep",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Deep",
+                            NameTrxCode = "feeling_name_deep",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("129b3bfb-12d9-45fd-8892-6c5ef3f3304f"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "yucky",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Yucky",
+                            NameTrxCode = "feeling_name_yucky",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("648390d6-7890-49ad-9c72-a661e6729728"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "nervous",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Nervous",
+                            NameTrxCode = "feeling_name_nervous",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("26d58432-2bb5-415c-ace8-113cb12392b7"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "blue",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Blue",
+                            NameTrxCode = "feeling_name_blue",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("4f5c95ce-f2c2-4b46-9082-1a97aeee1bb7"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "wanted",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Wanted",
+                            NameTrxCode = "feeling_name_wanted",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("98458a60-e77c-4c13-aff6-a49f9a58e936"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "honoured",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Honoured",
+                            NameTrxCode = "feeling_name_honoured",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("38d5508c-5522-4bc8-9337-1b9edda2eb6c"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "light",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Light",
+                            NameTrxCode = "feeling_name_light",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("9da10b21-2e01-410b-a085-d8665f96f1ec"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "hung-over",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Hung-Over",
+                            NameTrxCode = "feeling_name_hung-over",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("9c72638f-2439-4fbb-9584-68afd7783429"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "secure",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Secure",
+                            NameTrxCode = "feeling_name_secure",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("889aa766-6cd5-42f3-925c-29aa3ba16d8c"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "naked",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Naked",
+                            NameTrxCode = "feeling_name_naked",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("67c2b438-5d66-4aa0-a5cc-98679dc60435"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "dirty",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Dirty",
+                            NameTrxCode = "feeling_name_dirty",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("92939602-625d-4e14-9fa0-2a30cb9da56a"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "unimportant",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Unimportant",
+                            NameTrxCode = "feeling_name_unimportant",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("0140a60e-878c-4a12-83a0-20cb2690157b"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "mighty",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Mighty",
+                            NameTrxCode = "feeling_name_mighty",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("449d8827-847b-463d-8076-52e49a80236d"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "scared",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Scared",
+                            NameTrxCode = "feeling_name_scared",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("bad5058c-a879-41c7-9e3a-bb4808dab9b6"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "jealous",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Jealous",
+                            NameTrxCode = "feeling_name_jealous",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("8a0a5f1d-fd68-4ffe-bf51-bdfaac9a2a4b"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "sore",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Sore",
+                            NameTrxCode = "feeling_name_sore",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("e008d912-c1cf-42f4-b402-aa113951b5eb"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "unwanted",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Unwanted",
+                            NameTrxCode = "feeling_name_unwanted",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("252c8a0c-dbbf-4d12-92e8-6109f02b2ad7"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "appreciated",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Appreciated",
+                            NameTrxCode = "feeling_name_appreciated",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("e1ae1bf6-01ea-4d9b-a465-27eac60a47ee"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "full",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Full",
+                            NameTrxCode = "feeling_name_full",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("714c9538-a3b5-42e1-993f-cb9ce40858c1"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "busy",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Busy",
+                            NameTrxCode = "feeling_name_busy",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("f1b2d624-2518-4b9a-b1ab-d9a6279f0eea"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "small",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Small",
+                            NameTrxCode = "feeling_name_small",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("05328972-a422-4a7e-9492-3eabb2d75835"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "unloved",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Unloved",
+                            NameTrxCode = "feeling_name_unloved",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("65dee676-89c2-443f-b39a-5b2871b5de30"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "useless",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Useless",
+                            NameTrxCode = "feeling_name_useless",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("8ed8b4c7-d15d-4c22-9735-8037e5469a03"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "qualified",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Qualified",
+                            NameTrxCode = "feeling_name_qualified",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("0d8b5240-b39e-4acf-9333-9e4d509d4086"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "blah",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Blah",
+                            NameTrxCode = "feeling_name_blah",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("8d78d779-5cb7-4c13-9675-11ca2db5aba7"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "impatient",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Impatient",
+                            NameTrxCode = "feeling_name_impatient",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("900ad78b-e8a2-4c51-97c3-b198ded4282b"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "privileged",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Privileged",
+                            NameTrxCode = "feeling_name_privileged",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("a8a6723d-a16c-4168-88bf-f44da01ae000"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "trapped",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Trapped",
+                            NameTrxCode = "feeling_name_trapped",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("d703c237-d0a6-497e-94bd-1da31fe31ff7"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "thirsty",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Thirsty",
+                            NameTrxCode = "feeling_name_thirsty",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("6ac4f9b0-ac55-4a07-b9a1-aa903e4faf1e"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "nauseous",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Nauseous",
+                            NameTrxCode = "feeling_name_nauseous",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("8d594253-3542-48f3-b52f-b03bd07b5701"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "upset",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Upset",
+                            NameTrxCode = "feeling_name_upset",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("718540d3-daad-49bf-9798-7196d9d99a50"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "offended",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Offended",
+                            NameTrxCode = "feeling_name_offended",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("b432a5de-2d80-4208-929c-a132d92a9aca"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "numb",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Numb",
+                            NameTrxCode = "feeling_name_numb",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("063129b6-2539-43f2-a148-26ee2c463acd"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "perfect",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Perfect",
+                            NameTrxCode = "feeling_name_perfect",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("a83d7d34-3624-48e7-a6fe-60cbd2c7fcec"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "challenged",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Challenged",
+                            NameTrxCode = "feeling_name_challenged",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("0558fdcf-f219-4bf5-9745-d3fee4cf7901"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "threatened",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Threatened",
+                            NameTrxCode = "feeling_name_threatened",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("fe422f3b-54ae-494c-ad2b-5d9187683d20"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "relieved",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Relieved",
+                            NameTrxCode = "feeling_name_relieved",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("bdf68788-7653-400b-97d6-1a51d89be49d"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "stuck",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Stuck",
+                            NameTrxCode = "feeling_name_stuck",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("afa91a50-7f97-446e-a1c7-f9000a4faf6e"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "strange",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Strange",
+                            NameTrxCode = "feeling_name_strange",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("f9f3a900-c768-4c9a-84b0-98b5ed6dec5c"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "embarrassed",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Embarrassed",
+                            NameTrxCode = "feeling_name_embarrassed",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("25afbe8d-9c9a-4776-849b-7346ab2394e9"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "rested",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Rested",
+                            NameTrxCode = "feeling_name_rested",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("8ad3d2ab-793c-46fa-8b45-295ddd79b3fd"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "smart",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Smart",
+                            NameTrxCode = "feeling_name_smart",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("7b1d98ce-8462-42b2-85f1-a5fd54530625"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "cheated",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Cheated",
+                            NameTrxCode = "feeling_name_cheated",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("d1b2e108-315a-4744-97dd-58ed31e7b4d7"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "betrayed",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Betrayed",
+                            NameTrxCode = "feeling_name_betrayed",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("928da8df-f393-4586-a46a-7b2e1405064f"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "anxious",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Anxious",
+                            NameTrxCode = "feeling_name_anxious",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("3f93e029-dddb-4b76-8d77-8a1423c408b8"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "aggravated",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Aggravated",
+                            NameTrxCode = "feeling_name_aggravated",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("d0c3acb7-87d0-46e8-b67f-486536289ee7"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "evil",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Evil",
+                            NameTrxCode = "feeling_name_evil",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("e9743198-846d-4941-94fa-c9d828df1427"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "ignored",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Ignored",
+                            NameTrxCode = "feeling_name_ignored",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("3a6ea7e9-5495-4b1d-a5dc-a3afea789fb8"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "regret",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Regret",
+                            NameTrxCode = "feeling_name_regret",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("8650b528-aed2-4b69-9d39-5ffbfba00e18"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "healthy",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Healthy",
+                            NameTrxCode = "feeling_name_healthy",
+                            ShortCode = "",
+                            UnicodeIcon = "😊"
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("7a5111c9-c055-46dc-b834-e7f40e04170c"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "generous",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Generous",
+                            NameTrxCode = "feeling_name_generous",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("5d76bd60-af03-4a23-b26e-9680385b8326"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "rich",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Rich",
+                            NameTrxCode = "feeling_name_rich",
+                            ShortCode = "",
+                            UnicodeIcon = "🤑"
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("7ce07338-9f3f-4839-88ea-dd09bca92efb"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "afraid",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Afraid",
+                            NameTrxCode = "feeling_name_afraid",
+                            ShortCode = "",
+                            UnicodeIcon = "😨"
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("fc2ca2bb-60e9-46b6-b685-8f0877825d3b"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "broke",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Broke",
+                            NameTrxCode = "feeling_name_broke",
+                            ShortCode = "",
+                            UnicodeIcon = ""
+                        },
+                        new
+                        {
+                            FeelingId = new Guid("3924e451-f8ad-4345-a84d-b04e96cc32a0"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "invisible",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 757, DateTimeKind.Unspecified).AddTicks(1360), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Invisible",
+                            NameTrxCode = "feeling_name_invisible",
+                            ShortCode = "",
+                            UnicodeIcon = "🫥"
+                        });
+                });
+
+            modelBuilder.Entity("Astrana.Core.Data.Entities.Configuration.Language", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(0);
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(5)
+                        .HasColumnType("nvarchar(5)")
+                        .HasColumnOrder(3);
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(99996);
+
+                    b.Property<DateTimeOffset>("CreatedTimestamp")
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnOrder(99998);
+
+                    b.Property<Guid?>("DeactivatedBy")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(99995);
+
+                    b.Property<string>("DeactivatedReason")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnOrder(99994);
+
+                    b.Property<DateTimeOffset?>("DeactivatedTimestamp")
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnOrder(99993);
+
                     b.Property<int>("Direction")
                         .HasColumnType("int")
-                        .HasColumnOrder(5);
+                        .HasColumnOrder(6);
 
                     b.Property<Guid>("LastModifiedBy")
                         .HasColumnType("uniqueidentifier")
@@ -386,15 +3114,18 @@ namespace Astrana.Core.Data.Migrations.MSSqlServer.Migrations
                         .IsRequired()
                         .HasMaxLength(3)
                         .HasColumnType("nvarchar(3)")
-                        .HasColumnOrder(4);
+                        .HasColumnOrder(5);
 
                     b.Property<string>("TwoLetterCode")
                         .IsRequired()
                         .HasMaxLength(2)
                         .HasColumnType("nvarchar(2)")
-                        .HasColumnOrder(3);
+                        .HasColumnOrder(4);
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
 
                     b.HasIndex("NameTrxCode")
                         .IsUnique();
@@ -410,12 +3141,13 @@ namespace Astrana.Core.Data.Migrations.MSSqlServer.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("f0d5b326-2268-4d62-81bc-d0230e6a4dfd"),
+                            Id = new Guid("b50e2e13-376d-4cb1-af13-8809a84f2cc6"),
+                            Code = "EN",
                             CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
-                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 1, 29, 4, 39, 17, 906, DateTimeKind.Unspecified).AddTicks(9146), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(6047), new TimeSpan(0, 0, 0, 0, 0)),
                             Direction = 0,
                             LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
-                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 1, 29, 4, 39, 17, 906, DateTimeKind.Unspecified).AddTicks(9146), new TimeSpan(0, 0, 0, 0, 0)),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(6047), new TimeSpan(0, 0, 0, 0, 0)),
                             Name = "English",
                             NameTrxCode = "language_name_en",
                             ThreeLetterCode = "ENG",
@@ -423,12 +3155,27 @@ namespace Astrana.Core.Data.Migrations.MSSqlServer.Migrations
                         },
                         new
                         {
-                            Id = new Guid("2ff0da56-f966-4f28-a876-f3a1fd4a3d10"),
+                            Id = new Guid("e20fe9ee-d7a6-4b10-aa28-6b3dd3f5b98f"),
+                            Code = "AF",
                             CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
-                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 1, 29, 4, 39, 17, 906, DateTimeKind.Unspecified).AddTicks(9146), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(6047), new TimeSpan(0, 0, 0, 0, 0)),
                             Direction = 0,
                             LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
-                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 1, 29, 4, 39, 17, 906, DateTimeKind.Unspecified).AddTicks(9146), new TimeSpan(0, 0, 0, 0, 0)),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(6047), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Afrikaans",
+                            NameTrxCode = "language_name_af",
+                            ThreeLetterCode = "AFR",
+                            TwoLetterCode = "AF"
+                        },
+                        new
+                        {
+                            Id = new Guid("b7abfb2d-ae8d-4095-8712-bd515006d7a6"),
+                            Code = "FR",
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(6047), new TimeSpan(0, 0, 0, 0, 0)),
+                            Direction = 0,
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(6047), new TimeSpan(0, 0, 0, 0, 0)),
                             Name = "French",
                             NameTrxCode = "language_name_fr",
                             ThreeLetterCode = "FRA",
@@ -436,12 +3183,13 @@ namespace Astrana.Core.Data.Migrations.MSSqlServer.Migrations
                         },
                         new
                         {
-                            Id = new Guid("b76c646d-f411-4429-b6f6-0280bdfa4ee7"),
+                            Id = new Guid("440e19ab-fa19-4849-9b94-a3a19c9b6786"),
+                            Code = "ZH",
                             CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
-                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 1, 29, 4, 39, 17, 906, DateTimeKind.Unspecified).AddTicks(9146), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(6047), new TimeSpan(0, 0, 0, 0, 0)),
                             Direction = 0,
                             LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
-                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 1, 29, 4, 39, 17, 906, DateTimeKind.Unspecified).AddTicks(9146), new TimeSpan(0, 0, 0, 0, 0)),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(6047), new TimeSpan(0, 0, 0, 0, 0)),
                             Name = "Chinese",
                             NameTrxCode = "language_name_zh",
                             ThreeLetterCode = "ZHO",
@@ -449,12 +3197,13 @@ namespace Astrana.Core.Data.Migrations.MSSqlServer.Migrations
                         },
                         new
                         {
-                            Id = new Guid("dfbb72e4-58f9-4378-a5d0-39ceeb5f33c5"),
+                            Id = new Guid("091f5a11-36c1-4742-9f51-5de0abcd7604"),
+                            Code = "HE",
                             CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
-                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 1, 29, 4, 39, 17, 906, DateTimeKind.Unspecified).AddTicks(9146), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(6047), new TimeSpan(0, 0, 0, 0, 0)),
                             Direction = 1,
                             LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
-                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 1, 29, 4, 39, 17, 906, DateTimeKind.Unspecified).AddTicks(9146), new TimeSpan(0, 0, 0, 0, 0)),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(6047), new TimeSpan(0, 0, 0, 0, 0)),
                             Name = "Hebrew",
                             NameTrxCode = "language_name_he",
                             ThreeLetterCode = "HEB",
@@ -462,12 +3211,13 @@ namespace Astrana.Core.Data.Migrations.MSSqlServer.Migrations
                         },
                         new
                         {
-                            Id = new Guid("8810c969-c4f0-4bb5-bfc7-fb3653c49dd9"),
+                            Id = new Guid("e978e737-dec6-4baa-9481-c89886d1c7bb"),
+                            Code = "HI",
                             CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
-                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 1, 29, 4, 39, 17, 906, DateTimeKind.Unspecified).AddTicks(9146), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(6047), new TimeSpan(0, 0, 0, 0, 0)),
                             Direction = 0,
                             LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
-                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 1, 29, 4, 39, 17, 906, DateTimeKind.Unspecified).AddTicks(9146), new TimeSpan(0, 0, 0, 0, 0)),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(6047), new TimeSpan(0, 0, 0, 0, 0)),
                             Name = "Hindi",
                             NameTrxCode = "language_name_hi",
                             ThreeLetterCode = "HIN",
@@ -475,12 +3225,13 @@ namespace Astrana.Core.Data.Migrations.MSSqlServer.Migrations
                         },
                         new
                         {
-                            Id = new Guid("00af240d-f142-4636-a50e-7454cbf969c1"),
+                            Id = new Guid("3982f739-de7e-4deb-947d-61f12d24d721"),
+                            Code = "RU",
                             CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
-                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 1, 29, 4, 39, 17, 906, DateTimeKind.Unspecified).AddTicks(9146), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(6047), new TimeSpan(0, 0, 0, 0, 0)),
                             Direction = 0,
                             LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
-                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 1, 29, 4, 39, 17, 906, DateTimeKind.Unspecified).AddTicks(9146), new TimeSpan(0, 0, 0, 0, 0)),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(6047), new TimeSpan(0, 0, 0, 0, 0)),
                             Name = "Russian",
                             NameTrxCode = "language_name_ru",
                             ThreeLetterCode = "RUS",
@@ -488,16 +3239,31 @@ namespace Astrana.Core.Data.Migrations.MSSqlServer.Migrations
                         },
                         new
                         {
-                            Id = new Guid("0119d23e-5858-4852-9b3d-9696a203723a"),
+                            Id = new Guid("e06785b6-bb8e-4fee-ac07-f65a13e307ba"),
+                            Code = "ES",
                             CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
-                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 1, 29, 4, 39, 17, 906, DateTimeKind.Unspecified).AddTicks(9146), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(6047), new TimeSpan(0, 0, 0, 0, 0)),
                             Direction = 0,
                             LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
-                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 1, 29, 4, 39, 17, 906, DateTimeKind.Unspecified).AddTicks(9146), new TimeSpan(0, 0, 0, 0, 0)),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(6047), new TimeSpan(0, 0, 0, 0, 0)),
                             Name = "Spanish",
                             NameTrxCode = "language_name_es",
                             ThreeLetterCode = "ESP",
                             TwoLetterCode = "ES"
+                        },
+                        new
+                        {
+                            Id = new Guid("a8b3b4aa-d6fe-4441-9fc5-0dbf3a56f870"),
+                            Code = "ZU",
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(6047), new TimeSpan(0, 0, 0, 0, 0)),
+                            Direction = 0,
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(6047), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Zulu",
+                            NameTrxCode = "language_name_zu",
+                            ThreeLetterCode = "ZUL",
+                            TwoLetterCode = "ZU"
                         });
                 });
 
@@ -553,6 +3319,171 @@ namespace Astrana.Core.Data.Migrations.MSSqlServer.Migrations
                     b.ToTable("PhoneNumberTypes", "config");
                 });
 
+            modelBuilder.Entity("Astrana.Core.Data.Entities.Configuration.Reaction", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(0);
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(99996);
+
+                    b.Property<DateTimeOffset>("CreatedTimestamp")
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnOrder(99998);
+
+                    b.Property<Guid?>("DeactivatedBy")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(99995);
+
+                    b.Property<string>("DeactivatedReason")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnOrder(99994);
+
+                    b.Property<DateTimeOffset?>("DeactivatedTimestamp")
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnOrder(99993);
+
+                    b.Property<string>("IconName")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)")
+                        .HasColumnOrder(3);
+
+                    b.Property<Guid>("LastModifiedBy")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(99997);
+
+                    b.Property<DateTimeOffset>("LastModifiedTimestamp")
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnOrder(99999);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnOrder(1);
+
+                    b.Property<string>("NameTrxCode")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnOrder(2);
+
+                    b.Property<string>("UnicodeIcon")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)")
+                        .HasColumnOrder(4);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NameTrxCode")
+                        .IsUnique();
+
+                    b.ToTable("Reactions", "config");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("7fc7aa92-5fdc-417a-97a9-ae617a121a0c"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(9913), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "like",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(9913), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Like",
+                            NameTrxCode = "reaction_name_like",
+                            UnicodeIcon = "1"
+                        },
+                        new
+                        {
+                            Id = new Guid("994a5d49-4871-4e4d-84a5-a471e4d5e970"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(9913), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "dislike",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(9913), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Dislike",
+                            NameTrxCode = "reaction_name_dislike",
+                            UnicodeIcon = "1"
+                        },
+                        new
+                        {
+                            Id = new Guid("0955c3d3-f262-4ff9-8548-594bee3b0847"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(9913), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "love",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(9913), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Love",
+                            NameTrxCode = "reaction_name_love",
+                            UnicodeIcon = "1"
+                        },
+                        new
+                        {
+                            Id = new Guid("efd81e49-a7af-4aed-97a4-4f8db4a9990f"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(9913), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "care",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(9913), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Care",
+                            NameTrxCode = "reaction_name_care",
+                            UnicodeIcon = "1"
+                        },
+                        new
+                        {
+                            Id = new Guid("3f727d18-53ec-434c-ba7b-34c94e07185b"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(9913), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "wow",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(9913), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Wow",
+                            NameTrxCode = "reaction_name_wow",
+                            UnicodeIcon = "1"
+                        },
+                        new
+                        {
+                            Id = new Guid("05d0cafb-7e52-4172-be89-0dc6cd42bf2e"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(9913), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "laugh",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(9913), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Haha",
+                            NameTrxCode = "reaction_name_laugh",
+                            UnicodeIcon = "1"
+                        },
+                        new
+                        {
+                            Id = new Guid("ecb140d1-4091-4d3b-adae-b7459b28c21a"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(9913), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "angry",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(9913), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Angry",
+                            NameTrxCode = "reaction_name_angry",
+                            UnicodeIcon = "1"
+                        },
+                        new
+                        {
+                            Id = new Guid("a92e833d-74fb-41c2-837e-2a0832c8fde1"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(9913), new TimeSpan(0, 0, 0, 0, 0)),
+                            IconName = "sad",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(9913), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Sad",
+                            NameTrxCode = "reaction_name_sad",
+                            UnicodeIcon = "1"
+                        });
+                });
+
             modelBuilder.Entity("Astrana.Core.Data.Entities.Configuration.SystemSetting", b =>
                 {
                     b.Property<Guid>("Id")
@@ -593,9 +3524,12 @@ namespace Astrana.Core.Data.Migrations.MSSqlServer.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)")
                         .HasColumnOrder(1);
+
+                    b.Property<Guid?>("SettingCategoryId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ShortDescription")
                         .HasMaxLength(500)
@@ -609,94 +3543,148 @@ namespace Astrana.Core.Data.Migrations.MSSqlServer.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("SettingCategoryId");
+
                     b.ToTable("Settings", "config");
 
                     b.HasData(
                         new
                         {
-                            Id = new Guid("ae3789d7-21ba-4d81-8f0d-9cc91f66ba5f"),
+                            Id = new Guid("5886c7b0-3174-4d34-8fee-5d8afc707f94"),
                             CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
-                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 1, 29, 4, 39, 17, 906, DateTimeKind.Unspecified).AddTicks(6639), new TimeSpan(0, 0, 0, 0, 0)),
-                            DataType = 2,
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(1887), new TimeSpan(0, 0, 0, 0, 0)),
+                            DataType = 4,
                             DefaultValue = "AU",
                             LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
-                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 1, 29, 4, 39, 17, 906, DateTimeKind.Unspecified).AddTicks(6639), new TimeSpan(0, 0, 0, 0, 0)),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(1887), new TimeSpan(0, 0, 0, 0, 0)),
                             Name = "Regional Format",
                             ShortDescription = "Formats for dates, times and numbers."
                         },
                         new
                         {
-                            Id = new Guid("089d549b-e4e3-46f1-bcfe-402ca9778e63"),
+                            Id = new Guid("471ea100-e266-4a03-83cd-368cd7eec076"),
                             CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
-                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 1, 29, 4, 39, 17, 906, DateTimeKind.Unspecified).AddTicks(6639), new TimeSpan(0, 0, 0, 0, 0)),
-                            DataType = 2,
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(1887), new TimeSpan(0, 0, 0, 0, 0)),
+                            DataType = 4,
                             DefaultValue = "EN",
                             LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
-                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 1, 29, 4, 39, 17, 906, DateTimeKind.Unspecified).AddTicks(6639), new TimeSpan(0, 0, 0, 0, 0)),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(1887), new TimeSpan(0, 0, 0, 0, 0)),
                             Name = "Language Code",
                             ShortDescription = "The language code of the Astrana instance user."
                         },
                         new
                         {
-                            Id = new Guid("a4dfb95e-866e-4c07-bc17-ea561a4f2645"),
+                            Id = new Guid("b4d0533f-6e1e-4e46-aafc-8bb335a89ea0"),
                             CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
-                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 1, 29, 4, 39, 17, 906, DateTimeKind.Unspecified).AddTicks(6639), new TimeSpan(0, 0, 0, 0, 0)),
-                            DataType = 2,
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(1887), new TimeSpan(0, 0, 0, 0, 0)),
+                            DataType = 4,
                             DefaultValue = "AUS Eastern Standard Time",
                             LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
-                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 1, 29, 4, 39, 17, 906, DateTimeKind.Unspecified).AddTicks(6639), new TimeSpan(0, 0, 0, 0, 0)),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(1887), new TimeSpan(0, 0, 0, 0, 0)),
                             Name = "Time Zone",
                             ShortDescription = "The time zone of the Astrana instance user."
                         },
                         new
                         {
-                            Id = new Guid("be2222fb-d2be-4f7d-8b9d-c2fbf413f6aa"),
+                            Id = new Guid("0eac5c13-34a8-4b0b-bb49-b05f9805771b"),
                             CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
-                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 1, 29, 4, 39, 17, 906, DateTimeKind.Unspecified).AddTicks(6639), new TimeSpan(0, 0, 0, 0, 0)),
-                            DataType = 2,
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(1887), new TimeSpan(0, 0, 0, 0, 0)),
+                            DataType = 4,
                             DefaultValue = "localhost",
                             LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
-                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 1, 29, 4, 39, 17, 906, DateTimeKind.Unspecified).AddTicks(6639), new TimeSpan(0, 0, 0, 0, 0)),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(1887), new TimeSpan(0, 0, 0, 0, 0)),
                             Name = "Host Name",
                             ShortDescription = "The address of the Astrana instance."
                         },
                         new
                         {
-                            Id = new Guid("f273aa91-782c-4a99-a432-abee603e260c"),
+                            Id = new Guid("45443988-0606-455a-9bb1-8d564c79e3c6"),
                             CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
-                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 1, 29, 4, 39, 17, 906, DateTimeKind.Unspecified).AddTicks(6639), new TimeSpan(0, 0, 0, 0, 0)),
-                            DataType = 2,
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(1887), new TimeSpan(0, 0, 0, 0, 0)),
+                            DataType = 4,
                             DefaultValue = "",
                             LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
-                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 1, 29, 4, 39, 17, 906, DateTimeKind.Unspecified).AddTicks(6639), new TimeSpan(0, 0, 0, 0, 0)),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(1887), new TimeSpan(0, 0, 0, 0, 0)),
                             Name = "Host Port Number",
                             ShortDescription = "The host port number of the Astrana instance."
                         },
                         new
                         {
-                            Id = new Guid("1bcfd564-ccd9-48d3-bd29-255f81970c8e"),
+                            Id = new Guid("fd8799dd-dd56-4893-9c18-a2e7351ce046"),
                             CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
-                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 1, 29, 4, 39, 17, 906, DateTimeKind.Unspecified).AddTicks(6639), new TimeSpan(0, 0, 0, 0, 0)),
-                            DataType = 2,
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(1887), new TimeSpan(0, 0, 0, 0, 0)),
+                            DataType = 4,
                             DefaultValue = "",
                             LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
-                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 1, 29, 4, 39, 17, 906, DateTimeKind.Unspecified).AddTicks(6639), new TimeSpan(0, 0, 0, 0, 0)),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(1887), new TimeSpan(0, 0, 0, 0, 0)),
                             Name = "Idp Issuer Signing Key Secret",
                             ShortDescription = "The secret used for generating the Idp Issuer Signing Key for the Astrana instance.",
                             Value = "69473DFCE4E2D15A343495F3612FBD2C69473DFCE4E2D15A343495F3612FBD2C"
                         },
                         new
                         {
-                            Id = new Guid("0be03017-0c2f-488a-9ac3-9f0162e12de4"),
+                            Id = new Guid("c79f6b21-1038-40f4-9c2c-628b866b56dc"),
                             CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
-                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 1, 29, 4, 39, 17, 906, DateTimeKind.Unspecified).AddTicks(6639), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(1887), new TimeSpan(0, 0, 0, 0, 0)),
+                            DataType = 21,
+                            DefaultValue = "",
+                            LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(1887), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Default Skin Tone",
+                            ShortDescription = "The secret used for generating the Idp Issuer Signing Key for the Astrana instance.",
+                            Value = "69473DFCE4E2D15A343495F3612FBD2C69473DFCE4E2D15A343495F3612FBD2C"
+                        },
+                        new
+                        {
+                            Id = new Guid("e4de5a71-195c-4ae0-89b5-7f153ff287e3"),
+                            CreatedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
+                            CreatedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(1887), new TimeSpan(0, 0, 0, 0, 0)),
                             DataType = 1,
                             DefaultValue = "0",
                             LastModifiedBy = new Guid("0334ca45-b161-432c-ad23-ed7b7f0a74ab"),
-                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 1, 29, 4, 39, 17, 906, DateTimeKind.Unspecified).AddTicks(6639), new TimeSpan(0, 0, 0, 0, 0)),
+                            LastModifiedTimestamp = new DateTimeOffset(new DateTime(2023, 10, 17, 5, 40, 41, 756, DateTimeKind.Unspecified).AddTicks(1887), new TimeSpan(0, 0, 0, 0, 0)),
                             Name = "Multi-factor Authentication",
                             ShortDescription = "Turn multi-factor authentication on/off."
                         });
+                });
+
+            modelBuilder.Entity("Astrana.Core.Data.Entities.Configuration.SystemSettingCategory", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(0);
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(99996);
+
+                    b.Property<DateTimeOffset>("CreatedTimestamp")
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnOrder(99998);
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)")
+                        .HasColumnOrder(2);
+
+                    b.Property<Guid>("LastModifiedBy")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(99997);
+
+                    b.Property<DateTimeOffset>("LastModifiedTimestamp")
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnOrder(99999);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnOrder(1);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SettingCategories", "config");
                 });
 
             modelBuilder.Entity("Astrana.Core.Data.Entities.ContactInformation.EmailAddress", b =>
@@ -834,9 +3822,9 @@ namespace Astrana.Core.Data.Migrations.MSSqlServer.Migrations
                     b.ToTable("PhoneNumbers", "contact");
                 });
 
-            modelBuilder.Entity("Astrana.Core.Data.Entities.Content.Album", b =>
+            modelBuilder.Entity("Astrana.Core.Data.Entities.Content.Audio", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("AudioId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
                         .HasColumnOrder(0);
@@ -879,14 +3867,250 @@ namespace Astrana.Core.Data.Migrations.MSSqlServer.Migrations
                         .HasColumnType("datetimeoffset")
                         .HasColumnOrder(99999);
 
-                    b.Property<string>("Name")
+                    b.Property<string>("Location")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnOrder(1);
 
-                    b.HasKey("Id");
+                    b.HasKey("AudioId");
 
-                    b.ToTable("Albums", "content");
+                    b.ToTable("Audios", "content");
+                });
+
+            modelBuilder.Entity("Astrana.Core.Data.Entities.Content.Comment", b =>
+                {
+                    b.Property<Guid>("CommentId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(0);
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(99996);
+
+                    b.Property<DateTimeOffset>("CreatedTimestamp")
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnOrder(99998);
+
+                    b.Property<Guid?>("DeactivatedBy")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(99995);
+
+                    b.Property<string>("DeactivatedReason")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnOrder(99994);
+
+                    b.Property<DateTimeOffset?>("DeactivatedTimestamp")
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnOrder(99993);
+
+                    b.Property<Guid>("LastModifiedBy")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(99997);
+
+                    b.Property<DateTimeOffset>("LastModifiedTimestamp")
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnOrder(99999);
+
+                    b.Property<Guid?>("TargeCommentCommentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("TargetAudioId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(6);
+
+                    b.Property<Guid?>("TargetCommentId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(3);
+
+                    b.Property<Guid?>("TargetContentCollectionId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(8);
+
+                    b.Property<Guid?>("TargetGifId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(7);
+
+                    b.Property<Guid?>("TargetImageId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(4);
+
+                    b.Property<Guid?>("TargetLinkId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(9);
+
+                    b.Property<long?>("TargetPostId")
+                        .HasColumnType("bigint")
+                        .HasColumnOrder(2);
+
+                    b.Property<Guid?>("TargetVideoId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(5);
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)")
+                        .HasColumnOrder(1);
+
+                    b.HasKey("CommentId");
+
+                    b.HasIndex("TargeCommentCommentId");
+
+                    b.HasIndex("TargetAudioId");
+
+                    b.HasIndex("TargetContentCollectionId");
+
+                    b.HasIndex("TargetGifId");
+
+                    b.HasIndex("TargetImageId");
+
+                    b.HasIndex("TargetLinkId");
+
+                    b.HasIndex("TargetPostId");
+
+                    b.HasIndex("TargetVideoId");
+
+                    b.ToTable("Comments", "content");
+                });
+
+            modelBuilder.Entity("Astrana.Core.Data.Entities.Content.ContentCollection", b =>
+                {
+                    b.Property<Guid>("ContentCollectionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(0);
+
+                    b.Property<string>("Caption")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)")
+                        .HasColumnOrder(3);
+
+                    b.Property<int>("CollectionType")
+                        .HasColumnType("int")
+                        .HasColumnOrder(2);
+
+                    b.Property<string>("Copyright")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)")
+                        .HasColumnOrder(4);
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(99996);
+
+                    b.Property<DateTimeOffset>("CreatedTimestamp")
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnOrder(99998);
+
+                    b.Property<Guid?>("DeactivatedBy")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(99995);
+
+                    b.Property<string>("DeactivatedReason")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnOrder(99994);
+
+                    b.Property<DateTimeOffset?>("DeactivatedTimestamp")
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnOrder(99993);
+
+                    b.Property<Guid>("LastModifiedBy")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(99997);
+
+                    b.Property<DateTimeOffset>("LastModifiedTimestamp")
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnOrder(99999);
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)")
+                        .HasColumnOrder(1);
+
+                    b.HasKey("ContentCollectionId");
+
+                    b.ToTable("ContentCollections", "content");
+                });
+
+            modelBuilder.Entity("Astrana.Core.Data.Entities.Content.ContentCollectionItem", b =>
+                {
+                    b.Property<Guid>("ContentCollectionItemId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(0);
+
+                    b.Property<Guid?>("AudioId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(7);
+
+                    b.Property<Guid>("ContentCollectionId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(99996);
+
+                    b.Property<DateTimeOffset>("CreatedTimestamp")
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnOrder(99998);
+
+                    b.Property<Guid?>("DeactivatedBy")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(99995);
+
+                    b.Property<string>("DeactivatedReason")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnOrder(99994);
+
+                    b.Property<DateTimeOffset?>("DeactivatedTimestamp")
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnOrder(99993);
+
+                    b.Property<Guid?>("GifId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(8);
+
+                    b.Property<Guid?>("ImageId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(5);
+
+                    b.Property<Guid>("LastModifiedBy")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(99997);
+
+                    b.Property<DateTimeOffset>("LastModifiedTimestamp")
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnOrder(99999);
+
+                    b.Property<Guid?>("LinkId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(4);
+
+                    b.Property<int>("MediaType")
+                        .HasColumnType("int")
+                        .HasColumnOrder(3);
+
+                    b.Property<Guid?>("VideoId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(6);
+
+                    b.HasKey("ContentCollectionItemId");
+
+                    b.HasIndex("AudioId");
+
+                    b.HasIndex("ContentCollectionId");
+
+                    b.HasIndex("GifId");
+
+                    b.HasIndex("ImageId");
+
+                    b.HasIndex("LinkId");
+
+                    b.HasIndex("VideoId");
+
+                    b.ToTable("ContentCollectionItems", "content");
                 });
 
             modelBuilder.Entity("Astrana.Core.Data.Entities.Content.ContentSafetyRating", b =>
@@ -941,15 +4165,92 @@ namespace Astrana.Core.Data.Migrations.MSSqlServer.Migrations
                     b.ToTable("ContentSafetyRatings", "content");
                 });
 
-            modelBuilder.Entity("Astrana.Core.Data.Entities.Content.Image", b =>
+            modelBuilder.Entity("Astrana.Core.Data.Entities.Content.ExternalContentSubscription", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
                         .HasColumnOrder(0);
 
-                    b.Property<Guid?>("AlbumId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("CharSet")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnOrder(5);
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(99996);
+
+                    b.Property<DateTimeOffset>("CreatedTimestamp")
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnOrder(99998);
+
+                    b.Property<Guid?>("DeactivatedBy")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(99995);
+
+                    b.Property<string>("DeactivatedReason")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnOrder(99994);
+
+                    b.Property<DateTimeOffset?>("DeactivatedTimestamp")
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnOrder(99993);
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)")
+                        .HasColumnOrder(3);
+
+                    b.Property<Guid>("LastModifiedBy")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(99997);
+
+                    b.Property<DateTimeOffset>("LastModifiedTimestamp")
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnOrder(99999);
+
+                    b.Property<string>("Locale")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnOrder(4);
+
+                    b.Property<Guid>("PreviewImageId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(9);
+
+                    b.Property<string>("Robots")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnOrder(6);
+
+                    b.Property<string>("SiteName")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnOrder(7);
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)")
+                        .HasColumnOrder(2);
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)")
+                        .HasColumnOrder(1);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PreviewImageId");
+
+                    b.ToTable("ExternalContentSubscriptions", "content");
+                });
+
+            modelBuilder.Entity("Astrana.Core.Data.Entities.Content.Image", b =>
+                {
+                    b.Property<Guid>("ImageId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(0);
 
                     b.Property<string>("Caption")
                         .HasMaxLength(100)
@@ -995,24 +4296,21 @@ namespace Astrana.Core.Data.Migrations.MSSqlServer.Migrations
                         .HasColumnType("nvarchar(2500)")
                         .HasColumnOrder(1);
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("AlbumId");
+                    b.HasKey("ImageId");
 
                     b.ToTable("Images", "content");
                 });
 
             modelBuilder.Entity("Astrana.Core.Data.Entities.Content.Link", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("LinkId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
                         .HasColumnOrder(0);
 
-                    b.Property<string>("Address")
-                        .IsRequired()
+                    b.Property<string>("CharSet")
                         .HasColumnType("nvarchar(max)")
-                        .HasColumnOrder(1);
+                        .HasColumnOrder(5);
 
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("uniqueidentifier")
@@ -1034,6 +4332,12 @@ namespace Astrana.Core.Data.Migrations.MSSqlServer.Migrations
                         .HasColumnType("datetimeoffset")
                         .HasColumnOrder(99993);
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)")
+                        .HasColumnOrder(3);
+
                     b.Property<Guid>("LastModifiedBy")
                         .HasColumnType("uniqueidentifier")
                         .HasColumnOrder(99997);
@@ -1042,26 +4346,94 @@ namespace Astrana.Core.Data.Migrations.MSSqlServer.Migrations
                         .HasColumnType("datetimeoffset")
                         .HasColumnOrder(99999);
 
-                    b.Property<string>("Text")
+                    b.Property<string>("Locale")
                         .HasColumnType("nvarchar(max)")
+                        .HasColumnOrder(4);
+
+                    b.Property<Guid>("PreviewImageId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(9);
+
+                    b.Property<string>("Robots")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnOrder(6);
+
+                    b.Property<string>("SiteName")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnOrder(7);
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)")
                         .HasColumnOrder(2);
 
-                    b.HasKey("Id");
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)")
+                        .HasColumnOrder(1);
+
+                    b.HasKey("LinkId");
+
+                    b.HasIndex("PreviewImageId");
 
                     b.ToTable("Links", "content");
                 });
 
+            modelBuilder.Entity("Astrana.Core.Data.Entities.Content.Location", b =>
+                {
+                    b.Property<Guid>("LocationId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(0);
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(99996);
+
+                    b.Property<DateTimeOffset>("CreatedTimestamp")
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnOrder(99998);
+
+                    b.Property<Guid?>("DeactivatedBy")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(99995);
+
+                    b.Property<string>("DeactivatedReason")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnOrder(99994);
+
+                    b.Property<DateTimeOffset?>("DeactivatedTimestamp")
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnOrder(99993);
+
+                    b.Property<Guid>("LastModifiedBy")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(99997);
+
+                    b.Property<DateTimeOffset>("LastModifiedTimestamp")
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnOrder(99999);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnOrder(1);
+
+                    b.HasKey("LocationId");
+
+                    b.ToTable("Locations", "content");
+                });
+
             modelBuilder.Entity("Astrana.Core.Data.Entities.Content.Post", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<long>("PostId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasColumnOrder(0);
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<Guid?>("AttachmentId")
-                        .HasColumnType("uniqueidentifier");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("PostId"));
 
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("uniqueidentifier")
@@ -1092,14 +4464,11 @@ namespace Astrana.Core.Data.Migrations.MSSqlServer.Migrations
                         .HasColumnOrder(99999);
 
                     b.Property<string>("Text")
-                        .IsRequired()
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)")
                         .HasColumnOrder(1);
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("AttachmentId");
+                    b.HasKey("PostId");
 
                     b.ToTable("Posts", "content");
                 });
@@ -1111,15 +4480,18 @@ namespace Astrana.Core.Data.Migrations.MSSqlServer.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnOrder(0);
 
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnOrder(1);
+                    b.Property<Guid?>("AudioId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(7);
 
                     b.Property<string>("Caption")
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)")
-                        .HasColumnOrder(3);
+                        .HasColumnOrder(2);
+
+                    b.Property<Guid?>("ContentCollectionId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(9);
 
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("uniqueidentifier")
@@ -1141,6 +4513,18 @@ namespace Astrana.Core.Data.Migrations.MSSqlServer.Migrations
                         .HasColumnType("datetimeoffset")
                         .HasColumnOrder(99993);
 
+                    b.Property<Guid?>("FeelingId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(11);
+
+                    b.Property<Guid?>("GifId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(6);
+
+                    b.Property<Guid?>("ImageId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(5);
+
                     b.Property<Guid>("LastModifiedBy")
                         .HasColumnType("uniqueidentifier")
                         .HasColumnOrder(99997);
@@ -1149,13 +4533,49 @@ namespace Astrana.Core.Data.Migrations.MSSqlServer.Migrations
                         .HasColumnType("datetimeoffset")
                         .HasColumnOrder(99999);
 
+                    b.Property<Guid?>("LinkId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(4);
+
+                    b.Property<Guid?>("LocationId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(10);
+
+                    b.Property<long?>("PostId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("Title")
-                        .IsRequired()
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)")
-                        .HasColumnOrder(2);
+                        .HasColumnOrder(1);
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int")
+                        .HasColumnOrder(3);
+
+                    b.Property<Guid?>("VideoId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(8);
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AudioId");
+
+                    b.HasIndex("ContentCollectionId");
+
+                    b.HasIndex("FeelingId");
+
+                    b.HasIndex("GifId");
+
+                    b.HasIndex("ImageId");
+
+                    b.HasIndex("LinkId");
+
+                    b.HasIndex("LocationId");
+
+                    b.HasIndex("PostId");
+
+                    b.HasIndex("VideoId");
 
                     b.ToTable("PostAttachments", "content");
                 });
@@ -1166,6 +4586,9 @@ namespace Astrana.Core.Data.Migrations.MSSqlServer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
                         .HasColumnOrder(0);
+
+                    b.Property<Guid?>("AudienceId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("uniqueidentifier")
@@ -1203,12 +4626,14 @@ namespace Astrana.Core.Data.Migrations.MSSqlServer.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AudienceId");
+
                     b.ToTable("Tags", "content");
                 });
 
             modelBuilder.Entity("Astrana.Core.Data.Entities.Content.Video", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("VideoId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
                         .HasColumnOrder(0);
@@ -1256,7 +4681,7 @@ namespace Astrana.Core.Data.Migrations.MSSqlServer.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnOrder(1);
 
-                    b.HasKey("Id");
+                    b.HasKey("VideoId");
 
                     b.ToTable("Videos", "content");
                 });
@@ -1490,7 +4915,7 @@ namespace Astrana.Core.Data.Migrations.MSSqlServer.Migrations
 
             modelBuilder.Entity("Astrana.Core.Data.Entities.Peers.Peer", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("PeerId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
                         .HasColumnOrder(0);
@@ -1499,7 +4924,17 @@ namespace Astrana.Core.Data.Migrations.MSSqlServer.Migrations
                         .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)")
-                        .HasColumnOrder(3);
+                        .HasColumnOrder(6);
+
+                    b.Property<short>("Age")
+                        .HasColumnType("smallint")
+                        .HasColumnOrder(4);
+
+                    b.Property<Guid?>("AudienceId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("AudienceId1")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("uniqueidentifier")
@@ -1525,11 +4960,11 @@ namespace Astrana.Core.Data.Migrations.MSSqlServer.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)")
-                        .HasColumnOrder(1);
+                        .HasColumnOrder(2);
 
                     b.Property<bool>("IsMuted")
                         .HasColumnType("bit")
-                        .HasColumnOrder(6);
+                        .HasColumnOrder(9);
 
                     b.Property<Guid>("LastModifiedBy")
                         .HasColumnType("uniqueidentifier")
@@ -1543,19 +4978,31 @@ namespace Astrana.Core.Data.Migrations.MSSqlServer.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)")
-                        .HasColumnOrder(2);
+                        .HasColumnOrder(3);
 
                     b.Property<string>("Note")
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)")
-                        .HasColumnOrder(4);
+                        .HasColumnOrder(7);
 
                     b.Property<string>("PeerAccessToken")
                         .HasMaxLength(2000)
                         .HasColumnType("nvarchar(2000)")
+                        .HasColumnOrder(8);
+
+                    b.Property<int>("Sex")
+                        .HasColumnType("int")
                         .HasColumnOrder(5);
 
-                    b.HasKey("Id");
+                    b.Property<Guid>("VirtualProfileId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(1);
+
+                    b.HasKey("PeerId");
+
+                    b.HasIndex("AudienceId");
+
+                    b.HasIndex("AudienceId1");
 
                     b.ToTable("Peers", "dbo");
                 });
@@ -1816,7 +5263,10 @@ namespace Astrana.Core.Data.Migrations.MSSqlServer.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnOrder(0);
 
-                    b.Property<Guid?>("CoverPictureId")
+                    b.Property<Guid?>("CoverPictureImageId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CoverPicturesCollectionContentCollectionId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("CreatedBy")
@@ -1836,10 +5286,6 @@ namespace Astrana.Core.Data.Migrations.MSSqlServer.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)")
                         .HasColumnOrder(3);
-
-                    b.Property<int>("Gender")
-                        .HasColumnType("int")
-                        .HasColumnOrder(7);
 
                     b.Property<string>("Introduction")
                         .HasMaxLength(100)
@@ -1864,8 +5310,15 @@ namespace Astrana.Core.Data.Migrations.MSSqlServer.Migrations
                         .HasColumnType("nvarchar(300)")
                         .HasColumnOrder(4);
 
-                    b.Property<Guid?>("ProfilePictureId")
+                    b.Property<Guid?>("ProfilePictureImageId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("ProfilePicturesCollectionContentCollectionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Sex")
+                        .HasColumnType("int")
+                        .HasColumnOrder(7);
 
                     b.Property<Guid>("UserAccountId")
                         .HasColumnType("uniqueidentifier")
@@ -1873,36 +5326,333 @@ namespace Astrana.Core.Data.Migrations.MSSqlServer.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CoverPictureId");
+                    b.HasIndex("CoverPictureImageId");
 
-                    b.HasIndex("ProfilePictureId");
+                    b.HasIndex("CoverPicturesCollectionContentCollectionId");
+
+                    b.HasIndex("ProfilePictureImageId");
+
+                    b.HasIndex("ProfilePicturesCollectionContentCollectionId");
 
                     b.HasIndex("UserAccountId");
 
                     b.ToTable("UserProfiles", "user");
                 });
 
+            modelBuilder.Entity("Astrana.Core.Data.Entities.User.UserProfileDetail", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(0);
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(99996);
+
+                    b.Property<DateTimeOffset>("CreatedTimestamp")
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnOrder(99998);
+
+                    b.Property<short?>("DisplayOrder")
+                        .HasColumnType("smallint")
+                        .HasColumnOrder(7);
+
+                    b.Property<string>("IconName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnOrder(6);
+
+                    b.Property<string>("Key")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnOrder(3);
+
+                    b.Property<string>("Label")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnOrder(4);
+
+                    b.Property<Guid>("LastModifiedBy")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(99997);
+
+                    b.Property<DateTimeOffset>("LastModifiedTimestamp")
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnOrder(99999);
+
+                    b.Property<Guid>("UserProfileId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(1);
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnOrder(5);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserProfileId");
+
+                    b.ToTable("UserProfileDetails", "user");
+                });
+
+            modelBuilder.Entity("Astrana.Core.Data.Entities.Workflow.NewContentWorkflowStage", b =>
+                {
+                    b.Property<Guid>("NewContentWorkflowStageId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(0);
+
+                    b.Property<string>("ContentEntityId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnOrder(1);
+
+                    b.Property<string>("ContentEntityTypeId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnOrder(2);
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(99996);
+
+                    b.Property<DateTimeOffset>("CreatedTimestamp")
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnOrder(99998);
+
+                    b.Property<Guid>("LastModifiedBy")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(99997);
+
+                    b.Property<DateTimeOffset>("LastModifiedTimestamp")
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnOrder(99999);
+
+                    b.Property<int>("Stage")
+                        .HasColumnType("int")
+                        .HasColumnOrder(3);
+
+                    b.HasKey("NewContentWorkflowStageId");
+
+                    b.ToTable("NewContentWorkflowStage", "workflow");
+                });
+
+            modelBuilder.Entity("Astrana.Core.Data.Entities.Configuration.Audience", b =>
+                {
+                    b.HasOne("Astrana.Core.Data.Entities.User.UserProfileDetail", null)
+                        .WithMany("Audiences")
+                        .HasForeignKey("UserProfileDetailId");
+                });
+
             modelBuilder.Entity("Astrana.Core.Data.Entities.Configuration.Country", b =>
                 {
+                    b.HasOne("Astrana.Core.Data.Entities.Configuration.Audience", null)
+                        .WithMany("Countries")
+                        .HasForeignKey("AudienceId");
+
                     b.HasOne("Astrana.Core.Data.Entities.Configuration.Language", null)
                         .WithMany("Countries")
                         .HasForeignKey("LanguageId");
                 });
 
-            modelBuilder.Entity("Astrana.Core.Data.Entities.Content.Image", b =>
+            modelBuilder.Entity("Astrana.Core.Data.Entities.Configuration.SystemSetting", b =>
                 {
-                    b.HasOne("Astrana.Core.Data.Entities.Content.Album", null)
-                        .WithMany("Images")
-                        .HasForeignKey("AlbumId");
+                    b.HasOne("Astrana.Core.Data.Entities.Configuration.SystemSettingCategory", "SettingCategory")
+                        .WithMany("Settings")
+                        .HasForeignKey("SettingCategoryId");
+
+                    b.Navigation("SettingCategory");
                 });
 
-            modelBuilder.Entity("Astrana.Core.Data.Entities.Content.Post", b =>
+            modelBuilder.Entity("Astrana.Core.Data.Entities.Content.Comment", b =>
                 {
-                    b.HasOne("Astrana.Core.Data.Entities.Content.PostAttachment", "Attachment")
+                    b.HasOne("Astrana.Core.Data.Entities.Content.Comment", "TargeComment")
                         .WithMany()
-                        .HasForeignKey("AttachmentId");
+                        .HasForeignKey("TargeCommentCommentId");
 
-                    b.Navigation("Attachment");
+                    b.HasOne("Astrana.Core.Data.Entities.Content.Audio", "TargetAudio")
+                        .WithMany()
+                        .HasForeignKey("TargetAudioId");
+
+                    b.HasOne("Astrana.Core.Data.Entities.Content.Audio", "TargetContentCollection")
+                        .WithMany()
+                        .HasForeignKey("TargetContentCollectionId");
+
+                    b.HasOne("Astrana.Core.Data.Entities.Content.Image", "TargetGif")
+                        .WithMany()
+                        .HasForeignKey("TargetGifId");
+
+                    b.HasOne("Astrana.Core.Data.Entities.Content.Image", "TargetImage")
+                        .WithMany()
+                        .HasForeignKey("TargetImageId");
+
+                    b.HasOne("Astrana.Core.Data.Entities.Content.Link", "TargetLink")
+                        .WithMany()
+                        .HasForeignKey("TargetLinkId");
+
+                    b.HasOne("Astrana.Core.Data.Entities.Content.Post", "TargetPost")
+                        .WithMany()
+                        .HasForeignKey("TargetPostId");
+
+                    b.HasOne("Astrana.Core.Data.Entities.Content.Video", "TargetVideo")
+                        .WithMany()
+                        .HasForeignKey("TargetVideoId");
+
+                    b.Navigation("TargeComment");
+
+                    b.Navigation("TargetAudio");
+
+                    b.Navigation("TargetContentCollection");
+
+                    b.Navigation("TargetGif");
+
+                    b.Navigation("TargetImage");
+
+                    b.Navigation("TargetLink");
+
+                    b.Navigation("TargetPost");
+
+                    b.Navigation("TargetVideo");
+                });
+
+            modelBuilder.Entity("Astrana.Core.Data.Entities.Content.ContentCollectionItem", b =>
+                {
+                    b.HasOne("Astrana.Core.Data.Entities.Content.Audio", "Audio")
+                        .WithMany()
+                        .HasForeignKey("AudioId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Astrana.Core.Data.Entities.Content.ContentCollection", "ContentCollection")
+                        .WithMany("ContentCollectionItems")
+                        .HasForeignKey("ContentCollectionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Astrana.Core.Data.Entities.Content.Image", "Gif")
+                        .WithMany()
+                        .HasForeignKey("GifId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Astrana.Core.Data.Entities.Content.Image", "Image")
+                        .WithMany()
+                        .HasForeignKey("ImageId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Astrana.Core.Data.Entities.Content.Link", "Link")
+                        .WithMany()
+                        .HasForeignKey("LinkId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Astrana.Core.Data.Entities.Content.Video", "Video")
+                        .WithMany()
+                        .HasForeignKey("VideoId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Audio");
+
+                    b.Navigation("ContentCollection");
+
+                    b.Navigation("Gif");
+
+                    b.Navigation("Image");
+
+                    b.Navigation("Link");
+
+                    b.Navigation("Video");
+                });
+
+            modelBuilder.Entity("Astrana.Core.Data.Entities.Content.ExternalContentSubscription", b =>
+                {
+                    b.HasOne("Astrana.Core.Data.Entities.Content.Image", "PreviewImage")
+                        .WithMany()
+                        .HasForeignKey("PreviewImageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PreviewImage");
+                });
+
+            modelBuilder.Entity("Astrana.Core.Data.Entities.Content.Link", b =>
+                {
+                    b.HasOne("Astrana.Core.Data.Entities.Content.Image", "PreviewImage")
+                        .WithMany()
+                        .HasForeignKey("PreviewImageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PreviewImage");
+                });
+
+            modelBuilder.Entity("Astrana.Core.Data.Entities.Content.PostAttachment", b =>
+                {
+                    b.HasOne("Astrana.Core.Data.Entities.Content.Audio", "Audio")
+                        .WithMany()
+                        .HasForeignKey("AudioId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Astrana.Core.Data.Entities.Content.ContentCollection", "ContentCollection")
+                        .WithMany()
+                        .HasForeignKey("ContentCollectionId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Astrana.Core.Data.Entities.Configuration.Feeling", "Feeling")
+                        .WithMany()
+                        .HasForeignKey("FeelingId");
+
+                    b.HasOne("Astrana.Core.Data.Entities.Content.Image", "Gif")
+                        .WithMany()
+                        .HasForeignKey("GifId");
+
+                    b.HasOne("Astrana.Core.Data.Entities.Content.Image", "Image")
+                        .WithMany()
+                        .HasForeignKey("ImageId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Astrana.Core.Data.Entities.Content.Link", "Link")
+                        .WithMany()
+                        .HasForeignKey("LinkId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Astrana.Core.Data.Entities.Content.Location", "Location")
+                        .WithMany()
+                        .HasForeignKey("LocationId");
+
+                    b.HasOne("Astrana.Core.Data.Entities.Content.Post", null)
+                        .WithMany("Attachments")
+                        .HasForeignKey("PostId");
+
+                    b.HasOne("Astrana.Core.Data.Entities.Content.Video", "Video")
+                        .WithMany()
+                        .HasForeignKey("VideoId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Audio");
+
+                    b.Navigation("ContentCollection");
+
+                    b.Navigation("Feeling");
+
+                    b.Navigation("Gif");
+
+                    b.Navigation("Image");
+
+                    b.Navigation("Link");
+
+                    b.Navigation("Location");
+
+                    b.Navigation("Video");
+                });
+
+            modelBuilder.Entity("Astrana.Core.Data.Entities.Content.Tag", b =>
+                {
+                    b.HasOne("Astrana.Core.Data.Entities.Configuration.Audience", null)
+                        .WithMany("Tags")
+                        .HasForeignKey("AudienceId");
                 });
 
             modelBuilder.Entity("Astrana.Core.Data.Entities.Identity.UserAccountRoleRel", b =>
@@ -1922,6 +5672,17 @@ namespace Astrana.Core.Data.Migrations.MSSqlServer.Migrations
                     b.Navigation("UserAccount");
 
                     b.Navigation("UserRole");
+                });
+
+            modelBuilder.Entity("Astrana.Core.Data.Entities.Peers.Peer", b =>
+                {
+                    b.HasOne("Astrana.Core.Data.Entities.Configuration.Audience", null)
+                        .WithMany("PeersExcluded")
+                        .HasForeignKey("AudienceId");
+
+                    b.HasOne("Astrana.Core.Data.Entities.Configuration.Audience", null)
+                        .WithMany("PeersIncluded")
+                        .HasForeignKey("AudienceId1");
                 });
 
             modelBuilder.Entity("Astrana.Core.Data.Entities.User.UserEmailAddressRelationship", b =>
@@ -1985,11 +5746,19 @@ namespace Astrana.Core.Data.Migrations.MSSqlServer.Migrations
                 {
                     b.HasOne("Astrana.Core.Data.Entities.Content.Image", "CoverPicture")
                         .WithMany()
-                        .HasForeignKey("CoverPictureId");
+                        .HasForeignKey("CoverPictureImageId");
+
+                    b.HasOne("Astrana.Core.Data.Entities.Content.ContentCollection", "CoverPicturesCollection")
+                        .WithMany()
+                        .HasForeignKey("CoverPicturesCollectionContentCollectionId");
 
                     b.HasOne("Astrana.Core.Data.Entities.Content.Image", "ProfilePicture")
                         .WithMany()
-                        .HasForeignKey("ProfilePictureId");
+                        .HasForeignKey("ProfilePictureImageId");
+
+                    b.HasOne("Astrana.Core.Data.Entities.Content.ContentCollection", "ProfilePicturesCollection")
+                        .WithMany()
+                        .HasForeignKey("ProfilePicturesCollectionContentCollectionId");
 
                     b.HasOne("Astrana.Core.Data.Entities.Identity.UserAccount", "UserAccount")
                         .WithMany()
@@ -1999,14 +5768,45 @@ namespace Astrana.Core.Data.Migrations.MSSqlServer.Migrations
 
                     b.Navigation("CoverPicture");
 
+                    b.Navigation("CoverPicturesCollection");
+
                     b.Navigation("ProfilePicture");
 
+                    b.Navigation("ProfilePicturesCollection");
+
                     b.Navigation("UserAccount");
+                });
+
+            modelBuilder.Entity("Astrana.Core.Data.Entities.User.UserProfileDetail", b =>
+                {
+                    b.HasOne("Astrana.Core.Data.Entities.User.UserProfile", "UserProfile")
+                        .WithMany()
+                        .HasForeignKey("UserProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("UserProfile");
+                });
+
+            modelBuilder.Entity("Astrana.Core.Data.Entities.Configuration.Audience", b =>
+                {
+                    b.Navigation("Countries");
+
+                    b.Navigation("PeersExcluded");
+
+                    b.Navigation("PeersIncluded");
+
+                    b.Navigation("Tags");
                 });
 
             modelBuilder.Entity("Astrana.Core.Data.Entities.Configuration.Language", b =>
                 {
                     b.Navigation("Countries");
+                });
+
+            modelBuilder.Entity("Astrana.Core.Data.Entities.Configuration.SystemSettingCategory", b =>
+                {
+                    b.Navigation("Settings");
                 });
 
             modelBuilder.Entity("Astrana.Core.Data.Entities.ContactInformation.EmailAddress", b =>
@@ -2024,9 +5824,14 @@ namespace Astrana.Core.Data.Migrations.MSSqlServer.Migrations
                     b.Navigation("PhoneNumbers");
                 });
 
-            modelBuilder.Entity("Astrana.Core.Data.Entities.Content.Album", b =>
+            modelBuilder.Entity("Astrana.Core.Data.Entities.Content.ContentCollection", b =>
                 {
-                    b.Navigation("Images");
+                    b.Navigation("ContentCollectionItems");
+                });
+
+            modelBuilder.Entity("Astrana.Core.Data.Entities.Content.Post", b =>
+                {
+                    b.Navigation("Attachments");
                 });
 
             modelBuilder.Entity("Astrana.Core.Data.Entities.Identity.UserAccount", b =>
@@ -2043,6 +5848,11 @@ namespace Astrana.Core.Data.Migrations.MSSqlServer.Migrations
             modelBuilder.Entity("Astrana.Core.Data.Entities.Identity.UserRole", b =>
                 {
                     b.Navigation("UserAccountRoles");
+                });
+
+            modelBuilder.Entity("Astrana.Core.Data.Entities.User.UserProfileDetail", b =>
+                {
+                    b.Navigation("Audiences");
                 });
 #pragma warning restore 612, 618
         }

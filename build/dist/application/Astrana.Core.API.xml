@@ -1,0 +1,1028 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Astrana.Core.API</name>
+    </assembly>
+    <members>
+        <member name="P:Astrana.Core.API.AstranaApiInfo.Current">
+            <summary>
+            Returns the current HttpContext.
+            </summary>
+        </member>
+        <member name="P:Astrana.Core.API.AstranaApiInfo.AppBaseUrl">
+            <summary>
+            Returns the application's base URL.
+            </summary>
+        </member>
+        <member name="P:Astrana.Core.API.AstranaApiInfo.Controllers">
+            <summary>
+            Returns a list API Controller types.
+            </summary>
+        </member>
+        <member name="M:Astrana.Core.API.AstranaApiInfo.GetProxyEndpoint(System.String,System.String)">
+            <summary>
+            Returns a API proxy endpoint for the specified content identifier.
+            </summary>
+            <param name="contentType"></param>
+            <param name="contentIdentifier"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.AlbumsController.GetAsync(System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Guid},System.Int32,System.Int32)">
+            <summary>
+            Returns a paged set of albums according to the options provided.
+            </summary>
+            <param name="createdAfter"></param>
+            <param name="createdBefore"></param>
+            <param name="createdById"></param>
+            <param name="page"></param>
+            <param name="pageSize"></param>
+            <returns></returns>
+            <response code="200">Album(s) successfully retrieved.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="500">Something went wrong.</response>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.AlbumsController.GetAlbumByIdAsync(System.Guid)">
+            <summary>
+            Gets a album by it's ID if it exists.
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+            <response code="200">Album successfully retrieved.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="500">Something went wrong.</response>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.AlbumsController.CreateAlbums(System.Collections.Generic.IList{Astrana.Core.Domain.Models.Albums.AlbumToAdd})">
+            <summary>
+            Creates new albums.
+            </summary>
+            <param name="albums"></param>
+            <returns></returns>
+            <response code="201">Album(s) successfully created.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="500">Something went wrong.</response>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.AlbumsController.UpdateAlbums(System.Collections.Generic.IList{Astrana.Core.Domain.Models.Albums.Album})">
+            <summary>
+            Updates existing albums.
+            </summary>
+            <param name="albums"></param>
+            <returns></returns>
+            <response code="200">Album(s) successfully updated.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="500">Something went wrong.</response>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.AlbumsController.DeleteAlbums(System.Collections.Generic.IList{System.Guid})">
+            <summary>
+            Deletes existing albums by their IDs.
+            </summary>
+            <param name="albumIds"></param>
+            <returns></returns>
+            <response code="200">Album(s) successfully updated.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="500">Something went wrong.</response>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.AudiencesController.GetAsync(System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Guid},System.Int32,System.Int32)">
+            <summary>
+            Returns a paged set of audiences according to the options provided.
+            </summary>
+            <param name="createdAfter"></param>
+            <param name="createdBefore"></param>
+            <param name="createdById"></param>
+            <param name="page"></param>
+            <param name="pageSize"></param>
+            <returns></returns>
+            <response code="200">Audience(s) successfully retrieved.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="500">Something went wrong.</response>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.AudiencesController.GetAudienceByIdAsync(System.Guid)">
+            <summary>
+            Gets a audience by it's ID if it exists.
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+            <response code="200">Audience successfully retrieved.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="500">Something went wrong.</response>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.AudiencesController.CreateAudiences(System.Collections.Generic.IList{Astrana.Core.Domain.Models.Audiences.AudienceToAdd})">
+            <summary>
+            Creates new audiences.
+            </summary>
+            <param name="audiences"></param>
+            <returns></returns>
+            <response code="201">Audience(s) successfully created.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="500">Something went wrong.</response>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.AudiencesController.UpdateAudiences(System.Collections.Generic.IList{Astrana.Core.Domain.Models.Audiences.Audience})">
+            <summary>
+            Updates existing audiences.
+            </summary>
+            <param name="audiences"></param>
+            <returns></returns>
+            <response code="200">Audience(s) successfully updated.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="500">Something went wrong.</response>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.AudiencesController.DeleteAudiences(System.Collections.Generic.IList{System.Guid})">
+            <summary>
+            Deletes existing audiences by their IDs.
+            </summary>
+            <param name="audienceIds"></param>
+            <returns></returns>
+            <response code="200">Audience(s) successfully updated.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="500">Something went wrong.</response>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.BaseController`1.#ctor(Microsoft.Extensions.Logging.ILogger{`0},Astrana.Core.Domain.IdentityAccessManagement.Managers.SignIn.ISignInManager)">
+            <summary>
+            Base API Controller all other API Controllers should inherit from.
+            </summary>
+            <param name="logger"></param>
+            <param name="signInManager"></param>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.BaseController`1.GetHeaderValue(System.String)">
+            <summary>
+            Finds a request header by the header key/name and returns it's value.
+            </summary>
+            <param name="headerKey"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.BaseController`1.GetActioningUserId(System.Boolean)">
+            <summary>
+            Returns the User Account ID for the current session.
+            </summary>
+            <param name="allowAnonymousUser"></param>
+            <returns></returns>
+            <exception cref="T:Astrana.Core.Exceptions.InvalidUserException"></exception>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.BaseController`1.UnpagedGetResponse``1(``0,System.String)">
+            <summary>
+            Builds a standard API response wrapper for query without pagination.
+            </summary>
+            <param name="data"></param>
+            <param name="message"></param>
+            <typeparam name="TData"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.BaseController`1.PagedGetResponse``1(Astrana.Core.Domain.Models.Results.Contracts.IGetResult{``0},System.Int64,System.Int64,System.String)">
+            <summary>
+            Builds a standard API response wrapper for query with pagination.
+            </summary>
+            <typeparam name="TData"></typeparam>
+            <param name="result"></param>
+            <param name="page"></param>
+            <param name="pageSize"></param>
+            <param name="message"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.BaseController`1.PagedGetMetaResponse(Astrana.Core.Domain.Models.Results.Contracts.IGetResultMetadata,System.Int64,System.Int64,System.String)">
+            <summary>
+            Builds a standard API response wrapper for query metadata with pagination.
+            </summary>
+            <param name="result"></param>
+            <param name="page"></param>
+            <param name="pageSize"></param>
+            <param name="message"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.BaseController`1.AuthenticationSuccessResponse(System.String)">
+            <summary>
+            Builds a standard API response wrapper for a successful authentication outcome.
+            </summary>
+            <param name="token"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.BaseController`1.PreconditionRequiredResponse(System.String)">
+            <summary>
+            Builds a standard API response wrapper for an action that has a precondition to exist before it can be executed.
+            </summary>
+            <param name="message"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.BaseController`1.ExecutionSuccessResponse(System.String)">
+            <summary>
+            Builds a standard API response wrapper for a successful execution of an action, without data to return.
+            </summary>
+            <param name="message"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.BaseController`1.ExecutionSuccessResponse``1(Astrana.Core.Domain.Models.Results.Contracts.IExecutionResult{``0},System.String)">
+            <summary>
+            Builds a standard API response wrapper for a successful execution of an action, with data to return.
+            </summary>
+            <typeparam name="TData"></typeparam>
+            <param name="result"></param>
+            <param name="message"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.BaseController`1.CreatedSuccessResponse(System.String)">
+            <summary>
+            HTTP Response for Successful Create Operations
+            </summary>
+            <param name="message"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.BaseController`1.CreatedSuccessResponse``1(Astrana.Core.Domain.Models.Results.Contracts.IAddResult{``0},System.String)">
+            <summary>
+            HTTP Response for Successful Create Operations
+            </summary>
+            <param name="result"></param>
+            <param name="message"></param>
+            <typeparam name="TData"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.BaseController`1.UpdatedSuccessResponse(System.String)">
+            <summary>
+            HTTP Response for Successful Update Operations
+            </summary>
+            <param name="message"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.BaseController`1.UpdatedSuccessResponse``1(Astrana.Core.Domain.Models.Results.Contracts.IUpdateResult{``0},System.String)">
+            <summary>
+            HTTP Response for Successful Update Operations
+            </summary>
+            <param name="result"></param>
+            <param name="message"></param>
+            <typeparam name="TData"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.BaseController`1.DeletedSuccessResponse(System.String)">
+            <summary>
+            HTTP Response for Successful Delete Operations
+            </summary>
+            <param name="message"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.BaseController`1.DeletedSuccessResponse``1(Astrana.Core.Domain.Models.Results.Contracts.IDeleteResult{``0},System.String)">
+            <summary>
+            HTTP Response for Successful Delete Operations
+            </summary>
+            <param name="result"></param>
+            <param name="message"></param>
+            <typeparam name="TData"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.BaseController`1.ValidationResponse(System.String,System.Collections.Generic.IList{Astrana.Core.Domain.Models.AstranaApi.Responses.ApiResponseFailedItem})">
+            <summary>
+            HTTP Response for Operations that cannot be completed due to validation failures.
+            </summary>
+            <param name="message"></param>
+            <param name="failedItems"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.BaseController`1.FailureResponse(System.String)">
+            <summary>
+            HTTP Response for Operations that cannot be completed.
+            </summary>
+            <param name="message"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.BaseController`1.FailureResponse``1(``0,System.String)">
+            <summary>
+            HTTP Response for Operations that cannot be completed.
+            </summary>
+            <param name="data"></param>
+            <param name="message"></param>
+            <typeparam name="TData"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.BaseController`1.ErrorResponse(System.String)">
+            <summary>
+            HTTP Response for Operations that have failed with errors.
+            </summary>
+            <param name="message"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.BaseController`1.ErrorResponse``1(``0,System.String)">
+            <summary>
+            HTTP Response for Operations that have failed with errors.
+            </summary>
+            <param name="data"></param>
+            <param name="message"></param>
+            <typeparam name="TData"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.BaseController`1.BuildGetEndpointUrl(System.Nullable{System.Int64},System.Nullable{System.Int64})">
+            <summary>
+            Builds an API endpoint URL for a request to retrieve or query data.
+            </summary>
+            <param name="page"></param>
+            <param name="pageSize"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.EmojiController.GetAsync">
+            <summary>
+            Returns a paged set of audiences according to the options provided.
+            </summary>
+            <param name="createdAfter"></param>
+            <param name="createdBefore"></param>
+            <param name="createdById"></param>
+            <param name="page"></param>
+            <param name="pageSize"></param>
+            <returns></returns>
+            <response code="200">Audience(s) successfully retrieved.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="500">Something went wrong.</response>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.ExternalSubscriptionsController.GetAsync(System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Guid},System.Int32,System.Int32)">
+            <summary>
+            Returns a paged set of external content subscriptions according to the options provided.
+            </summary>
+            <param name="createdAfter"></param>
+            <param name="createdBefore"></param>
+            <param name="createdById"></param>
+            <param name="page"></param>
+            <param name="pageSize"></param>
+            <returns></returns>
+            <response code="200">ExternalContentSubscription(s) successfully retrieved.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="500">Something went wrong.</response>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.ExternalSubscriptionsController.GetExternalContentSubscriptionByIdAsync(System.Guid)">
+            <summary>
+            Gets a external content subscription by it's ID if it exists.
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+            <response code="200">ExternalContentSubscription successfully retrieved.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="500">Something went wrong.</response>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.ExternalSubscriptionsController.CreateExternalContentSubscriptions(System.Collections.Generic.IList{Astrana.Core.Domain.Models.ExternalContentSubscriptions.ExternalSubscriptionToAdd})">
+            <summary>
+            Creates new external content subscriptions.
+            </summary>
+            <param name="externalContentSubscriptions"></param>
+            <returns></returns>
+            <response code="201">ExternalContentSubscription(s) successfully created.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="500">Something went wrong.</response>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.ExternalSubscriptionsController.UpdateExternalContentSubscriptions(System.Collections.Generic.IList{Astrana.Core.Domain.Models.ExternalContentSubscriptions.ExternalSubscription})">
+            <summary>
+            Updates existing external content subscriptions.
+            </summary>
+            <param name="externalContentSubscriptions"></param>
+            <returns></returns>
+            <response code="200">ExternalContentSubscription(s) successfully updated.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="500">Something went wrong.</response>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.ExternalSubscriptionsController.DeleteExternalContentSubscriptions(System.Collections.Generic.IList{System.Guid})">
+            <summary>
+            Deletes existing external content subscriptions by their IDs.
+            </summary>
+            <param name="externalContentSubscriptionIds"></param>
+            <returns></returns>
+            <response code="200">ExternalContentSubscription(s) successfully updated.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="500">Something went wrong.</response>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.ExternalSubscriptionsController.Summary(System.Uri)">
+            <summary>
+            Gets a summary of a specified external content subscription.
+            </summary>
+            <param name="url"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.FeedController.GetFeedAsync(System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Guid},System.Int32,System.Int32)">
+            <summary>
+            Returns a paged set of feed content according to the options provided.
+            </summary>
+            <param name="createdAfter"></param>
+            <param name="createdBefore"></param>
+            <param name="createdById"></param>
+            <param name="page"></param>
+            <param name="pageSize"></param>
+            <returns></returns>
+            <response code="200">Item(s) successfully retrieved.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="500">Something went wrong.</response>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.ImagesController.Upload(System.Collections.Generic.List{Microsoft.AspNetCore.Http.IFormFile})">
+            <summary>
+            Uploads image files.
+            </summary>
+            <param name="files"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.ImagesController.SaveRemoteImage(System.Uri)">
+            <summary>
+            Save remote image.
+            </summary>
+            <param name="files"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.ImagesController.Proxy(System.String)">
+            <summary>
+            Proxies images from various internal and external sources.
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.InternationalizationController.GetTranslations(System.String,System.Collections.Generic.List{System.String})">
+            <summary>
+            Returns translations for the given translation keys.
+            </summary>
+            <param name="languageCode"></param>
+            <param name="translationKeys"></param>
+            <returns></returns>
+            <response code="200">Translation(s) successfully retrieved.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="500">Something went wrong.</response>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.InternationalizationController.GetAllTranslations(System.String)">
+            <summary>
+            Returns all translations for the given language code.
+            </summary>
+            <param name="languageCode"></param>
+            <returns></returns>
+            <response code="200">Translation(s) successfully retrieved.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="500">Something went wrong.</response>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.InternationalizationController.GetLanguagesAsync(Astrana.Core.Domain.Models.Languages.Options.LanguageQueryOptions{System.Guid,System.Guid})">
+            <summary>
+            Returns languages supported by the system.
+            </summary>
+            <returns></returns>
+            <response code="200">Language(s) successfully retrieved.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="500">Something went wrong.</response>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.LegalController.GetLicense(System.String,Astrana.Core.Enums.ContentFormat)">
+            <summary>
+            Returns the Astrana license.
+            </summary>
+            <returns></returns>
+            <response code="200">License successfully retrieved.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="500">Something went wrong.</response>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.LinksController.GetAsync(System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Guid},System.Int32,System.Int32)">
+            <summary>
+            Returns a paged set of links according to the options provided.
+            </summary>
+            <param name="createdAfter"></param>
+            <param name="createdBefore"></param>
+            <param name="createdById"></param>
+            <param name="page"></param>
+            <param name="pageSize"></param>
+            <returns></returns>
+            <response code="200">Link(s) successfully retrieved.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="500">Something went wrong.</response>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.LinksController.GetLinkByIdAsync(System.Guid)">
+            <summary>
+            Gets a link by it's ID if it exists.
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+            <response code="200">Link successfully retrieved.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="500">Something went wrong.</response>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.LinksController.CreateLinks(System.Collections.Generic.IList{Astrana.Core.Domain.Models.Links.LinkToAdd})">
+            <summary>
+            Creates new links.
+            </summary>
+            <param name="links"></param>
+            <returns></returns>
+            <response code="201">Link(s) successfully created.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="500">Something went wrong.</response>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.LinksController.UpdateLinks(System.Collections.Generic.IList{Astrana.Core.Domain.Models.Links.Link})">
+            <summary>
+            Updates existing links.
+            </summary>
+            <param name="links"></param>
+            <returns></returns>
+            <response code="200">Link(s) successfully updated.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="500">Something went wrong.</response>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.LinksController.DeleteLinks(System.Collections.Generic.IList{System.Guid})">
+            <summary>
+            Deletes existing links by their IDs.
+            </summary>
+            <param name="linkIds"></param>
+            <returns></returns>
+            <response code="200">Link(s) successfully updated.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="500">Something went wrong.</response>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.LinksController.Summary(System.Uri)">
+            <summary>
+            Gets a summary of a specified link.
+            </summary>
+            <param name="url"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.PeersController.CreatePeerConnectionRequests(Astrana.Core.Domain.Models.Peers.PeerConnectionRequestReceivedToAdd)">
+            <summary>
+            Creates peer connection requests.
+            </summary>
+            <param name="request"></param>
+            <response code="200">Peer Connection Request(s) was successfully created.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="401">Creating Peer Connection Request(s) failed.</response>
+            <response code="500">Something went wrong.</response>
+            <returns></returns>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.PeersController.AcceptPeerConnectionRequests(System.Collections.Generic.List{System.Guid})">
+            <summary>
+            Sets peer connection requests as accepted.
+            </summary>
+            <param name="peerConnectionRequestIds"></param>
+            <response code="200">Peer Connection Request(s) was successfully accepted.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="401">Accepting Peer Connection Request(s) failed.</response>
+            <response code="500">Something went wrong.</response>
+            <returns></returns>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.PeersController.RejectPeerConnectionRequests(System.Collections.Generic.List{System.Guid})">
+            <summary>
+            Sets peer connection requests as rejected.
+            </summary>
+            <param name="peerConnectionRequestIds"></param>
+            <response code="200">Peer Connection Request(s) was successfully rejected.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="401">Rejecting Peer Connection Request(s) failed.</response>
+            <response code="500">Something went wrong.</response>
+            <returns></returns>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.PeersController.GetPeerConnectionRequestsAsync(System.Nullable{Astrana.Core.Domain.Models.Peers.Enums.PeerConnectionRequestStatus},System.Int32,System.Int32)">
+            <summary>
+            Returns a paged set of peer connection requests according to the options provided.
+            </summary>
+            <param name="status"></param>
+            <param name="page"></param>
+            <param name="pageSize"></param>
+            <returns></returns>
+            <response code="200">Received Connection Request(s) successfully retrieved.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="500">Something went wrong.</response>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.PeersController.SubmitPeerConnectionRequest(Astrana.Core.Domain.Models.Peers.PeerConnectionRequestSubmittedToAdd)">
+            <summary>
+            Submits a peer connection request.
+            </summary>
+            <param name="request"></param>
+            <response code="200">Peer Connection Request was successfully submitted.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="401">Submitting Peer Connection Request failed.</response>
+            <response code="500">Something went wrong.</response>
+            <returns></returns>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.PeersController.GetSubmittedPeerConnectionRequestsAsync(System.Int32,System.Int32)">
+            <summary>
+            Returns a paged set of submitted peer connection requests according to the options provided.
+            </summary>
+            <param name="page"></param>
+            <param name="pageSize"></param>
+            <returns></returns>
+            <response code="200">Submitted Connection Request(s) successfully retrieved.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="500">Something went wrong.</response>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.PeersController.GetPeersAsync(System.Int32,System.Int32)">
+            <summary>
+            Returns a paged set of peers according to the options provided.
+            </summary>
+            <param name="page"></param>
+            <param name="pageSize"></param>
+            <returns></returns>
+            <response code="200">Peer(s) successfully retrieved.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="500">Something went wrong.</response>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.PeersController.GetPeerProfileAsync(System.Guid)">
+            <summary>
+            Returns a Peer Profile by Peer Id.
+            </summary>
+            <param name="peerId"></param>
+            <returns></returns>
+            <response code="200">Peer profile successfully retrieved.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="500">Something went wrong.</response>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.PeersController.RefreshPeerApiAccessToken(System.Guid)">
+            <summary>
+            Returns a refreshed API Access Token for a connected Peer
+            </summary>
+            <param name="peerId"></param>
+            <response code="200">API Access Token was successfully refreshed.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="401">Refreshing API Access Token failed.</response>
+            <response code="500">Something went wrong.</response>
+            <returns></returns>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.PostsController.GetAsync(System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Guid},System.Int32,System.Int32)">
+            <summary>
+            Returns a paged set of posts according to the options provided.
+            </summary>
+            <param name="createdAfter"></param>
+            <param name="createdBefore"></param>
+            <param name="createdById"></param>
+            <param name="page"></param>
+            <param name="pageSize"></param>
+            <returns></returns>
+            <response code="200">Post(s) successfully retrieved.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="500">Something went wrong.</response>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.PostsController.DiscoverPostsAsync(System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Guid},System.Int32,System.Int32)">
+            <summary>
+            Returns a paged set of posts metadata according to the options provided.
+            </summary>
+            <param name="createdAfter"></param>
+            <param name="createdBefore"></param>
+            <param name="createdById"></param>
+            <param name="page"></param>
+            <param name="pageSize"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.PostsController.GetPostByIdAsync(System.Int64)">
+            <summary>
+            Gets a post by it's ID if it exists.
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+            <response code="200">Post successfully retrieved.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="500">Something went wrong.</response>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.PostsController.CreatePosts(System.Collections.Generic.IList{Astrana.Core.Domain.Models.Posts.PostToAdd})">
+            <summary>
+            Creates new posts.
+            </summary>
+            <param name="posts"></param>
+            <returns></returns>
+            <response code="201">Post(s) successfully created.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="500">Something went wrong.</response>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.PostsController.UpdatePosts(System.Collections.Generic.IList{Astrana.Core.Domain.Models.Posts.Post})">
+            <summary>
+            Updates existing posts.
+            </summary>
+            <param name="posts"></param>
+            <returns></returns>
+            <response code="200">Post(s) successfully updated.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="500">Something went wrong.</response>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.PostsController.DeletePosts(System.Collections.Generic.IList{System.Int64})">
+            <summary>
+            Deletes existing posts by their IDs.
+            </summary>
+            <param name="postIds"></param>
+            <returns></returns>
+            <response code="200">Post(s) successfully updated.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="500">Something went wrong.</response>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.SettingsController.GetAsync(System.Collections.Generic.List{System.String},System.Int32,System.Int32)">
+            <summary>
+            Returns a paged set of settings according to the options provided.
+            </summary>
+            <param name="categories"></param>
+            <param name="page"></param>
+            <param name="pageSize"></param>
+            <returns></returns>
+            <response code="200">Setting(s) successfully retrieved.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="500">Something went wrong.</response>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.SettingsController.GetSettingByIdAsync(System.Guid)">
+            <summary>
+            Gets a setting by it's ID if it exists.
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+            <response code="200">Setting successfully retrieved.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="500">Something went wrong.</response>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.SettingsController.GetSystemSettingCategories">
+            <summary>
+            Returns a list setting categories.
+            </summary>
+            <returns></returns>
+            <response code="200">Setting Categories successfully retrieved.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="500">Something went wrong.</response>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.SettingsController.UpdateSettings(System.Collections.Generic.IList{Astrana.Core.Domain.Models.SystemSettings.SystemSetting})">
+            <summary>
+            Updates existing settings.
+            </summary>
+            <param name="settings"></param>
+            <returns></returns>
+            <response code="200">Setting(s) successfully updated.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="500">Something went wrong.</response>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.SettingsController.GetLookupAsync(System.String)">
+            <summary>
+            Returns the list of possible options for a given lookup/list.
+            </summary>
+            <param name="name"></param>
+            <response code="200">Lookup successfully retrieved.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="500">Something went wrong.</response>
+            <returns></returns>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.SettingsController.GetSlugsAsync">
+            <summary>
+            Returns the list of User and Peer slugs.
+            </summary>
+            <response code="200">Slugs successfully retrieved.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="500">Something went wrong.</response>
+            <returns></returns>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.SystemController.GetStatus">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+            <response code="200">System Status successfully retrieved.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="500">Something went wrong.</response>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.SystemController.GetApplicationVersion">
+            <summary>
+            Returns the Astrana application version.
+            </summary>
+            <returns></returns>
+            <response code="200">Application Version successfully retrieved.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="500">Something went wrong.</response>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.SystemController.GetApiVersion">
+            <summary>
+            Returns the Astrana Web API version.
+            </summary>
+            <returns></returns>
+            <response code="200">Web API Version successfully retrieved.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="500">Something went wrong.</response>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.SystemController.GetSupportCountriesAsync(System.Int32,System.Int32)">
+            <summary>
+            Returns a paged set of supported countries.
+            </summary>
+            <returns></returns>
+            <response code="200">Countries successfully retrieved.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="500">Something went wrong.</response>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.SystemController.CreateCountries(System.Collections.Generic.IList{Astrana.Core.Domain.Models.Countries.CountryToAdd})">
+            <summary>
+            Creates new countries.
+            </summary>
+            <param name="countries"></param>
+            <returns></returns>
+            <response code="201">Countries successfully created.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="422">Countries could not be successfully created.</response>
+            <response code="500">Something went wrong.</response>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.SystemController.UpdateCountries(System.Collections.Generic.IList{Astrana.Core.Domain.Models.Countries.Country})">
+            <summary>
+            Updates existing countries.
+            </summary>
+            <param name="countries"></param>
+            <returns></returns>
+            <response code="200">Countries successfully updated.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="422">Updates could not be successfully executed.</response>
+            <response code="500">Something went wrong.</response>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.SystemController.DeleteCountries(System.Collections.Generic.IList{System.Int64})">
+            <summary>
+            Deletes existing countries by their IDs.
+            </summary>
+            <param name="countryIds"></param>
+            <returns></returns>
+            <response code="200">Countries successfully updated.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="422">Deletions could not be successfully executed.</response>
+            <response code="500">Something went wrong.</response>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.SystemController.SetupStatus">
+            <summary>
+            Returns the setup status of the Astrana instance.
+            </summary>
+            <returns></returns>
+            <response code="200">System Setup Status successfully retrieved.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="500">Something went wrong.</response>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.SystemController.Setup(Astrana.Core.Domain.Models.SystemSetup.InstanceSetupRequest)">
+            <summary>
+            Readies the Astrana instance for usage.
+            </summary>
+            <param name="options"></param>
+            <returns></returns>
+            <response code="200">System setup is completed.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="422">System setup could not be successfully executed.</response>
+            <response code="500">Something went wrong.</response>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.SystemController.SetupTestDatabaseConnection(Astrana.Core.Domain.Models.SystemSetup.TestDatabaseConnectionRequest)">
+            <summary>
+            Tests a database connection can be established.
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+            <response code="200">Database connection can be established.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="422">Testing could not be successfully executed.</response>
+            <response code="500">Something went wrong.</response>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.SystemController.GetDatabaseSettingsAsync">
+            <summary>
+            Returns the database settings configured for the Astrana instance.
+            </summary>
+            <returns></returns>
+            <response code="200">System Database Settings successfully retrieved.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="500">Something went wrong.</response>
+        </member>
+        <member name="T:Astrana.Core.API.Controllers.UserController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.UserController.Authenticate(Astrana.Core.Domain.Models.IdentityAccessManagement.Models.LoginRequest)">
+            <summary>
+            Authenticates user credentials and returns an Authorization Token when successful.
+            </summary>
+            <param name="request"></param>
+            <response code="200">Authentication was successful.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="401">Authentication failed.</response>
+            <response code="428">Precondition must be met.</response>
+            <response code="500">Something went wrong.</response>
+            <returns></returns>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.UserController.RegisterAccount(Astrana.Core.Domain.Models.IdentityAccessManagement.Models.ApplicationUserToAdd)">
+            <summary>
+            Creates a new User Account
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+            <response code="201">User Account(s) successfully created.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="500">Something went wrong.</response>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.UserController.InitiateResetPassword(Astrana.Core.Domain.Models.IdentityAccessManagement.Models.InitiateResetPasswordRequest)">
+            <summary>
+            Initiates the password reset process for a specified user account.
+            </summary>
+            <param name="initiateResetPasswordRequest"></param>
+            <returns></returns>
+            <response code="202">Successfully initiated password reset process.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="500">Something went wrong.</response>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.UserController.ResetPassword(Astrana.Core.Domain.Models.IdentityAccessManagement.Models.ResetPasswordRequest)">
+            <summary>
+            Sets the new password for the user account associated with the supplied verification token.
+            </summary>
+            <param name="resetPasswordRequest"></param>
+            <returns></returns>
+            <response code="200">Successfully reset password.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="500">Something went wrong.</response>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.UserController.GetProfileAsync">
+            <summary>
+            Gets the Instance User Profile.
+            </summary>
+            <returns></returns>
+            <response code="200">Instance User Profile successfully retrieved.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="500">Something went wrong.</response>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.UserController.GetUserProfileIntroductionAsync">
+            <summary>
+            Returns the User Profile Introduction.
+            </summary>
+            <returns></returns>
+            <response code="200">User Profile Detail(s) successfully retrieved.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="500">Something went wrong.</response>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.UserController.UpdateUserProfileIntroduction(System.Guid,System.String)">
+            <summary>
+            Updates an existing User Profile's introduction by Profile ID.
+            </summary>
+            <param name="userProfileId"></param>
+            <param name="introduction"></param>
+            <returns></returns>
+            <response code="200">User Profile Introduction successfully updated.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="500">Something went wrong.</response>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.UserController.GetUserProfileDetailsAsync(System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Guid},System.Int32,System.Int32)">
+            <summary>
+            Returns a paged set of User Profile Details according to the options provided.
+            </summary>
+            <param name="createdAfter"></param>
+            <param name="createdBefore"></param>
+            <param name="createdById"></param>
+            <param name="page"></param>
+            <param name="pageSize"></param>
+            <returns></returns>
+            <response code="200">User Profile Detail(s) successfully retrieved.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="500">Something went wrong.</response>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.UserController.GetUserProfileDetailByIdAsync(System.Guid)">
+            <summary>
+            Gets a User Profile Detail by it's ID if it exists.
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+            <response code="200">User Profile Detail successfully retrieved.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="500">Something went wrong.</response>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.UserController.CreateUserProfileDetails(System.Collections.Generic.IList{Astrana.Core.Domain.Models.UserProfiles.UserProfileDetailToAdd})">
+            <summary>
+            Creates new User Profile Detail.
+            </summary>
+            <param name="userProfileDetails"></param>
+            <returns></returns>
+            <response code="201">User Profile Detail(s) successfully created.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="500">Something went wrong.</response>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.UserController.UpdateUserProfileDetails(System.Collections.Generic.IList{Astrana.Core.Domain.Models.UserProfiles.UserProfileDetail})">
+            <summary>
+            Updates existing User Profile Detail.
+            </summary>
+            <param name="userProfileDetails"></param>
+            <returns></returns>
+            <response code="200">User Profile Detail(s) successfully updated.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="500">Something went wrong.</response>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.UserController.DeleteUserProfileDetails(System.Collections.Generic.IList{System.Guid})">
+            <summary>
+            Deletes existing User Profile Details by their IDs.
+            </summary>
+            <param name="userProfileDetailIds"></param>
+            <returns></returns>
+            <response code="200">User Profile Detail(s) successfully updated.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="500">Something went wrong.</response>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.UserController.GetPreferencesAsync">
+            <summary>
+            Gets the Instance User Preferences.
+            </summary>
+            <returns></returns>
+            <response code="200">Instance User Preferences successfully retrieved.</response>
+            <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+            <response code="500">Something went wrong.</response>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.UserController.UpdateProfilePicture(Microsoft.AspNetCore.Http.IFormFile)">
+            <summary>
+            
+            </summary>
+            <param name="file"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Astrana.Core.API.Controllers.UserController.UpdateCoverPicture(Microsoft.AspNetCore.Http.IFormFile)">
+            <summary>
+            
+            </summary>
+            <param name="files"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Astrana.Core.API.ProgramBuilder.ConfigureWebApplicationBuilder(Microsoft.AspNetCore.Builder.WebApplicationOptions,System.Boolean)">
+            <summary>
+            Configures a Web Application Builder
+            </summary>
+            <param name="options"></param>
+            <param name="enableKestrelHttps"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Astrana.Core.API.ProgramBuilder.Build(Microsoft.AspNetCore.Builder.WebApplicationBuilder)">
+            <summary>
+            
+            </summary>
+            <param name="builder"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

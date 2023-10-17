@@ -34,7 +34,7 @@ namespace Astrana.Core.Data.EntityConfiguration
 
             return SettingsToSeed.Select(s => new Country
             {
-                Id = s.Id,
+                Id = s.CountryId,
                 Name = s.Name,
                 NameTrxCode = s.NameTrxCode,
                 TwoLetterCode = s.TwoLetterCode,

@@ -19,7 +19,7 @@ namespace Astrana.Core.Domain.Models.Peers.Contracts
 
         DateTimeOffset DateOfBirth { get; set; }
 
-        Gender Gender { get; set; }
+        Sex Sex { get; set; }
 
         string Introduction { get; set; }
 

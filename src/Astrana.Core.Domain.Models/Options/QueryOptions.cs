@@ -32,9 +32,11 @@ namespace Astrana.Core.Domain.Models.Options
 
         public QueryOptionsMatchMode IdsMatchMode { get; set; }
 
-        public List<TRecordId> Ids { get; set; } = new();
+        public List<TRecordId>? Ids { get; set; } = new();
 
-        public List<TOwnerUserId> OwnerUserIds { get; set; } = new();
+        public List<TRecordId>? ExcludeIds { get; set; } = new();
+
+        public List<TOwnerUserId>? OwnerUserIds { get; set; } = new();
 
         public DateTimeOffset? CreatedBefore { get; set; }
 
@@ -48,7 +50,9 @@ namespace Astrana.Core.Domain.Models.Options
 
         public string? SortBy { get; set; } = null;
 
-        public SortDirection SortDirection { get; set; }
+        public OrderByDirection OrderByDirection { get; set; }
+
+        public string? OrderBy { get; set; }
 
         public bool IncludeDeactivated { get; set; }
 
@@ -63,7 +67,7 @@ namespace Astrana.Core.Domain.Models.Options
                 $"{nameof(PageSize).ToCamelCase()}={PageSize}",
                 $"{nameof(CurrentPage).ToCamelCase()}={CurrentPage}",
                 $"{nameof(SortBy).ToCamelCase()}={SortBy}",
-                $"{nameof(SortDirection).ToCamelCase()}={SortDirection}",
+                $"{nameof(OrderByDirection).ToCamelCase()}={OrderByDirection}",
                 $"{nameof(IncludeDeactivated).ToCamelCase()}={IncludeDeactivated}"
             };
 
@@ -89,10 +93,10 @@ namespace Astrana.Core.Domain.Models.Options
                 $"{nameof(PageSize).ToCamelCase()}={PageSize}",
                 $"{nameof(CurrentPage).ToCamelCase()}={CurrentPage}",
                 $"{nameof(SortBy).ToCamelCase()}={SortBy}",
-                $"{nameof(SortDirection).ToCamelCase()}={SortDirection}",
+                $"{nameof(OrderByDirection).ToCamelCase()}={OrderByDirection}",
                 $"{nameof(IncludeDeactivated).ToCamelCase()}={IncludeDeactivated}",
-                $"{nameof(Ids).ToCamelCase()}={string.Join(',', Ids.Select(id => id.ToString()))}",
-                $"{nameof(OwnerUserIds).ToCamelCase()}={string.Join(',', OwnerUserIds.Select(uid => uid.ToString()))}"
+                $"{nameof(Ids).ToCamelCase()}={string.Join(',', Ids == null ? "" : Ids.Select(id => id.ToString()))}",
+                $"{nameof(OwnerUserIds).ToCamelCase()}={string.Join(',', OwnerUserIds == null ? "" : OwnerUserIds.Select(uid => uid.ToString()))}"
             };
 
             return string.Join(StringSeparator, propertyValues);

@@ -1,0 +1,76 @@
+# syntax=docker/dockerfile:1
+  
+# Use a lightweight and secure base image
+# FROM alpine:latest
+FROM postgres:15.3-alpine3.18
+
+ENV POSTGRES_DB="astrana"
+ENV POSTGRES_USER="astranau"
+ENV POSTGRES_PASSWORD="postgres"
+
+# Add required alpine packages
+RUN apk add openrc
+
+# Set the application port
+EXPOSE 5000
+EXPOSE 9001
+EXPOSE 80
+EXPOSE 443
+
+# Expose Database Ports
+# EXPOSE 5432
+
+# Install ASP.NET Core runtime
+RUN apk update
+
+RUN apk add aspnetcore7-runtime
+
+# Install Database
+## RUN apk update
+
+## RUN apk add postgresql
+
+## RUN su postgres
+
+## RUN mkdir /var/lib/postgresql/data
+## COPY /database/postgresql/linux/var/lib/postgresql/ /var/lib/postgresql/
+## COPY /database/postgresql/linux/etc/ /etc/
+
+## RUN chmod 0700 /var/lib/postgresql/data
+## RUN chmod +x /etc/local.d/postgres-custom.start
+
+## RUN initdb -D /var/lib/postgresql/data
+
+## RUN rc-update add local default
+## RUN openrc
+
+## RUN pg_ctl start -D /var/lib/postgresql/data
+
+# Switch to application installation directory
+WORKDIR /opt/astrana
+
+# Copy all release artifacts
+COPY /release/dist/ /opt/astrana/
+
+# Switch to the configuration directory
+WORKDIR /etc
+
+# Copy the configuration files
+COPY /release/config/.astrana /etc/astrana/
+COPY /release/config/ssl-certificate/* /etc/astrana/ssl/
+
+# Switch to the application executable directory
+WORKDIR /opt/astrana
+
+#USER postgres
+#
+#RUN chmod 0700 /var/lib/postgresql/data &&\
+    #initdb /var/lib/postgresql/data &&\
+    #echo "host all  all    0.0.0.0/0  md5" >> /var/lib/postgresql/data/pg_hba.conf &&\
+    #echo "listen_addresses='*'" >> /var/lib/postgresql/data/postgresql.conf &&\
+    #pg_ctl start &&\
+    #psql -U postgres -tc "SELECT 1 FROM pg_database WHERE datname = 'main'" | grep -q 1 || psql -U postgres -c "CREATE DATABASE main" &&\
+    #psql -c "ALTER USER postgres WITH ENCRYPTED PASSWORD 'Pwd123!!';"
+#
+
+ENTRYPOINT ["dotnet", "Astrana.Core.Application.dll", "--urls", "https://0.0.0.0:9001"]

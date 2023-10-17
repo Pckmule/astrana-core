@@ -11,7 +11,7 @@ namespace Astrana.Core.Domain.Models.Results
 {
     public class DeleteResult : IDeleteResult
     {
-        public DeleteResult(ResultOutcome outcome, long resultCount = 0, string message = "", string? resultCode = null)
+        public DeleteResult(ResultOutcome outcome, long resultCount = 0, string? message = "", string? resultCode = null)
         {
             Outcome = outcome;
             Count = resultCount;
@@ -23,7 +23,7 @@ namespace Astrana.Core.Domain.Models.Results
         
         public long Count { get; set; }
 
-        public string Message { get; set; }
+        public string? Message { get; set; }
 
         public bool? SoftDeleted { get; set; }
 
@@ -34,7 +34,7 @@ namespace Astrana.Core.Domain.Models.Results
 
     public class DeleteResult<TData> : DeleteResult, IDeleteResult<TData>
     {
-        public DeleteResult(ResultOutcome outcome, TData resultData, long resultCount = 0, string message = "", string? resultCode = null): base(outcome, resultCount, message, resultCode)
+        public DeleteResult(ResultOutcome outcome, TData resultData, long resultCount = 0, string? message = "", string? resultCode = null): base(outcome, resultCount, message, resultCode)
         {
             Data = resultData;
         }
@@ -44,21 +44,21 @@ namespace Astrana.Core.Domain.Models.Results
 
     public class DeleteSuccessResult : DeleteResult
     {
-        public DeleteSuccessResult(long resultCount = 0, string message = "", string? resultCode = null) : base(ResultOutcome.Success, resultCount, message, resultCode) { }
+        public DeleteSuccessResult(long resultCount = 0, string? message = "", string? resultCode = null) : base(ResultOutcome.Success, resultCount, message, resultCode) { }
     }
 
     public class DeleteSuccessResult<TData> : DeleteResult<TData>
     {
-        public DeleteSuccessResult(TData resultData, long resultCount = 0, string message = "", string? resultCode = null) : base(ResultOutcome.Success, resultData, resultCount, message, resultCode) { }
+        public DeleteSuccessResult(TData resultData, long resultCount = 0, string? message = "", string? resultCode = null) : base(ResultOutcome.Success, resultData, resultCount, message, resultCode) { }
     }
 
     public class DeleteFailResult : DeleteResult
     {
-        public DeleteFailResult(long resultCount = 0, string message = "", string? resultCode = null) : base(ResultOutcome.Success, resultCount, message, resultCode) { }
+        public DeleteFailResult(long resultCount = 0, string? message = "", string? resultCode = null) : base(ResultOutcome.Success, resultCount, message, resultCode) { }
     }
 
     public class DeleteFailResult<TData> : DeleteResult<TData>
     {
-        public DeleteFailResult(TData resultData, long resultCount = 0, string message = "", string? resultCode = null) : base(ResultOutcome.Success, resultData, resultCount, message, resultCode) { }
+        public DeleteFailResult(TData resultData, long resultCount = 0, string? message = "", string? resultCode = null) : base(ResultOutcome.Success, resultData, resultCount, message, resultCode) { }
     }
 }

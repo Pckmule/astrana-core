@@ -9,24 +9,19 @@ using Astrana.Core.Enums;
 using Astrana.Core.Legal;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace Astrana.Core.API.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
     public class LegalController : BaseController<LegalController>
     {
         private readonly ILogger<LegalController> _logger;
-        private readonly IConfiguration _configuration;
 
         private readonly ILegalService _legalService;
 
-
-        public LegalController(IConfiguration configuration, ILogger<LegalController> logger, ISignInManager signInManager, ILegalService legalService) : base(logger, signInManager)
+        public LegalController(ILogger<LegalController> logger, ISignInManager signInManager, ILegalService legalService) : base(logger, signInManager)
         {
-            _configuration = configuration;
             _logger = logger;
             _legalService = legalService;
         }

@@ -3,14 +3,15 @@ using Astrana.Core.Domain.Models.UserAccounts;
 using Astrana.Core.Domain.Models.UserAccounts.Enums;
 using Astrana.Core.Domain.Models.UserProfiles;
 using Astrana.Core.Domain.Models.UserProfiles.Enums;
-using Astrana.Core.Validation;
-using Astrana.Core.Validation.Enums;
+using Astrana.Core.Framework.Domain;
+using Astrana.Core.Framework.Model.Validation;
+using Astrana.Core.Framework.Model.Validation.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
 namespace Astrana.Core.Domain.Models.IdentityAccessManagement.Models
 {
-    public sealed class ApplicationUser: BaseDomainModel
+    public sealed class ApplicationUser: DomainEntity
     {
         [JsonIgnore]
         private readonly UserAccount _userAccount;
@@ -29,7 +30,9 @@ namespace Astrana.Core.Domain.Models.IdentityAccessManagement.Models
         }
 
         [Required]
-        public Guid Id => _userAccount.Id;
+        public Guid Id => _userAccount.UserAccountId;
+
+        public Guid ProfileId => _userProfile.ProfileId;
 
         [Required]
         public UserAccountType Type => _userAccount.Type;
@@ -151,10 +154,10 @@ namespace Astrana.Core.Domain.Models.IdentityAccessManagement.Models
         }
 
         [Required]
-        public Gender Gender
+        public Sex Sex
         {
-            get => _userProfile.Gender;
-            set => _userProfile.Gender = value;
+            get => _userProfile.Sex;
+            set => _userProfile.Sex = value;
         }
 
         public EntityValidationResult Validate()

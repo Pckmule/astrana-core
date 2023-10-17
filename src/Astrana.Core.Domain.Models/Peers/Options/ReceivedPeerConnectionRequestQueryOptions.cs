@@ -5,6 +5,7 @@
 */
 
 using Astrana.Core.Domain.Models.Options;
+using Astrana.Core.Domain.Models.Peers.Enums;
 using System.Text.Json.Serialization;
 
 namespace Astrana.Core.Domain.Models.Peers.Options
@@ -17,5 +18,7 @@ namespace Astrana.Core.Domain.Models.Peers.Options
         public ReceivedPeerConnectionRequestQueryOptions() { }
 
         public ReceivedPeerConnectionRequestQueryOptions(List<TRecordId> ids) : base(ids) { }
+
+        public PeerConnectionRequestStatus? Status { get; set; }
     }
 }

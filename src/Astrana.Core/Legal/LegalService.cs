@@ -18,33 +18,36 @@ namespace Astrana.Core.Legal
 
             var licenseFileName = GetLicenseFileName(languageCode);
 
-            using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(licenseFileName))
+            using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(licenseFileName);
+            if (stream == null)
+                throw new FileNotFoundException(licenseFileName);
+
+            using var reader = new StreamReader(stream);
+            return contentFormat switch
             {
-                if (stream == null)
-                    throw new FileNotFoundException(licenseFileName);
-
-                using (var reader = new StreamReader(stream))
-                {
-                    if (contentFormat == ContentFormat.Html)
-                        return Markdown.ToHtml(reader.ReadToEnd());
-
-                    if (contentFormat == ContentFormat.PlainText)
-                        return Markdown.ToPlainText(reader.ReadToEnd());
-
-                    return reader.ReadToEnd();
-                }
-            }
+                ContentFormat.Html => Markdown.ToHtml(reader.ReadToEnd()),
+                ContentFormat.PlainText => Markdown.ToPlainText(reader.ReadToEnd()),
+                _ => reader.ReadToEnd()
+            };
         }
 
         private static string GetLicenseFileName(string languageCode)
         {
             var codeParts = languageCode.Split("-");
 
-            var licenseFileNameTemplate = "Astrana.Core.Legal.License.LICENSE_{0}.md";
-            var licenseFileName = string.Format(licenseFileNameTemplate, languageCode);
+            var nomalizedCode = codeParts[0].ToLower();
+
+            if(codeParts.Length > 1)
+                nomalizedCode += "-" + codeParts[1].ToUpper();
+
+            const string licenseFileNameTemplate = "Astrana.Core.Legal.License.LICENSE_{0}.md";
+            var licenseFileName = string.Format(licenseFileNameTemplate, nomalizedCode);
 
             if (Assembly.GetExecutingAssembly().GetManifestResourceNames().All(r => r != licenseFileName))
-                licenseFileName = string.Format(licenseFileNameTemplate, codeParts[0]);
+                licenseFileName = string.Format(licenseFileNameTemplate, codeParts[0].ToLower());
+
+            if (Assembly.GetExecutingAssembly().GetManifestResourceNames().All(r => r != licenseFileName))
+                licenseFileName = string.Format(licenseFileNameTemplate, "en");
 
             return licenseFileName;
         }

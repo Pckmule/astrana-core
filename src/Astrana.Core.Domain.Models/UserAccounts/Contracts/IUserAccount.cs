@@ -10,7 +10,7 @@ namespace Astrana.Core.Domain.Models.UserAccounts.Contracts
 {
     public interface IUserAccount
     {
-        Guid Id { get; set; }
+        Guid UserAccountId { get; set; }
 
         UserAccountType Type { get; set; }
 

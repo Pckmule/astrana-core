@@ -6,14 +6,17 @@
 
 using Astrana.Core.Domain.Models.Database.Contracts;
 using Astrana.Core.Enums;
-using Astrana.Core.Validation;
-using Astrana.Core.Validation.Attributes;
+using Astrana.Core.Framework.Domain;
+using Astrana.Core.Framework.Model.Validation;
+using Astrana.Core.Framework.Model.Validation.Attributes;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Astrana.Core.Domain.Models.Database
 {
-    public class DatabaseSettings : BaseDomainModel, IDatabaseSettings
+    public class DatabaseSettings : DomainEntity, IDatabaseSettings
     {
+        [JsonConstructor]
         public DatabaseSettings() { }
 
         [RequiredEnum]

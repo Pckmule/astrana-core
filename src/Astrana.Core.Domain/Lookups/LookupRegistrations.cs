@@ -22,8 +22,8 @@ namespace Astrana.Core.Domain.Lookups
                 typeof(SystemSetupStatus),
                 typeof(DatabaseProvider),
                 typeof(ContentFormat),
-                typeof(SortDirection),
-                typeof(Gender),
+                typeof(OrderByDirection),
+                typeof(Sex),
                 typeof(NameCombination),
                 typeof(UserAccountType),
                 typeof(TagFilterMode)

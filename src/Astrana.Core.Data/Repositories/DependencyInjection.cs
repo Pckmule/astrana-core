@@ -5,13 +5,22 @@
 */
 
 using Astrana.Core.Data.Repositories.ApiAccessTokens;
+using Astrana.Core.Data.Repositories.Audiences;
+using Astrana.Core.Data.Repositories.AudioClips;
+using Astrana.Core.Data.Repositories.Audios;
+using Astrana.Core.Data.Repositories.Comments;
+using Astrana.Core.Data.Repositories.ContentCollections;
 using Astrana.Core.Data.Repositories.Countries;
+using Astrana.Core.Data.Repositories.Feelings;
+using Astrana.Core.Data.Repositories.Images;
 using Astrana.Core.Data.Repositories.Languages;
+using Astrana.Core.Data.Repositories.Links;
+using Astrana.Core.Data.Repositories.NewContentWorkflowStages;
 using Astrana.Core.Data.Repositories.Peers;
-using Astrana.Core.Data.Repositories.Posts;
 using Astrana.Core.Data.Repositories.SystemSettings;
 using Astrana.Core.Data.Repositories.UserAccounts;
 using Astrana.Core.Data.Repositories.UserProfiles;
+using Astrana.Core.Data.Repositories.Videos;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Astrana.Core.Data.Repositories
@@ -32,6 +41,9 @@ namespace Astrana.Core.Data.Repositories
             services.AddScoped<ICountryRepository<Guid>, CountryRepository>();
             services.AddTransient<ICountryRepository<Guid>, CountryRepository>();
 
+            services.AddScoped<IFeelingRepository<Guid>, FeelingRepository>();
+            services.AddTransient<IFeelingRepository<Guid>, FeelingRepository>();
+
             services.AddScoped<IUserAccountRepository<Guid>, UserAccountRepository>();
             services.AddTransient<IUserAccountRepository<Guid>, UserAccountRepository>();
 
@@ -41,8 +53,32 @@ namespace Astrana.Core.Data.Repositories
             services.AddScoped<IPeerRepository<Guid>, PeerRepository>();
             services.AddTransient<IPeerRepository<Guid>, PeerRepository>();
 
-            services.AddScoped<IPostRepository<Guid>, PostRepository>();
-            services.AddTransient<IPostRepository<Guid>, PostRepository>();
+            services.AddScoped<IAudienceRepository<Guid>, AudienceRepository>();
+            services.AddTransient<IAudienceRepository<Guid>, AudienceRepository>();
+
+            services.AddScoped<INewContentWorkflowStageRepository<Guid>, NewContentWorkflowStageRepository>();
+            services.AddTransient<INewContentWorkflowStageRepository<Guid>, NewContentWorkflowStageRepository>();
+
+            services.AddScoped<ILinkRepository<Guid>, LinkRepository>();
+            services.AddTransient<ILinkRepository<Guid>, LinkRepository>();
+
+            services.AddScoped<IImageRepository<Guid>, ImageRepository>();
+            services.AddTransient<IImageRepository<Guid>, ImageRepository>();
+
+            services.AddScoped<IVideoRepository<Guid>, VideoRepository>();
+            services.AddTransient<IVideoRepository<Guid>, VideoRepository>();
+
+            services.AddScoped<IAudioRepository<Guid>, AudioRepository>();
+            services.AddTransient<IAudioRepository<Guid>, AudioRepository>();
+
+            // services.AddScoped<IPostRepository<Guid>, PostRepository>();
+            // services.AddTransient<IPostRepository<Guid>, PostRepository>();
+
+            services.AddScoped<ICommentRepository<Guid>, CommentRepository>();
+            services.AddTransient<ICommentRepository<Guid>, CommentRepository>();
+
+            services.AddScoped<IContentCollectionRepository<Guid>, ContentCollectionRepository>();
+            services.AddTransient<IContentCollectionRepository<Guid>, ContentCollectionRepository>();
 
             return services;
         }

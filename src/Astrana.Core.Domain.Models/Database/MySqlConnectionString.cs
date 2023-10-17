@@ -7,15 +7,15 @@
 using Astrana.Core.Domain.Models.Database.Constants;
 using Astrana.Core.Domain.Models.Database.Contracts;
 using Astrana.Core.Extensions;
-using Astrana.Core.Validation;
 using System.Text.Json.Serialization;
+using Astrana.Core.Framework.Model.Validation;
 
 namespace Astrana.Core.Domain.Models.Database
 {
     public sealed class MySqlConnectionString : ConnectionString, IMySqlConnectionString
     {
         [JsonConstructor]
-        public MySqlConnectionString(): base()
+        public MySqlConnectionString()
         {
             NameUnique = ModelProperties.MySqlConnectionString.NameUnique;
             NameSingularForm = ModelProperties.MySqlConnectionString.NameSingularForm;

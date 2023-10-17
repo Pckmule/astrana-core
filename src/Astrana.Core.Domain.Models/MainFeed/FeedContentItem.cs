@@ -6,12 +6,13 @@
 
 using Astrana.Core.Domain.Models.MainFeed.Constants;
 using Astrana.Core.Domain.Models.MainFeed.Contracts;
-using Astrana.Core.Validation;
 using System.ComponentModel.DataAnnotations;
+using Astrana.Core.Framework.Domain;
+using Astrana.Core.Framework.Model.Validation;
 
 namespace Astrana.Core.Domain.Models.MainFeed
 {
-    public sealed class FeedContentItem : BaseDomainModel, IFeedContentItem
+    public sealed class FeedContentItem : DomainEntity, IFeedContentItem
     {
         public FeedContentItem()
         {

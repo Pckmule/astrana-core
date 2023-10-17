@@ -32,11 +32,14 @@ namespace Astrana.Core.Data.Repositories.ApiAccessTokens
         {
             options ??= new ApiAccessTokenQueryOptions<Guid, Guid>();
 
-            var query = ctx.ApiAccessTokens.AsQueryable();
+            var query = databaseSession.ApiAccessTokens.AsQueryable();
 
             // Add Filters
             if (options.Ids.Any())
                 query = query.Where(o => options.Ids.Contains(o.Id));
+
+            if (options.ExcludeIds.Any())
+                query = query.Where(o => !options.ExcludeIds.Contains(o.Id));
 
             if (options.CreatedBefore.HasValue)
                 query = query.Where(o => o.CreatedTimestamp < options.CreatedBefore.Value);
@@ -51,7 +54,7 @@ namespace Astrana.Core.Data.Repositories.ApiAccessTokens
             query = query.OrderByDescending(o => o.CreatedTimestamp);
 
             // Add Paging
-            if (!options.PagingDisabled && options.PageSize.HasValue && options.CurrentPage.HasValue)
+            if (options is { PagingDisabled: false, PageSize: { }, CurrentPage: { } })
                 query = query.Skip(options.PageSize.Value * (options.CurrentPage.Value - 1)).Take(options.PageSize.Value);
 
             return query;
@@ -111,7 +114,7 @@ namespace Astrana.Core.Data.Repositories.ApiAccessTokens
         }
 
         /// <summary>
-        /// Adds new Api Access Tokens to the Data Source.
+        /// Adds new API Access Tokens to the Data Source.
         /// </summary>
         /// <param name="requestedAdditions"></param>
         /// <param name="actioningUserId"></param>
@@ -139,8 +142,8 @@ namespace Astrana.Core.Data.Repositories.ApiAccessTokens
                     newApiAccessTokenEntity.LastModifiedTimestamp = now;
 
                     // Save records.
-                    ctx.ApiAccessTokens.Add(newApiAccessTokenEntity);
-                    await ctx.SaveChangesAsync();
+                    databaseSession.ApiAccessTokens.Add(newApiAccessTokenEntity);
+                    await databaseSession.SaveChangesAsync();
 
                     countAdded++;
 

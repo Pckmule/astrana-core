@@ -1,4 +1,4 @@
-﻿using Astrana.Core.Validation.Exceptions;
+﻿using Astrana.Core.Framework.Model.Validation.Exceptions;
 using System.Runtime.Serialization;
 
 namespace Astrana.Core.Data.Exceptions

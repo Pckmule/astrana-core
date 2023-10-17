@@ -8,6 +8,7 @@ using Astrana.Core.Constants;
 using Astrana.Core.Domain.AstranaApi.Commands.CreateApiAccessToken;
 using Astrana.Core.Domain.IdentityAccessManagement.Managers.SignIn;
 using Astrana.Core.Domain.Models.Peers;
+using Astrana.Core.Domain.Models.Peers.Enums;
 using Astrana.Core.Domain.Models.Peers.Options;
 using Astrana.Core.Domain.Models.Results.Enums;
 using Astrana.Core.Domain.Peers.Commands.AcceptPeerConnectionRequests;
@@ -17,17 +18,14 @@ using Astrana.Core.Domain.Peers.Commands.SubmitPeerConnectionRequests;
 using Astrana.Core.Domain.Peers.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace Astrana.Core.API.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
     public class PeersController : BaseController<PeersController>
     {
         private readonly ILogger<PeersController> _logger;
-        private readonly IConfiguration _configuration;
 
         private readonly ICreateReceivedPeerConnectionRequestsCommand _createReceivedPeerConnectionRequestsCommand;
         private readonly ISubmitPeerConnectionRequestsCommand _submitPeerConnectionRequestsCommand;
@@ -37,10 +35,13 @@ namespace Astrana.Core.API.Controllers
         private readonly IGetReceivedPeerConnectionRequestsQuery _getReceivedPeerConnectionRequestsQuery;
         private readonly IGetSubmittedPeerConnectionRequestsQuery _getSubmittedPeerConnectionRequestsQuery;
         private readonly IGetPeersQuery _getPeersQuery;
+        private readonly IGetPeerSummaryQuery _getPeerSummaryQuery;
         private readonly IGetPeerProfileQuery _getPeerProfileQuery;
         private readonly ICreateApiAccessTokenCommand _createApiAccessTokenCommand;
 
-        public PeersController(IConfiguration configuration, ILogger<PeersController> logger, ISignInManager signInManager,
+        public PeersController(
+            ILogger<PeersController> logger, 
+            ISignInManager signInManager,
             ICreateReceivedPeerConnectionRequestsCommand createReceivedPeerConnectionRequestsCommand,
             ISubmitPeerConnectionRequestsCommand submitPeerConnectionRequestsCommand,
             IAcceptPeerConnectionRequestsCommand acceptPeerConnectionRequestsCommand,
@@ -48,10 +49,10 @@ namespace Astrana.Core.API.Controllers
             IGetReceivedPeerConnectionRequestsQuery getReceivedPeerConnectionRequestsQuery,
             IGetSubmittedPeerConnectionRequestsQuery getSubmittedPeerConnectionRequestsQuery,
             IGetPeersQuery getPeersQuery,
+            IGetPeerSummaryQuery getPeerSummaryQuery,
             IGetPeerProfileQuery getPeerProfileQuery,
             ICreateApiAccessTokenCommand createApiAccessTokenCommand) : base(logger, signInManager)
         {
-            _configuration = configuration;
             _logger = logger;
 
             _createReceivedPeerConnectionRequestsCommand = createReceivedPeerConnectionRequestsCommand;
@@ -63,6 +64,7 @@ namespace Astrana.Core.API.Controllers
             _getSubmittedPeerConnectionRequestsQuery = getSubmittedPeerConnectionRequestsQuery;
 
             _getPeersQuery = getPeersQuery;
+            _getPeerSummaryQuery = getPeerSummaryQuery;
             _getPeerProfileQuery = getPeerProfileQuery;
 
             _createApiAccessTokenCommand = createApiAccessTokenCommand;
@@ -81,7 +83,7 @@ namespace Astrana.Core.API.Controllers
         [HttpPut("Connect/Requests")]
         public async Task<IActionResult> CreatePeerConnectionRequests(PeerConnectionRequestReceivedToAdd request)
         {
-            var actioningUserId = GetActioningUserId(true);
+            var actioningUserId = GetActioningUserId(ActioningUserOptions.Anonymous);
 
             try
             {
@@ -113,7 +115,7 @@ namespace Astrana.Core.API.Controllers
         [HttpPost("Connect/Requests/Accept")]
         public async Task<IActionResult> AcceptPeerConnectionRequests(List<Guid> peerConnectionRequestIds)
         {
-            var actioningUserId = GetActioningUserId(true);
+            var actioningUserId = GetActioningUserId(ActioningUserOptions.Anonymous);
 
             try
             {
@@ -145,7 +147,7 @@ namespace Astrana.Core.API.Controllers
         [HttpPost("Connect/Requests/Reject")]
         public async Task<IActionResult> RejectPeerConnectionRequests(List<Guid> peerConnectionRequestIds)
         {
-            var actioningUserId = GetActioningUserId(true);
+            var actioningUserId = GetActioningUserId(ActioningUserOptions.Anonymous);
 
             try
             {
@@ -167,6 +169,7 @@ namespace Astrana.Core.API.Controllers
         /// <summary>
         /// Returns a paged set of peer connection requests according to the options provided.
         /// </summary>
+        /// <param name="status"></param>
         /// <param name="page"></param>
         /// <param name="pageSize"></param>
         /// <returns></returns>
@@ -174,14 +177,15 @@ namespace Astrana.Core.API.Controllers
         /// <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
         /// <response code="500">Something went wrong.</response>
         [HttpGet("Connect/Requests")]
-        public async Task<IActionResult> GetPeerConnectionRequestsAsync(int page = Pagination.DefaultPage, int pageSize = Pagination.DefaultPageSize)
+        public async Task<IActionResult> GetPeerConnectionRequestsAsync(PeerConnectionRequestStatus? status, int page = Pagination.DefaultPage, int pageSize = Pagination.DefaultPageSize)
         {
             var actioningUserId = GetActioningUserId();
 
             var queryOptions = new ReceivedPeerConnectionRequestQueryOptions<Guid, Guid>
             {
                 PageSize = pageSize,
-                CurrentPage = page
+                CurrentPage = page,
+                Status = status
             };
 
             var result = await _getReceivedPeerConnectionRequestsQuery.ExecuteAsync(actioningUserId, queryOptions);
@@ -201,7 +205,7 @@ namespace Astrana.Core.API.Controllers
         [HttpPut("Connect/Requests/Submit")]
         public async Task<IActionResult> SubmitPeerConnectionRequest(PeerConnectionRequestSubmittedToAdd? request)
         {
-            var actioningUserId = GetActioningUserId(true);
+            var actioningUserId = GetActioningUserId(ActioningUserOptions.Anonymous);
 
             try
             {
@@ -266,8 +270,8 @@ namespace Astrana.Core.API.Controllers
             };
 
             var result = await _getPeersQuery.ExecuteAsync(actioningUserId, queryOptions);
-
-            return PagedGetResponse(result, page, pageSize, result.Message);
+            
+            return PagedGetResponse2(result, result.Data.Select(o => o.ToDomainTransferObject()).ToList(), page, pageSize, result.Message);
         }
 
         /// <summary>
@@ -301,6 +305,36 @@ namespace Astrana.Core.API.Controllers
         }
 
         /// <summary>
+        /// Returns a Peer Profile by Peer Id.
+        /// </summary>
+        /// <param name="peerId"></param>
+        /// <returns></returns>
+        /// <response code="200">Peer profile successfully retrieved.</response>
+        /// <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+        /// <response code="500">Something went wrong.</response>
+        [HttpGet("{peerId}/Summary")]
+        public async Task<IActionResult> GetPeerSummaryAsync(Guid peerId)
+        {
+            var actioningUserId = GetActioningUserId();
+
+            try
+            {
+                var result = await _getPeerSummaryQuery.ExecuteAsync(peerId, actioningUserId);
+
+                if (result == null)
+                    return NotFound();
+
+                return UnpagedGetResponse(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+
+                return ErrorResponse(peerId);
+            }
+        }
+
+        /// <summary>
         /// Returns a refreshed API Access Token for a connected Peer
         /// </summary>
         /// <param name="peerId"></param>
@@ -312,7 +346,7 @@ namespace Astrana.Core.API.Controllers
         [HttpPost("Access/Refresh")]
         public async Task<IActionResult> RefreshPeerApiAccessToken(Guid peerId)
         {
-            var actioningUserId = GetActioningUserId(true);
+            var actioningUserId = GetActioningUserId(ActioningUserOptions.Anonymous);
 
             try
             {

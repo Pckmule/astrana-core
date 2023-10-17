@@ -4,8 +4,8 @@
 * file, You can obtain one at https://mozilla.org/MPL/2.0/.
 */
 
-using Astrana.Core.Validation;
-using Astrana.Core.Validation.Contracts;
+using Astrana.Core.Framework.Model.Validation;
+using Astrana.Core.Framework.Model.Validation.Contracts;
 
 namespace Astrana.Core.Domain.Models.Results.Extensions
 {

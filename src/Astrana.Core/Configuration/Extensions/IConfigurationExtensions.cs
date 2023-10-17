@@ -4,6 +4,7 @@
 * file, You can obtain one at https://mozilla.org/MPL/2.0/.
 */
 
+using Astrana.Core.Configuration.Constants;
 using Astrana.Core.Configuration.Exceptions;
 using Astrana.Core.Enums;
 using Astrana.Core.Extensions;
@@ -14,6 +15,16 @@ namespace Astrana.Core.Configuration.Extensions
     // ReSharper disable once InconsistentNaming
     public static class IConfigurationExtensions
     {
+        public static bool HasKey(this IConfiguration configuration, string keyName)
+        {
+            return configuration.AsEnumerable().ToDictionary(x => x.Key, x => x.Value).ContainsKey(keyName);
+        }
+
+        public static bool IsSetupModeEnabled(this IConfiguration configuration)
+        {
+            return configuration.HasKey(ApplicationConfigurationKeys.SetupMode);
+        }
+
         public static DatabaseProvider GetDatabaseProvider(this IConfiguration? configuration)
         {
             return configuration.GetDatabaseProviderString().ToEnum<DatabaseProvider>();

@@ -47,5 +47,7 @@ namespace Astrana.Core.Data.Entities.Configuration
         [MinLength(DomainModelProperties.SystemSetting.MinimumValueLength)]
         [MaxLength(DomainModelProperties.SystemSetting.MaximumValueLength)]
         public string? Value { get; set; }
+
+        public SystemSettingCategory SettingCategory { get; set; }
     }
 }

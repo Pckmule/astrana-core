@@ -1,4 +1,5 @@
 ﻿using Astrana.Core.Domain.Models.AstranaApi.Responses;
+using System.Net;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -12,7 +13,15 @@ namespace Astrana.Core.Domain.Models.AstranaApi
         {
             _response = response;
         }
-        
+
+        public ApiCallerResult(Exception exception)
+        {
+            _response = new HttpResponseMessage(HttpStatusCode.InternalServerError)
+            {
+                ReasonPhrase = exception.Message
+            };
+        }
+
         public bool IsSuccess => _response.IsSuccessStatusCode;
 
         public string StatusCode => _response.StatusCode.ToString();
@@ -48,17 +57,33 @@ namespace Astrana.Core.Domain.Models.AstranaApi
 
         private readonly JsonSerializerOptions _jsonDeserializerOptions;
 
+        private readonly JsonSerializerOptions _defaultJsonSerializerOptions = new()
+        {
+            PropertyNameCaseInsensitive = true,
+            Converters = { new JsonStringEnumConverter() }
+        };
+
         public ApiCallerResult(HttpMethod httpMethod, HttpResponseMessage response, JsonSerializerOptions? jsonDeserializerOptions = null)
         {
             _httpMethod = httpMethod;
             _response = response;
             _content = _response.Content.ReadAsStringAsync().Result;
 
-            _jsonDeserializerOptions = jsonDeserializerOptions ?? new JsonSerializerOptions
+            _jsonDeserializerOptions = jsonDeserializerOptions ?? _defaultJsonSerializerOptions;
+        }
+
+        public ApiCallerResult(HttpMethod httpMethod, Exception exception)
+        {
+            _httpMethod = httpMethod;
+
+            _response = new HttpResponseMessage(HttpStatusCode.InternalServerError)
             {
-                PropertyNameCaseInsensitive = true,
-                Converters = { new JsonStringEnumConverter() }
+                ReasonPhrase = exception.Message
             };
+
+            _content = string.Empty;
+
+            _jsonDeserializerOptions = _defaultJsonSerializerOptions;
         }
 
         public bool IsSuccess => _response.IsSuccessStatusCode;

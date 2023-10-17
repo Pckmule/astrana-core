@@ -8,7 +8,8 @@ namespace Astrana.Core.Constants
 {
     public static class Api
     {
-        public const string RoutePrefix = "docs/api";
+        public const string RoutePrefix = "api";
+        public const string DocsRoutePrefix = $"docs/{RoutePrefix}";
 
         public static class Swagger
         {

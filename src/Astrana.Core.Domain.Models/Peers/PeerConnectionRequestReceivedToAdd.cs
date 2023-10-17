@@ -6,14 +6,15 @@
 
 using Astrana.Core.Domain.Models.Peers.Constants;
 using Astrana.Core.Domain.Models.Peers.Contracts;
+using Astrana.Core.Framework.Domain;
+using Astrana.Core.Framework.Model.Validation;
+using Astrana.Core.Framework.Model.Validation.Attributes;
 using Astrana.Core.Utilities;
-using Astrana.Core.Validation;
-using Astrana.Core.Validation.Attributes;
 using System.ComponentModel.DataAnnotations;
 
 namespace Astrana.Core.Domain.Models.Peers
 {
-    public class PeerConnectionRequestReceivedToAdd : BaseDomainModel, IPeerConnectionRequestReceivedToAdd
+    public class PeerConnectionRequestReceivedToAdd : DomainEntity, IPeerConnectionRequestReceivedToAdd
     {
         private string _address = "";
 

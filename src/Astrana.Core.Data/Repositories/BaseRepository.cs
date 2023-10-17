@@ -24,7 +24,7 @@ namespace Astrana.Core.Data.Repositories
         public ModelMapper.ModelMapper ModelMapper = new(new ModelMappings().Mappings);
 
         // protected readonly DataSourceSettings settings;
-        protected readonly ApplicationDbContext ctx;
+        protected readonly ApplicationDbContext databaseSession;
 
         public const string MessageRetrievedEntity = "Retrieved {0}.";
         public const string MessageSuccessfullyCreatedEntity = "Successfully created {0} new {1}.";
@@ -34,7 +34,7 @@ namespace Astrana.Core.Data.Repositories
         protected BaseRepository(ILogger<TRepository> repositoryLogger, ApplicationDbContext context)
         {
             logger = repositoryLogger;
-            ctx = context;
+            databaseSession = context;
         }
 
         protected string GetEnvironmentPrefix()
@@ -90,7 +90,7 @@ namespace Astrana.Core.Data.Repositories
                 return;
 
             if (disposing)
-                ctx.Dispose();
+                databaseSession.Dispose();
 
             _isDisposed = true;
 

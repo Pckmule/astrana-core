@@ -42,7 +42,7 @@ namespace Astrana.Core.Domain.MainFeed.Commands.ComposeFeed
             var peersPosts = FetchPeerPosts(peersWithPosts, options);
             var peerProfileData = FetchPeerProfileDataAsync(peersWithPosts);
 
-            var peerData = peerProfileData.Select(data => new PeerPostsModel(peersWithPosts.First(p => p.Id == data.UserAccountId).Address, data, peersPosts.FirstOrDefault(p => p.Key == data.UserAccountId.ToString()).Value.GetContent().Data)).ToList();
+            var peerData = peerProfileData.Select(data => new PeerPostsModel(peersWithPosts.First(p => p.PeerId == data.UserAccountId).Address, data, peersPosts.FirstOrDefault(p => p.Key == data.UserAccountId.ToString()).Value.GetContent().Data)).ToList();
 
             var feedItems = new List<FeedContentItem>();
 
@@ -52,7 +52,7 @@ namespace Astrana.Core.Domain.MainFeed.Commands.ComposeFeed
                 {
                     PeerUuid = data.Profile.UserAccountId.ToString(),
                     PeerName = data.Profile.GetNameCombination(NameCombination.FirstLast),
-                    PeerPictureUrl = data.Profile.ProfilePicture?.Location ?? "",
+                    PeerPictureUrl = "", //data.Profile.ProfilePicture?.Location ?? "", // TODO: Fix
                     ProfileUrl = AstranaLinkBuilder.Build(data.Address, AstranaPage.Profile),
                     Text = p.Text,
                     CreatedTimestamp = p.CreatedTimestamp
@@ -77,13 +77,13 @@ namespace Astrana.Core.Domain.MainFeed.Commands.ComposeFeed
 
             foreach (var peer in peers)
             {
-                peerPostsCalls[peer.Id.ToString()] = Task.Run(async () =>
+                peerPostsCalls[peer.PeerId.ToString()] = Task.Run(async () =>
                 {
-                    var apiCaller = new AstranaApiCaller();
+                    var apiCaller = new AstranaApiClient();
 
                     apiCaller.SetAuthorizationToken(peer.PeerAccessToken);
 
-                    peersPosts[peer.Id.ToString()] = await apiCaller.GetAsync<List<Post>>(peer.Address, "posts", "", queryOptions.ToQueryStringList());
+                    peersPosts[peer.PeerId.ToString()] = await apiCaller.GetAsync<List<Post>>(peer.Address, "posts", "", queryOptions.ToQueryStringList());
                 });
             }
 
@@ -106,13 +106,13 @@ namespace Astrana.Core.Domain.MainFeed.Commands.ComposeFeed
 
             foreach (var peer in peers.Data)
             {
-                peerPostsDiscoveryCalls[peer.Id.ToString()] = Task.Run(async () =>
+                peerPostsDiscoveryCalls[peer.PeerId.ToString()] = Task.Run(async () =>
                 {
-                    var apiCaller = new AstranaApiCaller();
+                    var apiCaller = new AstranaApiClient();
 
                     apiCaller.SetAuthorizationToken(peer.PeerAccessToken);
 
-                    peersPostsDiscoveryResponses[peer.Id.ToString()] = await apiCaller.HeadAsync(peer.Address, "posts", "discover", options.ToQueryStringList());
+                    peersPostsDiscoveryResponses[peer.PeerId.ToString()] = await apiCaller.HeadAsync(peer.Address, "posts", "discover", options.ToQueryStringList());
 
                     return peersPostsDiscoveryResponses;
                 });
@@ -120,7 +120,7 @@ namespace Astrana.Core.Domain.MainFeed.Commands.ComposeFeed
 
             Task.WhenAll(peerPostsDiscoveryCalls.Select(o => o.Value).ToArray()).Wait();
 
-            return peers.Data.Where(p => peersPostsDiscoveryResponses.Where(m => m.Value.Content.CustomHeaders.ContainsKey(Constants.Api.HeaderNames.Astrana.TotalCount) && int.TryParse(m.Value.Content.CustomHeaders[Constants.Api.HeaderNames.Astrana.TotalCount], out var totalCount) && totalCount > 0).Any(o => o.Key == p.Id.ToString())).ToList();
+            return peers.Data.Where(p => peersPostsDiscoveryResponses.Where(m => m.Value.Content.CustomHeaders.ContainsKey(Constants.Api.HeaderNames.Astrana.TotalCount) && int.TryParse(m.Value.Content.CustomHeaders[Constants.Api.HeaderNames.Astrana.TotalCount], out var totalCount) && totalCount > 0).Any(o => o.Key == p.PeerId.ToString())).ToList();
         }
 
         private List<UserProfile> FetchPeerProfileDataAsync(List<Peer> peers)
@@ -130,13 +130,13 @@ namespace Astrana.Core.Domain.MainFeed.Commands.ComposeFeed
 
             foreach (var peer in peers)
             {
-                peerProfileCalls[peer.Id.ToString()] = Task.Run(async () =>
+                peerProfileCalls[peer.PeerId.ToString()] = Task.Run(async () =>
                 {
-                    var apiCaller = new AstranaApiCaller();
+                    var apiCaller = new AstranaApiClient();
 
                     apiCaller.SetAuthorizationToken(peer.PeerAccessToken);
 
-                    peerProfiles[peer.Id.ToString()] = await apiCaller.GetAsync<UserProfile>(peer.Address, "user", "profile");
+                    peerProfiles[peer.PeerId.ToString()] = await apiCaller.GetAsync<UserProfile>(peer.Address, "user", "profile");
                 });
             }
 
@@ -159,13 +159,13 @@ namespace Astrana.Core.Domain.MainFeed.Commands.ComposeFeed
 
             foreach (var peer in peers.Data)
             {
-                peerRefreshTokenCalls[peer.Id.ToString()] = Task.Run(async () =>
+                peerRefreshTokenCalls[peer.PeerId.ToString()] = Task.Run(async () =>
                 {
-                    var apiCaller = new AstranaApiCaller();
+                    var apiCaller = new AstranaApiClient();
 
                     apiCaller.SetAuthorizationToken(peer.PeerAccessToken);
 
-                    peersRefreshTokenResponses[peer.Id.ToString()] = await apiCaller.HeadAsync(peer.Address, "peers", "access/refresh", options.ToQueryStringList());
+                    peersRefreshTokenResponses[peer.PeerId.ToString()] = await apiCaller.HeadAsync(peer.Address, "peers", "access/refresh", options.ToQueryStringList());
 
                     return peersRefreshTokenResponses;
                 });
@@ -173,7 +173,7 @@ namespace Astrana.Core.Domain.MainFeed.Commands.ComposeFeed
 
             Task.WhenAll(peerRefreshTokenCalls.Select(o => o.Value).ToArray()).Wait();
 
-            return peers.Data.Where(p => peersRefreshTokenResponses.Where(m => m.Value.Content.CustomHeaders.ContainsKey(Constants.Api.HeaderNames.Astrana.TotalCount) && int.TryParse(m.Value.Content.CustomHeaders[Constants.Api.HeaderNames.Astrana.TotalCount], out var totalCount) && totalCount > 0).Any(o => o.Key == p.Id.ToString())).ToList();
+            return peers.Data.Where(p => peersRefreshTokenResponses.Where(m => m.Value.Content.CustomHeaders.ContainsKey(Constants.Api.HeaderNames.Astrana.TotalCount) && int.TryParse(m.Value.Content.CustomHeaders[Constants.Api.HeaderNames.Astrana.TotalCount], out var totalCount) && totalCount > 0).Any(o => o.Key == p.PeerId.ToString())).ToList();
         }
     }
     

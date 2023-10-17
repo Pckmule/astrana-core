@@ -88,32 +88,32 @@ namespace Astrana.Core.Domain
             return sb.ToString().Trim();
         }
 
-        public static string CreateSuccessResultMessage(string nameSingularForm, string namePluralForm, long itemCount = 1)
+        public static string? CreateSuccessResultMessage(string nameSingularForm, string namePluralForm, long itemCount = 1)
         {
             return ResultMessage(ResultOutcome.Success, CrudAction.Create, nameSingularForm, namePluralForm, itemCount);
         }
 
-        public static string CreateFailureResultMessage(string nameSingularForm, string namePluralForm, long itemCount = 1)
+        public static string? CreateFailureResultMessage(string nameSingularForm, string namePluralForm, long itemCount = 1)
         {
             return ResultMessage(ResultOutcome.Failure, CrudAction.Create, nameSingularForm, namePluralForm, itemCount);
         }
 
-        public static string UpdateSuccessResultMessage(string nameSingularForm, string namePluralForm, long itemCount = 1)
+        public static string? UpdateSuccessResultMessage(string nameSingularForm, string namePluralForm, long itemCount = 1)
         {
             return ResultMessage(ResultOutcome.Success, CrudAction.Update, nameSingularForm, namePluralForm, itemCount);
         }
 
-        public static string UpdateFailureResultMessage(string nameSingularForm, string namePluralForm, long itemCount = 1)
+        public static string? UpdateFailureResultMessage(string nameSingularForm, string namePluralForm, long itemCount = 1)
         {
             return ResultMessage(ResultOutcome.Failure, CrudAction.Update, nameSingularForm, namePluralForm, itemCount);
         }
 
-        public static string DeleteSuccessResultMessage(string nameSingularForm, string namePluralForm, long itemCount = 1)
+        public static string? DeleteSuccessResultMessage(string nameSingularForm, string namePluralForm, long itemCount = 1)
         {
             return ResultMessage(ResultOutcome.Success, CrudAction.Delete, nameSingularForm, namePluralForm, itemCount);
         }
 
-        public static string DeleteFailureResultMessage(string nameSingularForm, string namePluralForm, long itemCount = 1)
+        public static string? DeleteFailureResultMessage(string nameSingularForm, string namePluralForm, long itemCount = 1)
         {
             return ResultMessage(ResultOutcome.Failure, CrudAction.Delete, nameSingularForm, namePluralForm, itemCount);
         }

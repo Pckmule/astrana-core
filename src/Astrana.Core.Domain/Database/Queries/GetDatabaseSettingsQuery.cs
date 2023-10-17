@@ -38,18 +38,20 @@ namespace Astrana.Core.Domain.Database.Queries
             if (string.IsNullOrWhiteSpace(connectionString))
                 return databaseSettings;
 
+            var decryptedConnectionString = appSettings.SetupMode == null ? EncryptionUtility.DecryptString(connectionString) : connectionString;
+
             switch (appSettings.DatabaseProvider)
             {
                 case Enums.DatabaseProvider.PostgreSQL:
-                    databaseSettings.ConnectionString = new PostgreSqlConnectionString(EncryptionUtility.DecryptString(connectionString));
+                    databaseSettings.ConnectionString = new PostgreSqlConnectionString(decryptedConnectionString);
                     break;
 
                 case Enums.DatabaseProvider.MySQL:
-                    databaseSettings.ConnectionString = new MySqlConnectionString(EncryptionUtility.DecryptString(connectionString)); 
+                    databaseSettings.ConnectionString = new MySqlConnectionString(decryptedConnectionString); 
                     break;
 
                 case Enums.DatabaseProvider.MSSqlServer:
-                    databaseSettings.ConnectionString = new MsSqlServerConnectionString(EncryptionUtility.DecryptString(connectionString));
+                    databaseSettings.ConnectionString = new MsSqlServerConnectionString(decryptedConnectionString);
                     break;
             }
 

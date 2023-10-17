@@ -4,13 +4,15 @@
 * file, You can obtain one at https://mozilla.org/MPL/2.0/.
 */
 
-using Astrana.Core.Domain.Models.Images;
+using Astrana.Core.Domain.Models.ContentCollections;
 using Astrana.Core.Domain.Models.UserProfiles.Enums;
 
 namespace Astrana.Core.Domain.Models.UserProfiles.Contracts
 {
     public interface IUserProfile
     {
+        Guid ProfileId { get; set; }
+
         Guid UserAccountId { get; set; }
 
         string FirstName { get; set; }
@@ -21,12 +23,12 @@ namespace Astrana.Core.Domain.Models.UserProfiles.Contracts
 
         DateTimeOffset DateOfBirth { get; set; }
 
-        Gender Gender { get; set; }
+        Sex Sex { get; set; }
 
         string Introduction { get; set; }
 
-        Image? ProfilePicture { get; set; }
+        ContentCollection? ProfilePicturesCollection { get; set; }
 
-        Image? CoverPicture { get; set; }
+        ContentCollection? CoverPicturesCollection { get; set; }
     }
 }

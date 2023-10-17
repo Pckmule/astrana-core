@@ -5,6 +5,7 @@
 */
 
 using Astrana.Core.Domain.SystemSetup.Commands.SetupInstance;
+using Astrana.Core.Domain.SystemSetup.Commands.SetupInstanceUser;
 using Astrana.Core.Domain.SystemSetup.Queries;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -16,6 +17,9 @@ namespace Astrana.Core.Domain.SystemSetup
         {
             services.AddScoped<IGetSystemSetupStatusQuery, GetSystemSetupStatusQuery>();
             services.AddTransient<IGetSystemSetupStatusQuery, GetSystemSetupStatusQuery>();
+
+            services.AddScoped<ISetupInstanceUserCommand, SetupInstanceUserCommand>();
+            services.AddTransient<ISetupInstanceUserCommand, SetupInstanceUserCommand>();
 
             services.AddScoped<ISetupInstanceCommand, SetupInstanceCommand>();
             services.AddTransient<ISetupInstanceCommand, SetupInstanceCommand>();

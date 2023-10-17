@@ -1,76 +1,99 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <PackageProjectUrl>https://www.astrana.org</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/astrana-project/astrana-core</RepositoryUrl>
-    <RepositoryType>git</RepositoryType>
-    <NeutralLanguage>en</NeutralLanguage>
-    <AssemblyVersion>0.1.0</AssemblyVersion>
-    <FileVersion>0.1.0</FileVersion>
-    <GenerateDocumentationFile>False</GenerateDocumentationFile>
-    <SignAssembly>False</SignAssembly>
-    <Company>Astrana</Company>
-    <Copyright>https://www.astrana.org/copyright</Copyright>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<PackageProjectUrl>https://www.astrana.org</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/astrana-project/astrana-core</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<NeutralLanguage>en</NeutralLanguage>
+		<AssemblyVersion>0.1.0</AssemblyVersion>
+		<FileVersion>0.1.0</FileVersion>
+		<GenerateDocumentationFile>False</GenerateDocumentationFile>
+		<SignAssembly>False</SignAssembly>
+		<Company>Astrana</Company>
+		<Copyright>https://www.astrana.org/copyright</Copyright>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="Legal\License\LICENSE_en.md" />
-    <None Remove="Legal\License\LICENSE_es.md" />
-    <None Remove="Legal\License\LICENSE_fr.md" />
-    <None Remove="Legal\License\LICENSE_he.md" />
-    <None Remove="Legal\License\LICENSE_hi.md" />
-    <None Remove="Legal\License\LICENSE_pt-BR.md" />
-    <None Remove="Legal\License\LICENSE_pt.md" />
-    <None Remove="Legal\License\LICENSE_ru.md" />
-    <None Remove="Legal\License\LICENSE_zh-CN.md" />
-    <None Remove="Legal\License\LICENSE_zh.md" />
-    <None Remove="Legal\TermsAndConditions.en.md" />
-    <None Remove="Localization\Translations\en.json" />
-    <None Remove="Localization\Translations\es.json" />
-    <None Remove="Localization\Translations\fr.json" />
-    <None Remove="Localization\Translations\he.json" />
-    <None Remove="Localization\Translations\hi.json" />
-    <None Remove="Localization\Translations\pt-BR.json" />
-    <None Remove="Localization\Translations\pt.json" />
-    <None Remove="Localization\Translations\ru.json" />
-    <None Remove="Localization\Translations\zh-cn.json" />
-    <None Remove="Localization\Translations\zh.json" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Remove="Legal\License\LICENSE_af-ZA.md" />
+		<None Remove="Legal\License\LICENSE_en.md" />
+		<None Remove="Legal\License\LICENSE_es.md" />
+		<None Remove="Legal\License\LICENSE_fr.md" />
+		<None Remove="Legal\License\LICENSE_he.md" />
+		<None Remove="Legal\License\LICENSE_hi.md" />
+		<None Remove="Legal\License\LICENSE_pt-BR.md" />
+		<None Remove="Legal\License\LICENSE_pt.md" />
+		<None Remove="Legal\License\LICENSE_ru.md" />
+		<None Remove="Legal\License\LICENSE_zh-CN.md" />
+		<None Remove="Legal\License\LICENSE_zh.md" />
+		<None Remove="Legal\License\LICENSE_zu-ZA.md" />
+		<None Remove="Legal\TermsAndConditions.en.md" />
+		<None Remove="Localization\Translations\af-ZA.json" />
+		<None Remove="Localization\Translations\en.json" />
+		<None Remove="Localization\Translations\es.json" />
+		<None Remove="Localization\Translations\fr.json" />
+		<None Remove="Localization\Translations\he.json" />
+		<None Remove="Localization\Translations\hi.json" />
+		<None Remove="Localization\Translations\pt-BR.json" />
+		<None Remove="Localization\Translations\pt.json" />
+		<None Remove="Localization\Translations\ru.json" />
+		<None Remove="Localization\Translations\zh-cn.json" />
+		<None Remove="Localization\Translations\zh.json" />
+		<None Remove="Localization\Translations\zu-ZA.json" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <EmbeddedResource Include="Legal\License\LICENSE_pt.md" />
-    <EmbeddedResource Include="Legal\License\LICENSE_pt-BR.md" />
-    <EmbeddedResource Include="Legal\License\LICENSE_es.md" />
-    <EmbeddedResource Include="Legal\License\LICENSE_he.md" />
-    <EmbeddedResource Include="Legal\License\LICENSE_hi.md" />
-    <EmbeddedResource Include="Legal\License\LICENSE_ru.md" />
-    <EmbeddedResource Include="Legal\License\LICENSE_en.md" />
-    <EmbeddedResource Include="Legal\License\LICENSE_fr.md" />
-    <EmbeddedResource Include="Legal\License\LICENSE_zh.md" />
-    <EmbeddedResource Include="Legal\License\LICENSE_zh-CN.md" />
-    <EmbeddedResource Include="Localization\Translations\pt.json" />
-    <EmbeddedResource Include="Localization\Translations\pt-BR.json" />
-    <EmbeddedResource Include="Localization\Translations\en.json" />
-    <EmbeddedResource Include="Localization\Translations\es.json" />
-    <EmbeddedResource Include="Localization\Translations\fr.json" />
-    <EmbeddedResource Include="Localization\Translations\he.json" />
-    <EmbeddedResource Include="Localization\Translations\hi.json" />
-    <EmbeddedResource Include="Localization\Translations\ru.json" />
-    <EmbeddedResource Include="Localization\Translations\zh.json" />
-    <EmbeddedResource Include="Localization\Translations\zh-cn.json" />
-  </ItemGroup>
+	<ItemGroup>
+		<EmbeddedResource Include="Legal\License\LICENSE_af-ZA.md" />
+		<EmbeddedResource Include="Legal\License\LICENSE_zu-ZA.md" />
+		<EmbeddedResource Include="Legal\License\LICENSE_pt.md" />
+		<EmbeddedResource Include="Legal\License\LICENSE_pt-BR.md" />
+		<EmbeddedResource Include="Legal\License\LICENSE_es.md" />
+		<EmbeddedResource Include="Legal\License\LICENSE_he.md" />
+		<EmbeddedResource Include="Legal\License\LICENSE_hi.md" />
+		<EmbeddedResource Include="Legal\License\LICENSE_ru.md" />
+		<EmbeddedResource Include="Legal\License\LICENSE_en.md" />
+		<EmbeddedResource Include="Legal\License\LICENSE_fr.md" />
+		<EmbeddedResource Include="Legal\License\LICENSE_zh.md" />
+		<EmbeddedResource Include="Legal\License\LICENSE_zh-CN.md" />
+		<EmbeddedResource Include="Localization\Translations\af-za.json" />
+		<EmbeddedResource Include="Localization\Translations\zu-za.json" />
+		<EmbeddedResource Include="Localization\Translations\pt.json" />
+		<EmbeddedResource Include="Localization\Translations\pt-BR.json" />
+		<EmbeddedResource Include="Localization\Translations\en.json" />
+		<EmbeddedResource Include="Localization\Translations\es.json" />
+		<EmbeddedResource Include="Localization\Translations\fr.json" />
+		<EmbeddedResource Include="Localization\Translations\he.json" />
+		<EmbeddedResource Include="Localization\Translations\hi.json" />
+		<EmbeddedResource Include="Localization\Translations\ru.json" />
+		<EmbeddedResource Include="Localization\Translations\zh.json" />
+		<EmbeddedResource Include="Localization\Translations\zh-cn.json" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="12.0.1" />
-    <PackageReference Include="Markdig" Version="0.30.4" />
-    <PackageReference Include="Microsoft.AspNetCore.SignalR.Core" Version="1.1.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="7.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
-    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="7.0.2" />
-  </ItemGroup>
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="AutoMapper" Version="12.0.1" />
+		<PackageReference Include="Markdig" Version="0.32.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="7.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
+		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="7.0.10" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="Emoji\emoji-groups.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Emoji\emoji.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Emoji\openmoji.json">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
 
 </Project>

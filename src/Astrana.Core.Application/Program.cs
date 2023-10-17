@@ -12,7 +12,8 @@ var options = new WebApplicationOptions
     Args = args
 };
 
+
 var programBuilder = new ProgramBuilder();
 
-var builder = programBuilder.ConfigureWebApplicationBuilder(options);
+var builder = programBuilder.ConfigureWebApplicationBuilder(options, false);
 programBuilder.Build(builder).Run();

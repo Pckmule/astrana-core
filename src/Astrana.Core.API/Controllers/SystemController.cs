@@ -23,17 +23,14 @@ using Astrana.Core.Domain.SystemSetup.Queries;
 using Astrana.Core.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace Astrana.Core.API.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
     public class SystemController : BaseController<SystemController>
     {
         private readonly ILogger<SystemController> _logger;
-        private readonly IConfiguration _configuration;
 
         private readonly IGetCountriesQuery _getCountriesQuery;
         private readonly ICreateCountriesCommand _createCountriesCommand;
@@ -46,7 +43,7 @@ namespace Astrana.Core.API.Controllers
         private readonly ITestDatabaseConnectionCommand _testDatabaseConnectionCommand;
         private readonly IGetDatabaseSettingsQuery _getDatabaseSettingsQuery;
 
-        public SystemController(IConfiguration configuration, ILogger<SystemController> logger, ISignInManager signInManager, 
+        public SystemController(ILogger<SystemController> logger, ISignInManager signInManager, 
             IGetCountriesQuery getCountriesQuery, 
             ICreateCountriesCommand createCountriesCommand, 
             IUpdateCountriesCommand updateCountriesCommand, 
@@ -56,7 +53,6 @@ namespace Astrana.Core.API.Controllers
             ITestDatabaseConnectionCommand testDatabaseConnectionCommand,
             IGetDatabaseSettingsQuery getDatabaseSettingsQuery) : base(logger, signInManager)
         {
-            _configuration = configuration;
             _logger = logger;
 
             _getCountriesQuery = getCountriesQuery;
@@ -79,6 +75,7 @@ namespace Astrana.Core.API.Controllers
         /// <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
         /// <response code="500">Something went wrong.</response>
         [HttpGet("Status")]
+        [AllowAnonymous]
         public SystemStatus GetStatus()
         {
             return new SystemStatus("OK");
@@ -129,7 +126,7 @@ namespace Astrana.Core.API.Controllers
                 CurrentPage = page
             };
 
-            var result = await _getCountriesQuery.ExecuteAsync(GetActioningUserId(true), queryOptions);
+            var result = await _getCountriesQuery.ExecuteAsync(GetActioningUserId(ActioningUserOptions.Anonymous), queryOptions);
 
             return PagedGetResponse(result, page, pageSize, result.Message);
         }
@@ -238,7 +235,7 @@ namespace Astrana.Core.API.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> SetupStatus()
         {
-            var status = await _getSystemSetupStatusQuery.ExecuteAsync(GetActioningUserId(true));
+            var status = await _getSystemSetupStatusQuery.ExecuteAsync(GetActioningUserId(ActioningUserOptions.Anonymous));
 
             return Ok(status);
         }
@@ -258,10 +255,10 @@ namespace Astrana.Core.API.Controllers
         {
             try
             {
-                var result = await _setupInstanceCommand.ExecuteAsync(options, GetActioningUserId(true));
+                var result = await _setupInstanceCommand.ExecuteAsync(options, GetActioningUserId(ActioningUserOptions.Anonymous));
 
                 if (result.Outcome == ResultOutcome.Success)
-                    return CreatedSuccessResponse(result, result.Message);
+                    return ExecutionSuccessResponse(result.Message);
                 
                 return FailureResponse(result, result.Message);
             }
@@ -288,7 +285,7 @@ namespace Astrana.Core.API.Controllers
         {
             try
             {
-                var result = await _testDatabaseConnectionCommand.ExecuteAsync(request, GetActioningUserId(true));
+                var result = await _testDatabaseConnectionCommand.ExecuteAsync(request, GetActioningUserId(ActioningUserOptions.Anonymous));
 
                 if (result.Outcome == ResultOutcome.Success)
                     return ExecutionSuccessResponse(result.Message);
@@ -314,11 +311,11 @@ namespace Astrana.Core.API.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GetDatabaseSettingsAsync()
         {
-            var setupStatus = await _getSystemSetupStatusQuery.ExecuteAsync(GetActioningUserId(true));
+            var setupStatus = await _getSystemSetupStatusQuery.ExecuteAsync(GetActioningUserId(ActioningUserOptions.Anonymous));
 
             if(setupStatus == SystemSetupStatus.New || setupStatus == SystemSetupStatus.InProgress)
             {
-                return UnpagedGetResponse(_getDatabaseSettingsQuery.Execute(GetActioningUserId(true)));
+                return UnpagedGetResponse(_getDatabaseSettingsQuery.Execute(GetActioningUserId(ActioningUserOptions.Anonymous)));
             }
 
             return BadRequest("This endpoint is not available after setup is completed.");

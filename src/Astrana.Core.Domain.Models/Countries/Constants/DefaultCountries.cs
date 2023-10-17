@@ -12,7 +12,7 @@ namespace Astrana.Core.Domain.Models.Countries.Constants
         {
             new()
             {
-                Id = 1,
+                CountryId = 1,
                 Name = "Australia",
                 NameTrxCode = "country_name_au",
                 TwoLetterCode = "au",
@@ -20,7 +20,7 @@ namespace Astrana.Core.Domain.Models.Countries.Constants
             },
             new()
             {
-                Id = 2,
+                CountryId = 2,
                 Name = "Brazil",
                 NameTrxCode = "country_name_br",
                 TwoLetterCode = "br",
@@ -28,7 +28,7 @@ namespace Astrana.Core.Domain.Models.Countries.Constants
             },
             new()
             {
-                Id = 3,
+                CountryId = 3,
                 Name = "China",
                 NameTrxCode = "country_name_cn",
                 TwoLetterCode = "cn",
@@ -36,7 +36,7 @@ namespace Astrana.Core.Domain.Models.Countries.Constants
             },
             new()
             {
-                Id = 4,
+                CountryId = 4,
                 Name = "France",
                 NameTrxCode = "country_name_fr",
                 TwoLetterCode = "fr",
@@ -44,7 +44,7 @@ namespace Astrana.Core.Domain.Models.Countries.Constants
             },
             new()
             {
-                Id = 5,
+                CountryId = 5,
                 Name = "India",
                 NameTrxCode = "country_name_in",
                 TwoLetterCode = "in",
@@ -52,7 +52,7 @@ namespace Astrana.Core.Domain.Models.Countries.Constants
             },
             new()
             {
-                Id = 6,
+                CountryId = 6,
                 Name = "Israel",
                 NameTrxCode = "country_name_il",
                 TwoLetterCode = "il",
@@ -60,7 +60,7 @@ namespace Astrana.Core.Domain.Models.Countries.Constants
             },
             new()
             {
-                Id = 7,
+                CountryId = 7,
                 Name = "Russia",
                 NameTrxCode = "country_name_ru",
                 TwoLetterCode = "ru",
@@ -68,7 +68,7 @@ namespace Astrana.Core.Domain.Models.Countries.Constants
             },
             new()
             {
-                Id = 8,
+                CountryId = 8,
                 Name = "South Africa",
                 NameTrxCode = "country_name_za",
                 TwoLetterCode = "za",
@@ -76,7 +76,7 @@ namespace Astrana.Core.Domain.Models.Countries.Constants
             },
             new()
             {
-                Id = 9,
+                CountryId = 9,
                 Name = "Spain",
                 NameTrxCode = "country_name_es",
                 TwoLetterCode = "es",
@@ -84,7 +84,7 @@ namespace Astrana.Core.Domain.Models.Countries.Constants
             },
             new()
             {
-                Id = 10,
+                CountryId = 10,
                 Name = "United Kingdom",
                 NameTrxCode = "country_name_gb",
                 TwoLetterCode = "gb",
@@ -92,7 +92,7 @@ namespace Astrana.Core.Domain.Models.Countries.Constants
             },
             new()
             {
-                Id = 11,
+                CountryId = 11,
                 Name = "United States",
                 NameTrxCode = "country_name_us",
                 TwoLetterCode = "us",

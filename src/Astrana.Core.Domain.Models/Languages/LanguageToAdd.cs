@@ -6,13 +6,15 @@
 
 using Astrana.Core.Domain.Models.Languages.Constants;
 using Astrana.Core.Domain.Models.Languages.Contracts;
-using Astrana.Core.Validation;
 using System.ComponentModel.DataAnnotations;
+using Astrana.Core.Framework.Domain;
+using Astrana.Core.Framework.Model.Validation;
 
 namespace Astrana.Core.Domain.Models.Languages
 {
-    public class LanguageToAdd : BaseDomainModel, ILanguageToAdd
+    public class LanguageToAdd : DomainEntity, ILanguageToAdd
     {
+        private string _code = "";
         private string _twoLetterCode = "";
         private string _threeLetterCode = "";
 
@@ -32,6 +34,15 @@ namespace Astrana.Core.Domain.Models.Languages
         [MinLength(ModelProperties.Language.MinimumNameLength)]
         [MaxLength(ModelProperties.Language.MaximumNameLength)]
         public string Name { get; set; }
+
+        [Required]
+        [MinLength(ModelProperties.Language.MinimumCodeLength)]
+        [MaxLength(ModelProperties.Language.MaximumCodeLength)]
+        public string Code
+        {
+            get => _code;
+            set => _code = value.ToUpperInvariant();
+        }
 
         [Required]
         [MinLength(ModelProperties.Language.MinimumTwoLetterCodeLength)]

@@ -20,8 +20,8 @@ namespace Astrana.Core.Domain.Models.Results
             ResultSetCount = resultSetCount > -1 ? resultSetCount : 0;
             ResultCount = resultCount;
 
-            CurrentPage = queryOptions.CurrentPage.HasValue && queryOptions.CurrentPage.Value > 0 ? queryOptions.CurrentPage.Value : 1;
-            PageSize = queryOptions.PageSize.HasValue && queryOptions.PageSize.Value > 0 ? queryOptions.PageSize.Value : 10;
+            CurrentPage = queryOptions.CurrentPage is > 0 ? queryOptions.CurrentPage.Value : 1;
+            PageSize = queryOptions.PageSize is > 0 ? queryOptions.PageSize.Value : 10;
 
             Message = message;
         }

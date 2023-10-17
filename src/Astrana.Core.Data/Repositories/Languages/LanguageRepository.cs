@@ -32,11 +32,14 @@ namespace Astrana.Core.Data.Repositories.Languages
         {
             options ??= new LanguageQueryOptions<Guid, Guid>();
 
-            var query = ctx.Languages.AsQueryable();
+            var query = databaseSession.Languages.AsQueryable();
 
             // Add Filters
             if (options.Ids.Any())
                 query = query.Where(o => options.Ids.Contains(o.Id));
+
+            if (options.ExcludeIds.Any())
+                query = query.Where(o => !options.ExcludeIds.Contains(o.Id));
 
             if (options.CreatedBefore.HasValue)
                 query = query.Where(o => o.CreatedTimestamp < options.CreatedBefore.Value);
@@ -51,7 +54,7 @@ namespace Astrana.Core.Data.Repositories.Languages
             query = query.OrderByDescending(o => o.CreatedTimestamp);
 
             // Add Paging
-            if (!options.PagingDisabled && options.PageSize.HasValue && options.CurrentPage.HasValue)
+            if (options is { PagingDisabled: false, PageSize: { }, CurrentPage: { } })
                 query = query.Skip(options.PageSize.Value * (options.CurrentPage.Value - 1)).Take(options.PageSize.Value);
 
             return query;
@@ -145,6 +148,7 @@ namespace Astrana.Core.Data.Repositories.Languages
                     if (newLanguageEntity == null)
                         continue;
 
+                    newLanguageEntity.Code = newLanguageEntity.Code.ToUpperInvariant();
                     newLanguageEntity.TwoLetterCode = newLanguageEntity.TwoLetterCode.ToUpperInvariant();
                     newLanguageEntity.ThreeLetterCode = newLanguageEntity.ThreeLetterCode.ToUpperInvariant();
 
@@ -155,8 +159,8 @@ namespace Astrana.Core.Data.Repositories.Languages
                     newLanguageEntity.LastModifiedTimestamp = now;
 
                     // Save records.
-                    ctx.Languages.Add(newLanguageEntity);
-                    await ctx.SaveChangesAsync();
+                    databaseSession.Languages.Add(newLanguageEntity);
+                    await databaseSession.SaveChangesAsync();
 
                     countAdded++;
 
@@ -199,7 +203,7 @@ namespace Astrana.Core.Data.Repositories.Languages
 
                 foreach (var update in requestedUpdates)
                 {
-                    var existingLanguageEntity = await ctx.Languages.FirstOrDefaultAsync(o => o.Id == update.Id);
+                    var existingLanguageEntity = await databaseSession.Languages.FirstOrDefaultAsync(o => o.Id == update.LanguageId);
 
                     if (existingLanguageEntity == null)
                         continue;
@@ -207,6 +211,7 @@ namespace Astrana.Core.Data.Repositories.Languages
                     // Update entity fields
 
                     existingLanguageEntity.Name = update.Name.Trim();
+                    existingLanguageEntity.Code = update.Code.ToUpperInvariant().Trim();
                     existingLanguageEntity.TwoLetterCode = update.TwoLetterCode.ToUpperInvariant().Trim();
                     existingLanguageEntity.ThreeLetterCode = update.ThreeLetterCode.ToUpperInvariant().Trim();
 
@@ -214,9 +219,9 @@ namespace Astrana.Core.Data.Repositories.Languages
                     existingLanguageEntity.LastModifiedTimestamp = now;
 
                     // Save changes to records.
-                    ctx.Languages.Update(existingLanguageEntity);
+                    databaseSession.Languages.Update(existingLanguageEntity);
 
-                    await ctx.SaveChangesAsync();
+                    await databaseSession.SaveChangesAsync();
 
                     countUpdated++;
 

@@ -6,12 +6,13 @@
 
 using Astrana.Core.Domain.Models.ApiAccessTokens.Constants;
 using Astrana.Core.Domain.Models.ApiAccessTokens.Contracts;
-using Astrana.Core.Validation;
 using System.ComponentModel.DataAnnotations;
+using Astrana.Core.Framework.Domain;
+using Astrana.Core.Framework.Model.Validation;
 
 namespace Astrana.Core.Domain.Models.ApiAccessTokens
 {
-    public class ApiAccessTokenToAdd : BaseDomainModel, IApiAccessTokenToAdd
+    public class ApiAccessTokenToAdd : DomainEntity, IApiAccessTokenToAdd
     {
         public ApiAccessTokenToAdd()
         {

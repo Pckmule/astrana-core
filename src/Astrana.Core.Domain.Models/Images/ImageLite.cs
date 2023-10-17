@@ -12,13 +12,13 @@ namespace Astrana.Core.Domain.Models.Images
     {
         public ImageLite(Image fullModel)
         {
-            Id = fullModel.Id;
+            ImageId = fullModel.ImageId;
             Location = fullModel.Location;
             Caption = fullModel.Caption;
             Copyright = fullModel.Copyright;
         }
 
-        public Guid Id { get; set; }
+        public Guid ImageId { get; set; }
 
         public string Location { get; set; }
         

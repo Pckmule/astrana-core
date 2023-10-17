@@ -14,29 +14,34 @@ using Astrana.Core.Domain.SystemSettings.Commands.UpdateSystemSettingsCommand;
 using Astrana.Core.Domain.SystemSettings.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System.ComponentModel.DataAnnotations;
 
 namespace Astrana.Core.API.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
     public class SettingsController : BaseController<SettingsController>
     {
         private readonly ILogger<SettingsController> _logger;
-        private readonly IConfiguration _configuration;
 
         private readonly IGetSystemSettingsQuery _getSettingsQuery;
+        private readonly IGetSettingCategoriesQuery _getSettingCategoriesQuery;
+
         private readonly IUpdateSystemSettingsCommand _updateSettingsCommand;
         private readonly IGetLookupQuery _getLookupQuery;
 
-        public SettingsController(IConfiguration configuration, ILogger<SettingsController> logger, ISignInManager signInManager, IGetSystemSettingsQuery getSettingsQuery, IUpdateSystemSettingsCommand updateSettingsCommand, IGetLookupQuery getLookupQuery) : base(logger, signInManager)
+        public SettingsController(ILogger<SettingsController> logger, 
+            ISignInManager signInManager, 
+            IGetSystemSettingsQuery getSettingsQuery,
+            IGetSettingCategoriesQuery getSettingCategoriesQuery,
+            IUpdateSystemSettingsCommand updateSettingsCommand, 
+            IGetLookupQuery getLookupQuery) : base(logger, signInManager)
         {
-            _configuration = configuration;
             _logger = logger;
 
             _getSettingsQuery = getSettingsQuery;
+            _getSettingCategoriesQuery = getSettingCategoriesQuery;
+
             _updateSettingsCommand = updateSettingsCommand;
             _getLookupQuery = getLookupQuery;
         }
@@ -52,9 +57,10 @@ namespace Astrana.Core.API.Controllers
         /// <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
         /// <response code="500">Something went wrong.</response>
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAsync([FromQuery]List<string> categories, int page = Pagination.DefaultPage, int pageSize = Pagination.DefaultPageSize)
         {
-            var actioningUserId = GetActioningUserId();
+            var actioningUserId = GetActioningUserId(ActioningUserOptions.Anonymous);
 
             var queryOptions = new SystemSettingQueryOptions<Guid, Guid>
             {
@@ -93,6 +99,23 @@ namespace Astrana.Core.API.Controllers
         }
 
         /// <summary>
+        /// Returns a list setting categories.
+        /// </summary>
+        /// <returns></returns>
+        /// <response code="200">Setting Categories successfully retrieved.</response>
+        /// <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+        /// <response code="500">Something went wrong.</response>
+        [HttpGet("Categories")]
+        public IActionResult GetSystemSettingCategories()
+        {
+            var actioningUserId = GetActioningUserId();
+
+            var result = _getSettingCategoriesQuery.Execute(actioningUserId);
+
+            return UnpagedGetResponse(result);
+        }
+
+        /// <summary>
         /// Updates existing settings.
         /// </summary>
         /// <param name="settings"></param>
@@ -126,18 +149,15 @@ namespace Astrana.Core.API.Controllers
         /// Returns the list of possible options for a given lookup/list.
         /// </summary>
         /// <param name="name"></param>
-        /// <response code="200">Item(s) successfully retrieved.</response>
-        /// <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
-        /// <response code="500">Something went wrong.</response>
-        /// <returns></returns>
         /// <response code="200">Lookup successfully retrieved.</response>
         /// <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
         /// <response code="500">Something went wrong.</response>
+        /// <returns></returns>
         [HttpGet("Lookup/{name}")]
         [AllowAnonymous]
         public async Task<IActionResult> GetLookupAsync([Required]string name)
         {
-            var actioningUserId = GetActioningUserId(true);
+            var actioningUserId = GetActioningUserId(ActioningUserOptions.Anonymous);
 
             var lookup = await _getLookupQuery.ExecuteAsync(actioningUserId, name);
 
@@ -145,6 +165,26 @@ namespace Astrana.Core.API.Controllers
                 return ValidationResponse("Lookup not found.");
 
             return UnpagedGetResponse(lookup);
+        }
+
+        /// <summary>
+        /// Returns the list of User and Peer slugs.
+        /// </summary>
+        /// <response code="200">Slugs successfully retrieved.</response>
+        /// <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+        /// <response code="500">Something went wrong.</response>
+        /// <returns></returns>
+        [HttpGet("Slugs")]
+        public async Task<IActionResult> GetSlugsAsync()
+        {
+            var actioningUserId = GetActioningUserId();
+
+            var slugs = new Dictionary<string, string>
+            {
+                { "40e30344-1172-4dad-dc96-08db124d6ccb", "me" }
+            };
+
+            return UnpagedGetResponse(slugs);
         }
     }
 }

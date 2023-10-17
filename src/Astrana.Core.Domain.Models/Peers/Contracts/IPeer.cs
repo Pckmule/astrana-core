@@ -8,7 +8,7 @@ namespace Astrana.Core.Domain.Models.Peers.Contracts
 {
     public interface IPeer
     {
-        Guid Id { get; set; }
+        Guid PeerId { get; set; }
 
         string FirstName { get; set; }
 

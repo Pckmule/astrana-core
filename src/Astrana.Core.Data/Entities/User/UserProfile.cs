@@ -51,7 +51,7 @@ namespace Astrana.Core.Data.Entities.User
 
         [PersonalData]
         [Column(Order = 7)]
-        public Gender Gender { get; set; }
+        public Sex Sex { get; set; }
 
         [PersonalData]
         [MaxLength(DomainModelProperties.UserProfile.MaximumIntroductionLength)]
@@ -62,6 +62,12 @@ namespace Astrana.Core.Data.Entities.User
         public Image ProfilePicture { get; set; }
 
         [Column(Order = 10)]
+        public ContentCollection ProfilePicturesCollection { get; set; }
+
+        [Column(Order = 11)]
         public Image CoverPicture { get; set; }
+        
+        [Column(Order = 12)]
+        public ContentCollection CoverPicturesCollection { get; set; }
     }
 }

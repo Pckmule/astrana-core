@@ -29,5 +29,24 @@ namespace Astrana.Core.Domain.Models.UserProfiles.Constants
             public const int MinimumIntroductionLength = 0;
             public const int MaximumIntroductionLength = 100;
         }
+
+        public static class UserProfileDetail
+        {
+            public static readonly string NameUnique = nameof(UserProfile).SplitOnUpperCase();
+            public static readonly string NameSingularForm = nameof(UserProfile).SplitOnUpperCase();
+            public static readonly string NamePluralForm = $"{nameof(UserProfile)}s".SplitOnUpperCase();
+
+            public const int MinimumKeyLength = 0;
+            public const int MaximumKeyLength = 100;
+
+            public const int MinimumIconNameLength = 0;
+            public const int MaximumIconNameLength = 100;
+
+            public const int MinimumLabelLength = 1;
+            public const int MaximumLabelLength = 100;
+
+            public const int MinimumValueLength = 1;
+            public const int MaximumValueLength = 100;
+        }
     }
 }

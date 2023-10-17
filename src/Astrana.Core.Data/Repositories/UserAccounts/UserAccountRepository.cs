@@ -33,7 +33,7 @@ namespace Astrana.Core.Data.Repositories.UserAccounts
         /// <returns></returns>
         public async Task<DM.UserAccounts.UserAccount> GetUserAccountByCredentialsAsync(string username, string plainTextPassword)
         {
-            var query = ctx.UserAccounts.Include(o => o.UserAccountRoles).AsQueryable();
+            var query = databaseSession.UserAccounts.Include(o => o.UserAccountRoles).AsQueryable();
             
             query = query.Where(o => o.UserName == username);
 
@@ -61,11 +61,14 @@ namespace Astrana.Core.Data.Repositories.UserAccounts
         {
             options ??= new UserAccountQueryOptions<Guid, Guid>();
 
-            var query = ctx.UserAccounts.Include(o => o.UserAccountRoles).AsQueryable();
+            var query = databaseSession.UserAccounts.Include(o => o.UserAccountRoles).AsQueryable();
 
             // Add Filters
             if (options.Ids.Any())
                 query = query.Where(o => options.Ids.Contains(o.Id));
+
+            if (options.ExcludeIds.Any())
+                query = query.Where(o => !options.ExcludeIds.Contains(o.Id));
 
             if (options.AccountTypes.Any())
                 query = query.Where(o => options.AccountTypes.Contains(o.Type));
@@ -86,7 +89,7 @@ namespace Astrana.Core.Data.Repositories.UserAccounts
             query = query.OrderByDescending(o => o.CreatedTimestamp);
 
             // Add Paging
-            if (!options.PagingDisabled && options.PageSize.HasValue && options.CurrentPage.HasValue)
+            if (options is { PagingDisabled: false, PageSize: { }, CurrentPage: { } })
                 query = query.Skip(options.PageSize.Value * (options.CurrentPage.Value - 1)).Take(options.PageSize.Value);
 
             return query;
@@ -185,16 +188,16 @@ namespace Astrana.Core.Data.Repositories.UserAccounts
 
                     results.Add($"{i}", new List<ResultError>());
 
-                    if (ctx.UserAccounts.Any(o => o.Type == UserAccountType.Instance))
+                    if (databaseSession.UserAccounts.Any(o => o.Type == UserAccountType.Instance))
                         results[$"{i}"].Add(new ResultError(nameof(addition.UserName), "Only one instance account is allowed.", ErrorCodes.UniqueValueRequired));
 
-                    if (ctx.UserAccounts.Any(o => o.UserName == addition.UserName))
+                    if (databaseSession.UserAccounts.Any(o => o.UserName == addition.UserName))
                         results[$"{i}"].Add(new ResultError(nameof(addition.UserName), "User Name already in use.", ErrorCodes.UniqueValueRequired));
 
-                    if (ctx.UserAccounts.Any(o => o.EmailAddress == addition.EmailAddress))
+                    if (databaseSession.UserAccounts.Any(o => o.EmailAddress == addition.EmailAddress))
                         results[$"{i}"].Add(new ResultError(nameof(addition.EmailAddress), "Email Address already in use.", ErrorCodes.UniqueValueRequired));
 
-                    if (!string.IsNullOrWhiteSpace(addition.PhoneNumber) && ctx.UserAccounts.Any(o => o.PhoneNumber == addition.PhoneNumber))
+                    if (!string.IsNullOrWhiteSpace(addition.PhoneNumber) && databaseSession.UserAccounts.Any(o => o.PhoneNumber == addition.PhoneNumber))
                         results[$"{i}"].Add(new ResultError(nameof(addition.PhoneNumber), "Phone number already in use.", ErrorCodes.UniqueValueRequired));
 
                     if(results[$"{i}"].Count > 0)
@@ -217,8 +220,8 @@ namespace Astrana.Core.Data.Repositories.UserAccounts
                     newUserAccountEntity.LastModifiedTimestamp = now;
 
                     // Save records.
-                    ctx.UserAccounts.Add(newUserAccountEntity);
-                    await ctx.SaveChangesAsync();
+                    databaseSession.UserAccounts.Add(newUserAccountEntity);
+                    await databaseSession.SaveChangesAsync();
 
                     countAdded++;
 
@@ -288,7 +291,7 @@ namespace Astrana.Core.Data.Repositories.UserAccounts
 
                 foreach (var update in requestedUpdates)
                 {
-                    var existingUserAccountEntity = await ctx.UserAccounts.FirstOrDefaultAsync(o => o.Id == update.Id);
+                    var existingUserAccountEntity = await databaseSession.UserAccounts.FirstOrDefaultAsync(o => o.Id == update.UserAccountId);
 
                     if (existingUserAccountEntity == null)
                         continue;
@@ -302,9 +305,9 @@ namespace Astrana.Core.Data.Repositories.UserAccounts
                     existingUserAccountEntity.LastModifiedTimestamp = now;
 
                     // Save changes to records.
-                    ctx.UserAccounts.Update(existingUserAccountEntity);
+                    databaseSession.UserAccounts.Update(existingUserAccountEntity);
 
-                    await ctx.SaveChangesAsync();
+                    await databaseSession.SaveChangesAsync();
 
                     countUpdated++;
 

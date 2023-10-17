@@ -16,8 +16,12 @@ namespace Astrana.Core.Data.Repositories.Peers
         Task<ICountResult> GetPeersCountAsync(PeerQueryOptions<Guid, TUserId>? queryOptions = null);
 
         Task<IGetResult<Peer>> GetPeersAsync(PeerQueryOptions<Guid, TUserId>? queryOptions = null);
+        
+        Task<Guid> GetPeerIdByPeerProfileIdAsync(Guid profileId);
 
         Task<Peer> GetPeerByIdAsync(Guid id);
+
+        Task<Peer> GetPeerByProfileIdAsync(Guid profileId);
 
         Task<IAddResult<List<Peer>>> CreatePeersAsync(IEnumerable<IPeerToAdd> requestedAdditions, TUserId actioningUserId, bool returnRecords = true);
 
