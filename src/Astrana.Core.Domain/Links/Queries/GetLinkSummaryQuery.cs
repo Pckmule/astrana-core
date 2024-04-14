@@ -15,8 +15,7 @@ namespace Astrana.Core.Domain.Links.Queries
     public class GetLinkSummaryQuery : IGetLinkSummaryQuery
     {
         private readonly ILogger<GetLinkSummaryQuery> _logger;
-
-
+        
         public GetLinkSummaryQuery(ILogger<GetLinkSummaryQuery> logger)
         {
             _logger = logger;
@@ -97,7 +96,7 @@ namespace Astrana.Core.Domain.Links.Queries
             return trim ? value?.Trim() : value;
         }
 
-        private static async Task<string> GetHtmlPageContentAsync(Uri url)
+        private async Task<string> GetHtmlPageContentAsync(Uri url)
         {
             try
             {
@@ -113,6 +112,7 @@ namespace Astrana.Core.Domain.Links.Queries
             catch (Exception ex)
             {
                 // ignored
+                _logger.LogError(ex, ex.Message);
             }
 
             return string.Empty;

@@ -26,8 +26,8 @@ namespace Astrana.Core.Domain.Peers
             services.AddScoped<IRejectPeerConnectionRequestsCommand, RejectPeerConnectionRequestsCommand>();
             services.AddTransient<IRejectPeerConnectionRequestsCommand, RejectPeerConnectionRequestsCommand>();
 
-            services.AddScoped<ISubmitPeerConnectionRequestsCommand, SubmitPeerConnectionRequestsCommand>();
-            services.AddTransient<ISubmitPeerConnectionRequestsCommand, SubmitPeerConnectionRequestsCommand>();
+            services.AddScoped<ISubmitPeerConnectionRequestCommand, SubmitPeerConnectionRequestCommand>();
+            services.AddTransient<ISubmitPeerConnectionRequestCommand, SubmitPeerConnectionRequestCommand>();
 
             services.AddScoped<IGetReceivedPeerConnectionRequestsQuery, GetReceivedPeerConnectionRequestsQuery>();
             services.AddTransient<IGetReceivedPeerConnectionRequestsQuery, GetReceivedPeerConnectionRequestsQuery>();

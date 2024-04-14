@@ -9,15 +9,18 @@ using Astrana.Core.Domain.Models.Feelings.Constants;
 using Astrana.Core.Domain.Models.Feelings.Contracts;
 using Astrana.Core.Domain.Models.Feelings.DomainTransferObjects;
 using Astrana.Core.Domain.Models.Lookups.Attributes;
-using Astrana.Core.Domain.Models.System.Contracts;
+using Astrana.Core.Domain.Models.Feelings.DomainTransferObjects;
 using Astrana.Core.Framework.Domain;
 using Astrana.Core.Framework.Model;
 using Astrana.Core.Framework.Model.Validation;
+using System;
 using System.ComponentModel.DataAnnotations;
+using System.Drawing;
 using System.Text.Json.Serialization;
 
 namespace Astrana.Core.Domain.Models.Feelings
 {
+    // Reference Data?
     public sealed class Feeling : DomainEntity, IFeeling, IAuditable<Guid>, IDeactivatable<Guid>
     {
         [JsonConstructor]
@@ -77,6 +80,34 @@ namespace Astrana.Core.Domain.Models.Feelings
             if (!validationResult.IsSuccess)
                 throw new InvalidDomainEntityStateException(validationResult.ValidatedEntityName, new Exception(validationResult.Message));
         }
+        
+        public Feeling(FeelingToAddDto dto) : this()
+        {
+            if (dto == null)
+                throw new ArgumentNullException(nameof(dto));
+
+            FeelingId = Guid.Empty;
+
+            if (!string.IsNullOrEmpty(dto.Name))
+                Name = dto.Name;
+
+            if (!string.IsNullOrEmpty(dto.NameTrxCode))
+                NameTrxCode = dto.NameTrxCode;
+
+            if (!string.IsNullOrEmpty(dto.IconName))
+                IconName = dto.IconName;
+
+            if (!string.IsNullOrEmpty(dto.UnicodeIcon))
+                UnicodeIcon = dto.UnicodeIcon;
+
+            if (!string.IsNullOrEmpty(dto.ShortCode))
+                ShortCode = dto.ShortCode;
+
+            var validationResult = Validate();
+
+            if (!validationResult.IsSuccess)
+                throw new InvalidDomainEntityStateException(validationResult.ValidatedEntityName, new Exception(validationResult.Message));
+        }
 
         public Feeling(Guid id, string name, string nameTrxCode, string iconName, string unicodeIcon, string shortCode) : this()
         {
@@ -90,6 +121,7 @@ namespace Astrana.Core.Domain.Models.Feelings
 
         [Required]
         [LookupOptionValue]
+        [JsonIgnore]
         public Guid FeelingId
         {
             get => Id;
@@ -111,7 +143,7 @@ namespace Astrana.Core.Domain.Models.Feelings
         [Required]
         [MinLength(ModelProperties.Feeling.MinimumIconNameLength)]
         [MaxLength(ModelProperties.Feeling.MaximumIconNameLength)]
-        [LookupOptionIconAddress]
+        [LookupOptionIconName]
         public string IconName { get; set; }
 
         [Required]

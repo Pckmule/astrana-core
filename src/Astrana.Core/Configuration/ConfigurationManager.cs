@@ -6,7 +6,7 @@
 
 using Astrana.Core.Configuration.Constants;
 using Astrana.Core.Configuration.Exceptions;
-using Astrana.Core.Configuration.Models;
+using Astrana.Core.Settings.Models;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -15,12 +15,14 @@ namespace Astrana.Core.Configuration
     public class ConfigurationManager
     {
         private readonly string _applicationSettingsFilePath;
+        private readonly IDataProtectionEncryptionUtility _dataProtectionEncryptionUtility;
 
         private ApplicationSettings _applicationSettings = new();
 
-        public ConfigurationManager(string applicationSettingsFilePath)
+        public ConfigurationManager(string applicationSettingsFilePath, IDataProtectionEncryptionUtility dataProtectionEncryptionUtility)
         {
             _applicationSettingsFilePath = applicationSettingsFilePath;
+            _dataProtectionEncryptionUtility = dataProtectionEncryptionUtility;
 
             LoadApplicationSettingsAsync(applicationSettingsFilePath).Wait();
         }
@@ -47,32 +49,32 @@ namespace Astrana.Core.Configuration
             await SaveAppSettingsJsonFileAsync(_applicationSettingsFilePath, applicationSettings);
         }
 
-        public static ApplicationSettings EncryptApplicationSettings(ApplicationSettings settings)
+        public ApplicationSettings EncryptApplicationSettings(ApplicationSettings settings)
         {
             if (settings == null)
                 throw new ApplicationConfigurationException("Configuration is null.");
 
             foreach (var connectionString in settings.ConnectionStrings)
             {
-                settings.ConnectionStrings[connectionString.Key] = EncryptionUtility.EncryptString(connectionString.Value);
+                settings.ConnectionStrings[connectionString.Key] = _dataProtectionEncryptionUtility.EncryptString(connectionString.Value);
             }
 
             var msSqlServerSinkSettings = settings.Serilog.WriteTo.FirstOrDefault(o => o.Name == ApplicationConfigurationKeys.SerilogSinkMsSqlServerName);
             if (msSqlServerSinkSettings != null && msSqlServerSinkSettings.Args.Any(o => o.Key == ApplicationConfigurationKeys.SerilogSinkMsSqlServerArgConnectionString))
             {
-                msSqlServerSinkSettings.Args[ApplicationConfigurationKeys.SerilogSinkMsSqlServerArgConnectionString] = EncryptionUtility.EncryptString(msSqlServerSinkSettings.Args[ApplicationConfigurationKeys.SerilogSinkMsSqlServerArgConnectionString].ToString()!);
+                msSqlServerSinkSettings.Args[ApplicationConfigurationKeys.SerilogSinkMsSqlServerArgConnectionString] = _dataProtectionEncryptionUtility.EncryptString(msSqlServerSinkSettings.Args[ApplicationConfigurationKeys.SerilogSinkMsSqlServerArgConnectionString].ToString()!);
             }
 
             var postgreSqlSinkSettings = settings.Serilog.WriteTo.FirstOrDefault(o => o.Name == ApplicationConfigurationKeys.SerilogSinkPostgreSqlName);
             if (postgreSqlSinkSettings != null && postgreSqlSinkSettings.Args.Any(o => o.Key == ApplicationConfigurationKeys.SerilogSinkPostgreSqlArgConnectionString))
             {
-                postgreSqlSinkSettings.Args[ApplicationConfigurationKeys.SerilogSinkPostgreSqlArgConnectionString] = EncryptionUtility.EncryptString(postgreSqlSinkSettings.Args[ApplicationConfigurationKeys.SerilogSinkPostgreSqlArgConnectionString].ToString()!);
+                postgreSqlSinkSettings.Args[ApplicationConfigurationKeys.SerilogSinkPostgreSqlArgConnectionString] = _dataProtectionEncryptionUtility.EncryptString(postgreSqlSinkSettings.Args[ApplicationConfigurationKeys.SerilogSinkPostgreSqlArgConnectionString].ToString()!);
             }
 
             var mySqlSinkSettings = settings.Serilog.WriteTo.FirstOrDefault(o => o.Name == ApplicationConfigurationKeys.SerilogSinkMySqlName);
             if (mySqlSinkSettings != null && mySqlSinkSettings.Args.Any(o => o.Key == ApplicationConfigurationKeys.SerilogSinkMySqlArgConnectionString))
             {
-                mySqlSinkSettings.Args[ApplicationConfigurationKeys.SerilogSinkMySqlArgConnectionString] = EncryptionUtility.EncryptString(mySqlSinkSettings.Args[ApplicationConfigurationKeys.SerilogSinkMySqlArgConnectionString].ToString()!);
+                mySqlSinkSettings.Args[ApplicationConfigurationKeys.SerilogSinkMySqlArgConnectionString] = _dataProtectionEncryptionUtility.EncryptString(mySqlSinkSettings.Args[ApplicationConfigurationKeys.SerilogSinkMySqlArgConnectionString].ToString()!);
             }
 
             return settings;
@@ -100,15 +102,24 @@ namespace Astrana.Core.Configuration
 
         private static async Task<ApplicationSettings> ReadAppSettingsJsonFileAsync(string filePath)
         {
-            await using var fileStream = File.OpenRead(filePath);
-            return await JsonSerializer.DeserializeAsync<ApplicationSettings>(fileStream, new JsonSerializerOptions
+            try
             {
-                Converters = { new JsonStringEnumConverter() }
+                await using var fileStream = File.OpenRead(filePath);
 
-            }) ?? new();
+                return await JsonSerializer.DeserializeAsync<ApplicationSettings>(fileStream, new JsonSerializerOptions
+                {
+                    Converters = { new JsonStringEnumConverter() }
+
+                }) ?? new ApplicationSettings();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                throw;
+            }
         }
 
-        private async Task SaveAppSettingsJsonFileAsync(string filePath, ApplicationSettings applicationSettings)
+        private static async Task SaveAppSettingsJsonFileAsync(string filePath, ApplicationSettings applicationSettings)
         {
             try
             {

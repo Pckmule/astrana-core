@@ -5,6 +5,8 @@
 */
 
 using Astrana.Core.Data.Repositories.Peers;
+using Astrana.Core.Domain.Models.Notifications.DomainTransferObjects;
+using Astrana.Core.Domain.Models.Notifications.Enums;
 using Astrana.Core.Domain.Models.Peers;
 using Astrana.Core.Domain.Models.Peers.Constants;
 using Astrana.Core.Domain.Models.Results;
@@ -19,13 +21,13 @@ namespace Astrana.Core.Domain.Peers.Commands.AcceptPeerConnectionRequests
     public class AcceptPeerConnectionRequestsCommand : IAcceptPeerConnectionRequestsCommand
     {
         private readonly ILogger<AcceptPeerConnectionRequestsCommand> _logger;
-
+        
         private readonly IPeerRepository<Guid> _peerRepository;
 
         public AcceptPeerConnectionRequestsCommand(ILogger<AcceptPeerConnectionRequestsCommand> logger, IPeerRepository<Guid> peerRepository)
         {
             _logger = logger;
-
+            
             _peerRepository = peerRepository;
         }
 
@@ -56,7 +58,7 @@ namespace Astrana.Core.Domain.Peers.Commands.AcceptPeerConnectionRequests
 
             if (result.Outcome == ResultOutcome.Success)
                 return new UpdateSuccessResult<List<PeerConnectionRequestReceived>>(result.Data, result.Count, MRB.UpdateSuccessResultMessage(ModelProperties.PeerConnectionRequestReceived.NameSingularForm, ModelProperties.PeerConnectionRequestReceived.NamePluralForm, result.Count));
-            
+
             return new UpdateFailResult<List<PeerConnectionRequestReceived>>(result.Data, 0, result.Message, result.ResultCode);
         }
     }

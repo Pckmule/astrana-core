@@ -20,46 +20,31 @@ namespace Astrana.Core.Data.Entities.Content
         [Key, Column(Order = 0)]
         public Guid ContentCollectionId { get; set; }
 
-        [Column(Order = 1)]
-        [MinLength(DomainModelProperties.ContentCollection.MinimumTitleLength)]
-        [MaxLength(DomainModelProperties.ContentCollection.MaximumTitleLength)]
+        [MinLength(DomainModelProperties.ContentCollection.MinimumNameLength)]
         public string Name { get; set; }
 
-        [Column(Order = 2)]
         public ContentCollectionType CollectionType { get; set; }
 
-        [Column(Order = 3)]
         [MinLength(DomainModelProperties.ContentCollection.MinimumCaptionLength)]
-        [MaxLength(DomainModelProperties.ContentCollection.MaximumCaptionLength)]
         public string Caption { get; set; }
 
-        [Column(Order = 4)]
         [MinLength(DomainModelProperties.ContentCollection.MinimumCopyrightLength)]
-        [MaxLength(DomainModelProperties.ContentCollection.MaximumCopyrightLength)]
         public string Copyright { get; set; }
 
-        [Column(Order = 5)]
         public ICollection<ContentCollectionItem> ContentCollectionItems { get; set; } = new List<ContentCollectionItem>();
 
-        [Column(Order = 99993)]
         public DateTimeOffset? DeactivatedTimestamp { get; set; }
 
-        [Column(Order = 99994)]
-        public string? DeactivatedReason { get; set; } = null;
+        public string DeactivatedReason { get; set; } = null;
 
-        [Column(Order = 99995)]
         public Guid? DeactivatedBy { get; set; }
 
-        [Required, Column(Order = 99996)]
         public Guid CreatedBy { get; set; }
 
-        [Required, Column(Order = 99997)]
         public Guid LastModifiedBy { get; set; }
 
-        [Required, Column(Order = 99998)]
-        public DateTimeOffset CreatedTimestamp { get; set; } = DateTimeOffset.UtcNow;
+        public DateTimeOffset CreatedTimestamp { get; set; }
 
-        [Required, Column(Order = 99999)]
-        public DateTimeOffset LastModifiedTimestamp { get; set; } = DateTimeOffset.UtcNow;
+        public DateTimeOffset LastModifiedTimestamp { get; set; }
     }
 }

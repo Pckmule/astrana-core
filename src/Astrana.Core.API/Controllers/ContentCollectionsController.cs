@@ -12,14 +12,13 @@ using Astrana.Core.Domain.ContentCollections.Commands.DeleteContentCollections;
 using Astrana.Core.Domain.ContentCollections.Commands.UpdateContentCollections;
 using Astrana.Core.Domain.ContentCollections.Queries;
 using Astrana.Core.Domain.IdentityAccessManagement.Managers.SignIn;
-using Astrana.Core.Domain.Models.AstranaApi.Responses;
 using Astrana.Core.Domain.Models.ContentCollections;
 using Astrana.Core.Domain.Models.ContentCollections.DomainTransferObjects;
 using Astrana.Core.Domain.Models.ContentCollections.Enums;
 using Astrana.Core.Domain.Models.ContentCollections.Options;
-using Astrana.Core.Domain.Models.Results;
 using Astrana.Core.Domain.Models.Results.Enums;
 using Astrana.Core.Domain.Models.System.Enums;
+using Astrana.Core.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -75,8 +74,6 @@ namespace Astrana.Core.API.Controllers
 
             var queryOptions = new ContentCollectionQueryOptions<Guid, Guid>
             {
-                OwnerUserIds = createdById.HasValue ? new List<Guid> { createdById.Value } : new List<Guid>(),
-
                 CreatedAfter = createdAfter,
                 CreatedBefore = createdBefore,
 
@@ -86,6 +83,8 @@ namespace Astrana.Core.API.Controllers
                 OrderByDirection = orderByDirection,
                 OrderBy = orderBy
             };
+
+            queryOptions.SetOwnerUserIds(createdById.AsList());
 
             if (includeContentItems.HasValue)
                 queryOptions.IncludeCollectionItems = includeContentItems.Value;
@@ -132,10 +131,7 @@ namespace Astrana.Core.API.Controllers
         {
             var actioningUserId = GetActioningUserId();
 
-            var queryOptions = new ContentCollectionQueryOptions<Guid, Guid>
-            {
-                Ids = new List<Guid> { id }
-            };
+            var queryOptions = new ContentCollectionQueryOptions<Guid, Guid>(id.AsList());
 
             if (includeContentItems.HasValue)
                 queryOptions.IncludeCollectionItems = includeContentItems.Value;

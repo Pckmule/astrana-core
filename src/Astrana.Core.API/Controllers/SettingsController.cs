@@ -12,6 +12,7 @@ using Astrana.Core.Domain.Models.SystemSettings;
 using Astrana.Core.Domain.Models.SystemSettings.Options;
 using Astrana.Core.Domain.SystemSettings.Commands.UpdateSystemSettingsCommand;
 using Astrana.Core.Domain.SystemSettings.Queries;
+using Astrana.Core.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -30,7 +31,8 @@ namespace Astrana.Core.API.Controllers
         private readonly IUpdateSystemSettingsCommand _updateSettingsCommand;
         private readonly IGetLookupQuery _getLookupQuery;
 
-        public SettingsController(ILogger<SettingsController> logger, 
+        public SettingsController(
+            ILogger<SettingsController> logger, 
             ISignInManager signInManager, 
             IGetSystemSettingsQuery getSettingsQuery,
             IGetSettingCategoriesQuery getSettingCategoriesQuery,
@@ -64,7 +66,7 @@ namespace Astrana.Core.API.Controllers
 
             var queryOptions = new SystemSettingQueryOptions<Guid, Guid>
             {
-                Categories = categories,
+                CategoryIds = categories,
 
                 PageSize = pageSize,
                 CurrentPage = page
@@ -88,10 +90,7 @@ namespace Astrana.Core.API.Controllers
         {
             var actioningUserId = GetActioningUserId();
 
-            var queryOptions = new SystemSettingQueryOptions<Guid, Guid>
-            {
-                Ids = new List<Guid> { id }
-            };
+            var queryOptions = new SystemSettingQueryOptions<Guid, Guid>(id.AsList());
 
             var result = await _getSettingsQuery.ExecuteAsync(actioningUserId, queryOptions);
 
@@ -106,11 +105,11 @@ namespace Astrana.Core.API.Controllers
         /// <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
         /// <response code="500">Something went wrong.</response>
         [HttpGet("Categories")]
-        public IActionResult GetSystemSettingCategories()
+        public async Task<IActionResult> GetSystemSettingCategories()
         {
             var actioningUserId = GetActioningUserId();
 
-            var result = _getSettingCategoriesQuery.Execute(actioningUserId);
+            var result = await _getSettingCategoriesQuery.ExecuteAsync(actioningUserId);
 
             return UnpagedGetResponse(result);
         }

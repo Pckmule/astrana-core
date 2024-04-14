@@ -4,6 +4,7 @@
 * file, You can obtain one at https://mozilla.org/MPL/2.0/.
 */
 
+using Astrana.Core.Data.Repositories.SystemSettings;
 using Astrana.Core.Domain.Models.SystemSettings;
 using Astrana.Core.Utilities;
 using Microsoft.Extensions.Logging;
@@ -14,21 +15,22 @@ namespace Astrana.Core.Domain.SystemSettings.Queries
     {
         private readonly ILogger<GetSettingCategoriesQuery> _logger;
 
-        public GetSettingCategoriesQuery(ILogger<GetSettingCategoriesQuery> logger)
+        private readonly ISystemSettingRepository<Guid> _systemSettingRepository;
+
+        public GetSettingCategoriesQuery(ILogger<GetSettingCategoriesQuery> logger, ISystemSettingRepository<Guid> systemSettingRepository)
         {
             _logger = logger;
+
+            _systemSettingRepository = systemSettingRepository;
         }
 
-        public List<SystemSettingCategory> Execute(Guid actioningUserId)
+        public async Task<List<SystemSettingCategory>> ExecuteAsync(Guid actioningUserId)
         {
-            var settingCategories = new List<SystemSettingCategory>();
+            var result = await _systemSettingRepository.GetSystemSettingCategoriesAsync();
 
-            Models.System.Constants.SettingCategoryDefinitions.Register(settingCategories);
-            Models.IdentityAccessManagement.Constants.SettingCategoryDefinitions.Register(settingCategories);
+            _logger.LogTrace($"Executed {nameof(GetSettingCategoriesQuery).SplitOnUpperCase()}");
 
-            _logger.LogTrace($"Executed {nameof(GetSystemSettingsQuery).SplitOnUpperCase()}");
-
-            return settingCategories;
+            return result.Data;
         }
     }
 }

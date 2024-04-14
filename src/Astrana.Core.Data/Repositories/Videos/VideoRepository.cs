@@ -154,7 +154,7 @@ namespace Astrana.Core.Data.Repositories.Videos
 
                 // Return the current records.
                 if (returnRecords)
-                    return new AddSuccessResult<List<DM.Videos.Video>>((await GetVideosAsync(new VideoQueryOptions<Guid, Guid>() { Ids = newVideoIds })).Data, countAdded);
+                    return new AddSuccessResult<List<DM.Videos.Video>>((await GetVideosAsync(new VideoQueryOptions<Guid, Guid>(newVideoIds))).Data, countAdded);
 
                 return new AddSuccessResult<List<DM.Videos.Video>>(new List<DM.Videos.Video>(), countAdded);
             }
@@ -210,7 +210,7 @@ namespace Astrana.Core.Data.Repositories.Videos
 
                 // Return the current records.
                 if (returnRecords)
-                    return new UpdateSuccessResult<List<DM.Videos.Video>>((await GetVideosAsync(new VideoQueryOptions<Guid, Guid>() { Ids = updatedVideoIds })).Data, countUpdated);
+                    return new UpdateSuccessResult<List<DM.Videos.Video>>((await GetVideosAsync(new VideoQueryOptions<Guid, Guid>(updatedVideoIds))).Data, countUpdated);
 
                 return new UpdateSuccessResult<List<DM.Videos.Video>>(new List<DM.Videos.Video>(), countUpdated);
             }

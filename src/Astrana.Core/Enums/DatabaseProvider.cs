@@ -4,9 +4,9 @@
 * file, You can obtain one at https://mozilla.org/MPL/2.0/.
 */
 
-using Astrana.Core.Attributes;
 using Astrana.Core.Localization.Attributes;
 using System.ComponentModel;
+using Astrana.Core.Attributes;
 
 namespace Astrana.Core.Enums
 {

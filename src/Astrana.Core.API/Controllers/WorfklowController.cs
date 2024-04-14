@@ -13,6 +13,7 @@ using Astrana.Core.Domain.NewContentWorkflowStages.Commands.CreateNewContentWork
 using Astrana.Core.Domain.NewContentWorkflowStages.Commands.DeleteNewContentWorkflowStages;
 using Astrana.Core.Domain.NewContentWorkflowStages.Commands.UpdateNewContentWorkflowStages;
 using Astrana.Core.Domain.NewContentWorkflowStages.Queries;
+using Astrana.Core.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -58,14 +59,14 @@ namespace Astrana.Core.API.Controllers
 
             var queryOptions = new NewContentWorkflowStageQueryOptions<Guid, Guid>
             {
-                OwnerUserIds = createdById.HasValue ? new List<Guid> { createdById.Value } : new List<Guid>(),
-
                 CreatedAfter = createdAfter,
                 CreatedBefore = createdBefore,
 
                 PageSize = pageSize,
                 CurrentPage = page
             };
+
+            queryOptions.SetOwnerUserIds(createdById.AsList());
 
             var result = await _getNewContentWorkflowStagesQuery.ExecuteAsync(actioningUserId, queryOptions);
 
@@ -85,10 +86,7 @@ namespace Astrana.Core.API.Controllers
         {
             var actioningUserId = GetActioningUserId();
 
-            var queryOptions = new NewContentWorkflowStageQueryOptions<Guid, Guid>
-            {
-                Ids = new List<Guid> { id }
-            };
+            var queryOptions = new NewContentWorkflowStageQueryOptions<Guid, Guid>(id.AsList());
 
             var result = await _getNewContentWorkflowStagesQuery.ExecuteAsync(actioningUserId, queryOptions);
 

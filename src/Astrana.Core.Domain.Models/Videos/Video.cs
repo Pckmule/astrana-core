@@ -13,6 +13,7 @@ using Astrana.Core.Framework.Domain;
 using Astrana.Core.Framework.Model;
 using Astrana.Core.Framework.Model.Validation;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Astrana.Core.Domain.Models.Videos
 {
@@ -72,7 +73,33 @@ namespace Astrana.Core.Domain.Models.Videos
                 throw new InvalidDomainEntityStateException(validationResult.ValidatedEntityName, new Exception(validationResult.Message));
         }
 
+        public Video(VideoToAddDto dto) : this()
+        {
+            if (dto == null)
+                throw new ArgumentNullException(nameof(dto));
+
+            VideoId = Guid.Empty;
+
+            if (!string.IsNullOrEmpty(dto.Location))
+                Location = dto.Location;
+
+            if (!string.IsNullOrEmpty(dto.Caption))
+                Caption = dto.Caption;
+
+            if (!string.IsNullOrEmpty(dto.Copyright))
+                Copyright = dto.Copyright;
+
+            if (dto.Size != null)
+                Size = dto.Size;
+
+            var validationResult = Validate();
+
+            if (!validationResult.IsSuccess)
+                throw new InvalidDomainEntityStateException(validationResult.ValidatedEntityName, new Exception(validationResult.Message));
+        }
+
         [Required]
+        [JsonIgnore]
         public Guid VideoId
         {
             get => Id;

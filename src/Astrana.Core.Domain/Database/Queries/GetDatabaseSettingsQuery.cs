@@ -5,7 +5,9 @@
 */
 
 using Astrana.Core.Configuration;
+using Astrana.Core.Domain.Application.Configuration;
 using Astrana.Core.Domain.Models.Database;
+using Astrana.Core.Enums;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Logging;
 
@@ -15,19 +17,23 @@ namespace Astrana.Core.Domain.Database.Queries
     {
         private readonly ILogger<GetDatabaseSettingsQuery> _logger;
         private readonly IWebHostEnvironment _environment;
-
-        public GetDatabaseSettingsQuery(ILogger<GetDatabaseSettingsQuery> logger, IWebHostEnvironment environment)
+        
+        private readonly IDataProtectionEncryptionUtility _dataProtectionEncryptionUtility;
+        
+        public GetDatabaseSettingsQuery(ILogger<GetDatabaseSettingsQuery> logger, IWebHostEnvironment environment,  IDataProtectionEncryptionUtility dataProtectionEncryptionUtility)
         {
             _logger = logger;
             _environment = environment;
+
+            _dataProtectionEncryptionUtility = dataProtectionEncryptionUtility;
         }
 
         public DatabaseSettings Execute(Guid actioningUserId)
         {
             var appSettingsFilePath = Path.Join(_environment.ContentRootPath, Constants.Application.SettingsFileName);
-            var appSettings = new ConfigurationManager(appSettingsFilePath).ApplicationSettings;
+            var appSettings = new ConfigurationManager(appSettingsFilePath, _dataProtectionEncryptionUtility).ApplicationSettings;
 
-            var databaseSettings = new DatabaseSettings()
+            var databaseSettings = new DatabaseSettings
             {
                 DatabaseProvider = appSettings.DatabaseProvider,
                 ConnectionString = new MsSqlServerConnectionString()
@@ -38,19 +44,19 @@ namespace Astrana.Core.Domain.Database.Queries
             if (string.IsNullOrWhiteSpace(connectionString))
                 return databaseSettings;
 
-            var decryptedConnectionString = appSettings.SetupMode == null ? EncryptionUtility.DecryptString(connectionString) : connectionString;
+            var decryptedConnectionString = appSettings.SetupMode == null ? _dataProtectionEncryptionUtility.DecryptString(connectionString) : connectionString;
 
             switch (appSettings.DatabaseProvider)
             {
-                case Enums.DatabaseProvider.PostgreSQL:
+                case DatabaseProvider.PostgreSQL:
                     databaseSettings.ConnectionString = new PostgreSqlConnectionString(decryptedConnectionString);
                     break;
 
-                case Enums.DatabaseProvider.MySQL:
+                case DatabaseProvider.MySQL:
                     databaseSettings.ConnectionString = new MySqlConnectionString(decryptedConnectionString); 
                     break;
 
-                case Enums.DatabaseProvider.MSSqlServer:
+                case DatabaseProvider.MSSqlServer:
                     databaseSettings.ConnectionString = new MsSqlServerConnectionString(decryptedConnectionString);
                     break;
             }

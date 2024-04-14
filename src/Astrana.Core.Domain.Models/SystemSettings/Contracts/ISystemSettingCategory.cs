@@ -8,7 +8,7 @@ namespace Astrana.Core.Domain.Models.SystemSettings.Contracts
 {
     public interface ISystemSettingCategory
     {
-        Guid LinkId { get; set; }
+        Guid SystemSettingCategoryId { get; set; }
 
         string Name { get; set; }
 

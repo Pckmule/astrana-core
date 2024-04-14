@@ -6,25 +6,35 @@
 
 namespace Astrana.Core.Framework.Domain
 {
-    public abstract class DomainValueObject<TValueObject> where TValueObject : DomainValueObject<TValueObject>
+    public abstract class DomainValueObject
     {
+        protected abstract IEnumerable<object> GetEqualityComponents();
+
         public override bool Equals(object obj)
         {
-            var valueObject = obj as TValueObject;
+            if (obj == null)
+                return false;
 
-            return !ReferenceEquals(valueObject, null) && EqualsCore(valueObject);
+            if (GetType() != obj.GetType())
+                return false;
+
+            var valueObject = (DomainValueObject)obj;
+
+            return GetEqualityComponents().SequenceEqual(valueObject.GetEqualityComponents());
         }
-
-        protected abstract bool EqualsCore(TValueObject other);
 
         public override int GetHashCode()
         {
-            return GetHashCodeCore();
+            return GetEqualityComponents().Aggregate(1, (current, obj) =>
+            {
+                unchecked
+                {
+                    return current * 23 + (obj?.GetHashCode() ?? 0);
+                }
+            });
         }
 
-        protected abstract int GetHashCodeCore();
-
-        public static bool operator ==(DomainValueObject<TValueObject> a, DomainValueObject<TValueObject> b)
+        public static bool operator ==(DomainValueObject a, DomainValueObject b)
         {
             if (ReferenceEquals(a, null) && ReferenceEquals(b, null))
                 return true;
@@ -35,9 +45,10 @@ namespace Astrana.Core.Framework.Domain
             return a.Equals(b);
         }
 
-        public static bool operator !=(DomainValueObject<TValueObject> a, DomainValueObject<TValueObject> b)
+        public static bool operator !=(DomainValueObject a, DomainValueObject b)
         {
             return !(a == b);
         }
     }
+
 }

@@ -5,6 +5,6 @@ namespace Astrana.Core.Domain.Peers.Commands.CreatePeerConnectionRequests
 {
     public interface ICreateReceivedPeerConnectionRequestsCommand
     {
-        Task<AddResult<List<PeerConnectionRequestReceived>>> ExecuteAsync(IList<PeerConnectionRequestReceivedToAdd> peerConnectionRequestsToAdd, Guid actioningUserId);
+        Task<AddResult<List<PeerConnectionRequestReceived>>> ExecuteAsync(IList<PeerConnectionRequestReceived> peerConnectionRequestsToAdd, Guid actioningUserId);
     }
 }

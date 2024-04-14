@@ -15,13 +15,13 @@ namespace Astrana.Core.Data.Repositories.Audios
     {
         Task<ICountResult> GetAudiosCountAsync(AudioQueryOptions<Guid, TUserId>? queryOptions = null);
 
-        Task<IGetResult<Audio>> GetAudiosAsync(AudioQueryOptions<Guid, TUserId> queryOptions = null);
+        Task<IGetResult<AudioClip>> GetAudiosAsync(AudioQueryOptions<Guid, TUserId> queryOptions = null);
 
-        Task<Audio?> GetAudioByIdAsync(Guid id);
+        Task<AudioClip?> GetAudioByIdAsync(Guid id);
 
-        Task<IAddResult<List<Audio>>> CreateAsync(IEnumerable<IAudioToAdd> requestedAdditions, TUserId actioningUserId, bool returnRecords = true);
+        Task<IAddResult<List<AudioClip>>> CreateAsync(IEnumerable<IAudioToAdd> requestedAdditions, TUserId actioningUserId, bool returnRecords = true);
 
-        Task<IUpdateResult<List<Audio>>> UpdateAsync(IEnumerable<Audio> requestedUpdates, TUserId actioningUserId, bool returnRecords = true);
+        Task<IUpdateResult<List<AudioClip>>> UpdateAsync(IEnumerable<AudioClip> requestedUpdates, TUserId actioningUserId, bool returnRecords = true);
 
         Task<IDeleteResult<List<Guid>>> DeleteAsync(IEnumerable<Guid> validatedAudiosToRemoveIds, Guid actioningUserId);
     }

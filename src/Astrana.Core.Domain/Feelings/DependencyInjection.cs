@@ -5,6 +5,7 @@
 */
 
 using Astrana.Core.Domain.Feelings.Queries;
+using Astrana.Core.Domain.SkinTone.Queries;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Astrana.Core.Domain.Feelings

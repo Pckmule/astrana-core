@@ -15,6 +15,7 @@ using Astrana.Core.Domain.Models.Albums.DomainTransferObjects;
 using Astrana.Core.Domain.Models.Albums.Options;
 using Astrana.Core.Domain.Models.Results.Enums;
 using Astrana.Core.Domain.Models.System.Enums;
+using Astrana.Core.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -63,8 +64,6 @@ namespace Astrana.Core.API.Controllers
 
             var queryOptions = new AlbumQueryOptions<Guid, Guid>
             {
-                OwnerUserIds = createdById.HasValue ? new List<Guid> { createdById.Value } : new List<Guid>(),
-
                 CreatedAfter = createdAfter,
                 CreatedBefore = createdBefore,
 
@@ -74,6 +73,8 @@ namespace Astrana.Core.API.Controllers
                 OrderByDirection = orderByByDirection,
                 OrderBy = orderBy
             };
+
+            queryOptions.SetOwnerUserIds(createdById.AsList());
 
             if (includeContentItems.HasValue)
                 queryOptions.IncludeCollectionItems = includeContentItems.Value;
@@ -97,10 +98,7 @@ namespace Astrana.Core.API.Controllers
         {
             var actioningUserId = GetActioningUserId();
 
-            var queryOptions = new AlbumQueryOptions<Guid, Guid>
-            {
-                Ids = new List<Guid> { id }
-            };
+            var queryOptions = new AlbumQueryOptions<Guid, Guid>(id.AsList());
 
             if (includeContentItems.HasValue)
                 queryOptions.IncludeCollectionItems = includeContentItems.Value;

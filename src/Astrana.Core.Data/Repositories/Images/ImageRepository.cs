@@ -154,7 +154,7 @@ namespace Astrana.Core.Data.Repositories.Images
 
                 // Return the current records.
                 if (returnRecords)
-                    return new AddSuccessResult<List<DM.Images.Image>>((await GetImagesAsync(new ImageQueryOptions<Guid, Guid>() { Ids = newImageIds })).Data, countAdded);
+                    return new AddSuccessResult<List<DM.Images.Image>>((await GetImagesAsync(new ImageQueryOptions<Guid, Guid>(newImageIds))).Data, countAdded);
 
                 return new AddSuccessResult<List<DM.Images.Image>>(new List<DM.Images.Image>(), countAdded);
             }
@@ -210,7 +210,7 @@ namespace Astrana.Core.Data.Repositories.Images
 
                 // Return the current records.
                 if (returnRecords)
-                    return new UpdateSuccessResult<List<DM.Images.Image>>((await GetImagesAsync(new ImageQueryOptions<Guid, Guid>() { Ids = updatedImageIds })).Data, countUpdated);
+                    return new UpdateSuccessResult<List<DM.Images.Image>>((await GetImagesAsync(new ImageQueryOptions<Guid, Guid>(updatedImageIds))).Data, countUpdated);
 
                 return new UpdateSuccessResult<List<DM.Images.Image>>(new List<DM.Images.Image>(), countUpdated);
             }

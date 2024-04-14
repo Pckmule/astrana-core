@@ -13,6 +13,7 @@ using Astrana.Core.Framework.Domain;
 using Astrana.Core.Framework.Model;
 using Astrana.Core.Framework.Model.Validation;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Astrana.Core.Domain.Models.Links
 {
@@ -87,8 +88,49 @@ namespace Astrana.Core.Domain.Models.Links
                 throw new InvalidDomainEntityStateException(validationResult.ValidatedEntityName, new Exception(validationResult.Message));
         }
 
+        public Link(LinkToAddDto dto) : this()
+        {
+            if (dto == null)
+                throw new ArgumentNullException(nameof(dto));
+
+            LinkId = Guid.Empty;
+
+            if (dto.Url != null)
+                Url = dto.Url;
+
+            if (!string.IsNullOrEmpty(dto.Title))
+                Title = dto.Title;
+
+            if (!string.IsNullOrEmpty(dto.Description))
+                Description = dto.Description;
+
+            if (!string.IsNullOrEmpty(dto.Caption))
+                Caption = dto.Caption;
+
+            if (!string.IsNullOrEmpty(dto.Locale))
+                Locale = dto.Locale;
+
+            if (!string.IsNullOrEmpty(dto.CharSet))
+                CharSet = dto.CharSet;
+
+            if (!string.IsNullOrEmpty(dto.Robots))
+                Robots = dto.Robots;
+
+            if (!string.IsNullOrEmpty(dto.SiteName))
+                SiteName = dto.SiteName;
+
+            if (dto.PreviewImage != null)
+                PreviewImage = new Image(dto.PreviewImage);
+
+            var validationResult = Validate();
+
+            if (!validationResult.IsSuccess)
+                throw new InvalidDomainEntityStateException(validationResult.ValidatedEntityName, new Exception(validationResult.Message));
+        }
+        
         [Required]
         [Range(ModelProperties.Link.IdMinLength, ModelProperties.Link.IdMaxLength)]
+        [JsonIgnore]
         public Guid LinkId
         {
             get => Id; 

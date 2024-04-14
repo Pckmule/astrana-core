@@ -4,6 +4,9 @@
 * file, You can obtain one at https://mozilla.org/MPL/2.0/.
 */
 
+using System.Collections;
+using System.Diagnostics;
+using Asp.Versioning;
 using Astrana.Core.Configuration;
 using Astrana.Core.Constants;
 using Astrana.Core.Data.DependencyInjection;
@@ -19,9 +22,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
-using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
@@ -30,7 +31,11 @@ using Microsoft.Extensions.Logging;
 using Serilog;
 using System.Net;
 using System.Text.Json.Serialization;
+using Microsoft.Data.SqlClient;
 using ApiConstants = Astrana.Core.Constants.Api;
+using System.Reflection;
+using System.Text.Json.Serialization.Metadata;
+using ImageMagick;
 
 namespace Astrana.Core.API
 {
@@ -49,7 +54,7 @@ namespace Astrana.Core.API
 
         public ProgramBuilder()
         {
-            _configuration = new ConfigurationBuilder().AddProtectedJsonFile(Application.SettingsFileName).Build();
+            _configuration = new ConfigurationBuilder().AddProtectedJsonFile(GetServiceProvider(true).GetRequiredService<IDataProtectionEncryptionUtility>(), Application.SettingsFileName).Build();
             
             _idpManager = GetServiceProvider().GetRequiredService<IIdpManager>();
         }
@@ -64,14 +69,34 @@ namespace Astrana.Core.API
         {
             var builder = WebApplication.CreateBuilder(options);
 
+            builder.Services.AddDataProtection();
+            builder.Services.AddDataEncryption();
+
             builder.Configuration.Sources.Clear();
-            builder.Configuration.AddProtectedJsonFile(Application.SettingsFileName, false);
+            builder.Configuration.AddProtectedJsonFile(ActivatorUtilities.CreateInstance<DataProtectionEncryptionUtility>(builder.Services.BuildServiceProvider()), Application.SettingsFileName, false);
 
             builder.Logging.ClearProviders();
 
             builder.Host.UseSerilog((hostContext, loggerConfiguration) =>
             {
-                loggerConfiguration.ReadFrom.Configuration(hostContext.Configuration);
+                try
+                {
+                    loggerConfiguration.ReadFrom.Configuration(hostContext.Configuration);
+                }
+                catch (Exception ex)
+                {
+                    var debugMessage = "Failure during Serilog configuration.";
+
+                    if (ex is TargetInvocationException && ex.InnerException != null)
+                    {
+                        if (ex.InnerException is SqlException)
+                        {
+                            debugMessage = ex.InnerException.Message;
+                        }
+                    }
+
+                    Debug.WriteLine(debugMessage);
+                }
             });
 
             builder.Services.AddSingleton<IAstranaApiInfo, AstranaApiInfo>();
@@ -83,10 +108,16 @@ namespace Astrana.Core.API
             builder.Services.AddControllers().AddJsonOptions(jsonOptions =>
             {
                 jsonOptions.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+
                 jsonOptions.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
 
+                jsonOptions.JsonSerializerOptions.TypeInfoResolver = new DefaultJsonTypeInfoResolver
+                {
+                    Modifiers = { IgnoreEmptyCollectionTypes }
+                };
+
             }).PartManager.ApplicationParts.Add(new AssemblyPart(typeof(ProgramBuilder).Assembly));
-            
+
             builder.Services.AddHttpContextAccessor();
 
             if (builder.Environment.IsDevelopment())
@@ -117,7 +148,7 @@ namespace Astrana.Core.API
             });
 
             builder.Services.AddRouting(routeOptions => routeOptions.LowercaseUrls = true);
-            
+
             builder.Services.AddAuthentication(authenticationOptions =>
             {
                 authenticationOptions.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -142,13 +173,13 @@ namespace Astrana.Core.API
                     OnChallenge = async (context) =>
                     {
                         context.HandleResponse();
-                        
+
                         if (context.AuthenticateFailure != null)
                         {
                             context.Response.StatusCode = 401;
 
                             context.Response.ContentType = MimeTypeMapper.GetMimeType("json");
-                            
+
                             await context.HttpContext.Response.WriteAsync("{ \"message\": \"Access Denied\" }");
                         }
                     }
@@ -164,13 +195,15 @@ namespace Astrana.Core.API
 
             builder.Services.AddSpaStaticFiles(configuration =>
             {
-               configuration.RootPath = $"{ClientAppDirectory}/build";
+                configuration.RootPath = $"{ClientAppDirectory}/build";
             });
 
             if (enableKestrelHttps)
             {
                 var httpsIpAddress = IPAddress.Loopback;
                 const int httpsPort = 9001;
+
+                Console.WriteLine("https://" + httpsIpAddress + ":" + httpsPort);
 
                 builder.WebHost.UseKestrel(kestrelServerOptions =>
                 {
@@ -261,6 +294,25 @@ namespace Astrana.Core.API
             return app;
         }
 
+        private static void IgnoreEmptyCollectionTypes(JsonTypeInfo jsonTypeInfo)
+        {
+            foreach (var property in jsonTypeInfo.Properties)
+            {
+                if (typeof(IList).IsAssignableFrom(property.PropertyType))
+                {
+                    property.ShouldSerialize += (_, val) => val is IList list && list.Count > 0;
+                }
+                else if (typeof(ICollection).IsAssignableFrom(property.PropertyType))
+                {
+                    property.ShouldSerialize += (_, val) => val is ICollection collection && collection.Count > 0;
+                }
+                else if (typeof(IEnumerable<object>).IsAssignableFrom(property.PropertyType))
+                {
+                    property.ShouldSerialize += (_, val) => val is IEnumerable<object> enumerable && enumerable.Any();
+                }
+            }
+        }
+
         private static bool PathStartsWith(HttpContext httpContext, List<string> paths)
         {
             if(httpContext.Request.Path.Value == null)
@@ -275,16 +327,25 @@ namespace Astrana.Core.API
             return false;
         }
 
-        private ServiceProvider GetServiceProvider()
+        private ServiceProvider GetServiceProvider(bool withoutConfiguration = false)
         {
-            return new ServiceCollection()
-                .AddScoped(_ => _configuration)
-                .AddLogging(l => l.AddConsole())
-                .Configure<LoggerFilterOptions>(c => c.MinLevel = LogLevel.Trace)
-                .AddCoreServices(_configuration)
-                .AddDataServices(_configuration)
-                .AddDomainServices(_configuration)
-                .BuildServiceProvider();
+            var services = new ServiceCollection();
+
+            services.AddDataProtection();
+            services.AddDataEncryption();
+            
+            services.AddLogging(l => l.AddConsole());
+            
+            if (withoutConfiguration)
+                return services.BuildServiceProvider();
+
+            services.AddScoped(_ => _configuration);
+            services.Configure<LoggerFilterOptions>(c => c.MinLevel = LogLevel.Trace);
+            services.AddCoreServices(_configuration);
+            services.AddDataServices(_configuration);
+            services.AddDomainServices(_configuration);
+            
+            return services.BuildServiceProvider();
         }
     }
 }

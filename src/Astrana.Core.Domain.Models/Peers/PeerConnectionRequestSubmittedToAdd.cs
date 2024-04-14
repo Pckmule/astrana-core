@@ -63,7 +63,7 @@ namespace Astrana.Core.Domain.Models.Peers
         /// <example>Remember me? We met at Jane's birthday party.</example>
         [MinLength(ModelProperties.PeerConnectionRequestSubmitted.MinimumNoteLength)]
         [MaxLength(ModelProperties.PeerConnectionRequestSubmitted.MaximumNoteLength)]
-        public string Note { get; set; }
+        public string? Note { get; set; }
 
         /// <summary>
         /// A short lived access token for accessing preview information for the Astrana instance submitting the connection request.

@@ -22,7 +22,7 @@ namespace Astrana.Core.Domain.Models.Audiences
             NamePluralForm = ModelProperties.Audience.NamePluralForm;
         }
 
-        public Guid LinkId { get; set; }
+        public Guid AudienceId { get; set; }
 
         [Required]
         [MinLength(ModelProperties.Audience.MinimumNameLength)]
@@ -30,9 +30,19 @@ namespace Astrana.Core.Domain.Models.Audiences
         public string Name { get; set; }
 
         [Required]
+        [MinLength(ModelProperties.Audience.MinimumNameTrxCodeLength)]
+        [MaxLength(ModelProperties.Audience.MaximumNameTrxCodeLength)]
+        public string NameTrxCode { get; set; }
+
+        [Required]
         [MinLength(ModelProperties.Audience.MinimumDescriptionLength)]
         [MaxLength(ModelProperties.Audience.MaximumDescriptionLength)]
         public string Description { get; set; }
+
+        [Required]
+        [MinLength(ModelProperties.Audience.MinimumDescriptionTrxCodeLength)]
+        [MaxLength(ModelProperties.Audience.MaximumDescriptionTrxCodeLength)]
+        public string DescriptionTrxCode { get; set; }
 
         [Required]
         public Guid CreatedBy { get; set; }

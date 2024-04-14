@@ -36,10 +36,10 @@ namespace Astrana.Core.Data.Repositories.Languages
 
             // Add Filters
             if (options.Ids.Any())
-                query = query.Where(o => options.Ids.Contains(o.Id));
+                query = query.Where(o => options.Ids.Contains(o.LanguageId));
 
             if (options.ExcludeIds.Any())
-                query = query.Where(o => !options.ExcludeIds.Contains(o.Id));
+                query = query.Where(o => !options.ExcludeIds.Contains(o.LanguageId));
 
             if (options.CreatedBefore.HasValue)
                 query = query.Where(o => o.CreatedTimestamp < options.CreatedBefore.Value);
@@ -96,7 +96,7 @@ namespace Astrana.Core.Data.Repositories.Languages
             else
                 resultSetCount = queryResults.Count;
 
-            var countries = queryResults.Select(country => ModelMapper.MapModel<DM.Languages.Language, Language>(country)).ToList();
+            var countries = queryResults.Select(Data.Entities.Configuration.ModelMappings.Language.MapToDomainModel).ToList();
 
             logger.LogInformation(string.Format(MessageRetrievedEntity, nameof(Language)), queryOptions);
 
@@ -148,7 +148,6 @@ namespace Astrana.Core.Data.Repositories.Languages
                     if (newLanguageEntity == null)
                         continue;
 
-                    newLanguageEntity.Code = newLanguageEntity.Code.ToUpperInvariant();
                     newLanguageEntity.TwoLetterCode = newLanguageEntity.TwoLetterCode.ToUpperInvariant();
                     newLanguageEntity.ThreeLetterCode = newLanguageEntity.ThreeLetterCode.ToUpperInvariant();
 
@@ -164,14 +163,14 @@ namespace Astrana.Core.Data.Repositories.Languages
 
                     countAdded++;
 
-                    newLanguageIds.Add(newLanguageEntity.Id);
+                    newLanguageIds.Add(newLanguageEntity.LanguageId);
                 }
 
                 logger.LogInformation(string.Format(MessageSuccessfullyCreatedEntity, newLanguageIds.Count, nameof(Language) + "(s)"));
 
                 // Return the current records.
                 if (returnRecords)
-                    return new AddSuccessResult<List<DM.Languages.Language>>((await GetLanguagesAsync(new LanguageQueryOptions<Guid, Guid>() { Ids = newLanguageIds })).Data, countAdded);
+                    return new AddSuccessResult<List<DM.Languages.Language>>((await GetLanguagesAsync(new LanguageQueryOptions<Guid, Guid>(newLanguageIds))).Data, countAdded);
 
                 return new AddSuccessResult<List<DM.Languages.Language>>(new List<DM.Languages.Language>(), countAdded);
             }
@@ -203,7 +202,7 @@ namespace Astrana.Core.Data.Repositories.Languages
 
                 foreach (var update in requestedUpdates)
                 {
-                    var existingLanguageEntity = await databaseSession.Languages.FirstOrDefaultAsync(o => o.Id == update.LanguageId);
+                    var existingLanguageEntity = await databaseSession.Languages.FirstOrDefaultAsync(o => o.LanguageId == update.LanguageId);
 
                     if (existingLanguageEntity == null)
                         continue;
@@ -211,7 +210,6 @@ namespace Astrana.Core.Data.Repositories.Languages
                     // Update entity fields
 
                     existingLanguageEntity.Name = update.Name.Trim();
-                    existingLanguageEntity.Code = update.Code.ToUpperInvariant().Trim();
                     existingLanguageEntity.TwoLetterCode = update.TwoLetterCode.ToUpperInvariant().Trim();
                     existingLanguageEntity.ThreeLetterCode = update.ThreeLetterCode.ToUpperInvariant().Trim();
 
@@ -225,14 +223,14 @@ namespace Astrana.Core.Data.Repositories.Languages
 
                     countUpdated++;
 
-                    updatedLanguageIds.Add(existingLanguageEntity.Id);
+                    updatedLanguageIds.Add(existingLanguageEntity.LanguageId);
                 }
 
                 logger.LogInformation(string.Format(MessageSuccessfullyUpdatedEntity, updatedLanguageIds.Count, nameof(Language) + "(s)"));
 
                 // Return the current records.
                 if (returnRecords)
-                    return new UpdateSuccessResult<List<DM.Languages.Language>>((await GetLanguagesAsync(new LanguageQueryOptions<Guid, Guid>() { Ids = updatedLanguageIds })).Data, countUpdated);
+                    return new UpdateSuccessResult<List<DM.Languages.Language>>((await GetLanguagesAsync(new LanguageQueryOptions<Guid, Guid>(updatedLanguageIds))).Data, countUpdated);
 
                 return new UpdateSuccessResult<List<DM.Languages.Language>>(new List<DM.Languages.Language>(), countUpdated);
             }

@@ -11,7 +11,9 @@ using Astrana.Core.Domain.Models.Comments.DomainTransferObjects;
 using Astrana.Core.Framework.Domain;
 using Astrana.Core.Framework.Model;
 using Astrana.Core.Framework.Model.Validation;
+using System;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Astrana.Core.Domain.Models.Comments
 {
@@ -59,7 +61,30 @@ namespace Astrana.Core.Domain.Models.Comments
                 throw new InvalidDomainEntityStateException(validationResult.ValidatedEntityName, new Exception(validationResult.Message));
         }
 
+        public Comment(CommentToAddDto dto) : this()
+        {
+            if (dto == null)
+                throw new ArgumentNullException(nameof(dto));
+
+            CommentId = Guid.Empty;
+
+            if (!string.IsNullOrEmpty(dto.Text))
+                Text = dto.Text;
+
+            if (!string.IsNullOrEmpty(dto.ContentId))
+                ContentId = dto.ContentId;
+
+            if (dto.PeerId.HasValue)
+                PeerId = dto.PeerId.Value;
+
+            var validationResult = Validate();
+
+            if (!validationResult.IsSuccess)
+                throw new InvalidDomainEntityStateException(validationResult.ValidatedEntityName, new Exception(validationResult.Message));
+        }
+
         [Required]
+        [JsonIgnore]
         public Guid CommentId
         {
             get => Id; 

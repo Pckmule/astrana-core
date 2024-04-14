@@ -19,79 +19,53 @@ namespace Astrana.Core.Data.Entities.Content
         [Key, Column(Order = 0)]
         public Guid CommentId { get; set; }
 
-        [Required]
         [MinLength(DomainModelProperties.Comment.MinimumTextLength)]
-        [MaxLength(DomainModelProperties.Comment.MaximumTextLength)]
-        [Column(Order = 1)]
         public string Text { get; set; }
-
-        [Column(Order = 2)]
-        public Post? TargetPost { get; set; }
-
-        [Column(Order = 2)]
+        
+        public Post TargetPost { get; set; }
+        
         public long? TargetPostId { get; set; }
-
-        [Column(Order = 3)]
-        public Comment? TargeComment { get; set; }
-
-        [Column(Order = 3)]
+        
+        public Comment TargetComment { get; set; }
+        
         public Guid? TargetCommentId { get; set; }
-
-        [Column(Order = 4)]
-        public Image? TargetImage { get; set; }
-
-        [Column(Order = 4)]
+        
+        public Image TargetImage { get; set; }
+        
         public Guid? TargetImageId { get; set; }
-
-        [Column(Order = 5)]
-        public Video? TargetVideo { get; set; }
-
-        [Column(Order = 5)]
+        
+        public Video TargetVideo { get; set; }
+        
         public Guid? TargetVideoId { get; set; }
-
-        [Column(Order = 6)]
-        public Audio? TargetAudio { get; set; }
-
-        [Column(Order = 6)]
+        
+        public AudioClip TargetAudio { get; set; }
+        
         public Guid? TargetAudioId { get; set; }
-
-        [Column(Order = 7)]
-        public Image? TargetGif { get; set; }
-
-        [Column(Order = 7)]
+        
+        public Image TargetGif { get; set; }
+        
         public Guid? TargetGifId { get; set; }
-
-        [Column(Order = 8)]
-        public Audio? TargetContentCollection { get; set; }
-
-        [Column(Order = 8)]
+        
+        public AudioClip TargetContentCollection { get; set; }
+        
         public Guid? TargetContentCollectionId { get; set; }
         
-        [Column(Order = 9)]
-        public Link? TargetLink { get; set; }
-
-        [Column(Order = 9)]
+        public Link TargetLink { get; set; }
+        
         public Guid? TargetLinkId { get; set; }
 
-        [Column(Order = 99993)]
         public DateTimeOffset? DeactivatedTimestamp { get; set; }
 
-        [Column(Order = 99994)]
-        public string? DeactivatedReason { get; set; } = null;
+        public string DeactivatedReason { get; set; } = null;
 
-        [Column(Order = 99995)]
         public Guid? DeactivatedBy { get; set; }
 
-        [Required, Column(Order = 99996)]
         public Guid CreatedBy { get; set; }
 
-        [Required, Column(Order = 99997)]
         public Guid LastModifiedBy { get; set; }
 
-        [Required, Column(Order = 99998)]
-        public DateTimeOffset CreatedTimestamp { get; set; } = DateTimeOffset.UtcNow;
+        public DateTimeOffset CreatedTimestamp { get; set; }
 
-        [Required, Column(Order = 99999)]
-        public DateTimeOffset LastModifiedTimestamp { get; set; } = DateTimeOffset.UtcNow;
+        public DateTimeOffset LastModifiedTimestamp { get; set; }
     }
 }

@@ -12,7 +12,7 @@ namespace Astrana.Core.Data.Entities.User.ModelMappings
 
             var domainModel = new UserProfileDomainEntity
             {
-                ProfileId = userProfileDataEntity.Id,
+                ProfileId = userProfileDataEntity.UserProfileId,
 
                 FirstName = userProfileDataEntity.FirstName,
                 MiddleNames = userProfileDataEntity.MiddleNames,

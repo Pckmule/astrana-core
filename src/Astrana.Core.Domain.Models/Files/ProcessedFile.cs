@@ -6,13 +6,14 @@
 
 using Astrana.Core.Domain.Models.Files.Constants;
 using Astrana.Core.Domain.Models.Files.Contracts;
-using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
 using Astrana.Core.Framework.Domain;
 using Astrana.Core.Framework.Model.Validation;
+using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Astrana.Core.Domain.Models.Files
 {
+    // DTO?
     public class ProcessedFile : DomainEntity, IProcessedFile
     {
         [JsonConstructor]

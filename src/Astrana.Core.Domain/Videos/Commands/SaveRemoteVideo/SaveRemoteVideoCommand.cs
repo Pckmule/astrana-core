@@ -50,6 +50,8 @@ namespace Astrana.Core.Domain.Videos.Commands.SaveRemoteVideo
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, ex.Message);
+
                 return new AddFailResult<List<Video>>(null, 0, "Remote file save failed. " + ex.Message, ErrorCodes.Default);
             }
         }

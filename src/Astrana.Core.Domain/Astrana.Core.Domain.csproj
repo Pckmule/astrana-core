@@ -1,7 +1,7 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
@@ -16,18 +16,20 @@
   <ItemGroup>
     <Folder Include="ApiAccessTokens\" />
     <Folder Include="ExternalFeeds\Commands\" />
+    <Folder Include="ExternalFeeds\Models\" />
     <Folder Include="Images\Queries\" />
     <Folder Include="Languages\Commands\" />
     <Folder Include="ProfileCoverPicture\Queries\" />
     <Folder Include="ProfilePicture\Queries\" />
+    <Folder Include="Sources\" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AgeCalculator" Version="1.3.0" />
+    <PackageReference Include="AgeCalculator" Version="1.4.0" />
     <PackageReference Include="AntiVirusScanner" Version="1.0.2" />
-    <PackageReference Include="HtmlAgilityPack" Version="1.11.51" />
-    <PackageReference Include="Magick.NET-Q8-x64" Version="13.2.0" />
-    <PackageReference Include="Magick.NET.Core" Version="13.2.0" />
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.59" />
+    <PackageReference Include="Magick.NET-Q8-x64" Version="13.6.0" />
+    <PackageReference Include="Magick.NET.Core" Version="13.6.0" />
   </ItemGroup>
 
 </Project>

@@ -28,6 +28,9 @@ namespace Astrana.Core.Domain.Models.SystemSettings.Constants
             public const int MinimumValueLength = 1;
             public const int MaximumValueLength = 500;
 
+            public const int MinimumValueOptionsLookupNameLength = 1;
+            public const int MaximumValueOptionsLookupNameLength = 100;
+
             public const int MinimumShortDescriptionLength = 0;
             public const int MaximumShortDescriptionLength = 500;
 
@@ -36,6 +39,9 @@ namespace Astrana.Core.Domain.Models.SystemSettings.Constants
 
             public const int MinimumHelpTextLength = 0;
             public const int MaximumHelpTextLength = 500;
+
+            public const int MinimumHelpTextTrxCodeLength = 1;
+            public const int MaximumHelpTextTrxCodeLength = 100;
         }
 
         public static class SystemSettingCategory

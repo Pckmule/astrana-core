@@ -20,15 +20,23 @@ namespace Astrana.Core.Domain.Models.IdentityAccessManagement.Constants
         {
             settings.Add(new SystemSetting
             {
+                SystemSettingId = new Guid("c269f856-f3f6-48f8-a6c7-0acac6dbe50b"),
                 Name = Names.MultiFactorAuthentication,
+                NameTrxCode = GetTrxCode(Names.MultiFactorAuthentication),
                 DataType = SystemDataType.Boolean,
                 DefaultValue = "0",
                 ShortDescription = "Turn multi-factor authentication on/off.",
                 HelpText = null,
-                UserMaySet = true
+                UserMaySet = true,
+                SystemSettingCategoryId = SettingCategoryDefinitions.FindByName(SettingCategoryDefinitions.Names.AccessControl)?.Id
             });
 
             return settings;
+        }
+
+        private static string GetTrxCode(string name)
+        {
+            return "system_setting_" + name.Replace(" ", "_").ToLower();
         }
     }
 }

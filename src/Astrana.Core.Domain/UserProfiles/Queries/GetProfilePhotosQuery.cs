@@ -43,8 +43,6 @@ namespace Astrana.Core.Domain.UserProfiles.Queries
         {
             var queryOptions = new ContentCollectionQueryOptions<Guid, Guid>
             {
-                OwnerUserIds = options?.OwnerUserIds,
-
                 CreatedAfter = options?.CreatedAfter,
                 CreatedBefore = options?.CreatedBefore,
 
@@ -57,6 +55,8 @@ namespace Astrana.Core.Domain.UserProfiles.Queries
                 IncludeCollectionItems = true,
                 CollectionType = ContentCollectionType.Generic
             };
+
+            queryOptions.SetOwnerUserIds(options?.OwnerUserIds);
 
             var instanceUser = await _userManager.GetInstanceUserAsync();
 

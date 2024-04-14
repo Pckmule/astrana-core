@@ -30,6 +30,8 @@ namespace Astrana.Core.Domain.Models.Peers.DomainTransferObjects
         public string? PeerAccessToken { get; set; }
 
         public bool? IsMuted { get; set; }
+        
+        public PeerStatisticsDto? Statistics { get; set; }
 
         public Guid? CreatedBy { get; set; }
 

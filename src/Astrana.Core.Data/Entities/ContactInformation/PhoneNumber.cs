@@ -4,25 +4,41 @@
 * file, You can obtain one at https://mozilla.org/MPL/2.0/.
 */
 
-using Astrana.Core.Data.Attributes;
 using Astrana.Core.Data.Constants;
 using Astrana.Core.Data.Entities.User;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Astrana.Core.Attributes;
+using DomainModelProperties = Astrana.Core.Domain.Models.PhoneNumbers.Constants.ModelProperties;
 
 #nullable disable
 
 namespace Astrana.Core.Data.Entities.ContactInformation
 {
     [Table("PhoneNumbers", Schema = SchemaNames.ContactInformation)]
-    public class PhoneNumber : BaseDeactivatableEntity<Guid, Guid>
+    public class PhoneNumber
     {
-        [PersonalData]
-        [MaxLength(100)]
-        [Column(Order = 1)]
-        public string Address { get; set; }
+        [Key, Column(Order = 0)]
+        public Guid PhoneNumberId { get; set; }
 
-        [Column(Order = 2)]
-        public ICollection<UserPhoneNumberRelationship> PhoneNumbers { get; set; } = new List<UserPhoneNumberRelationship>();
+        [PersonalData]
+        [MinLength(DomainModelProperties.PhoneNumber.MinimumNumberLength)]
+        public string Number { get; set; }
+
+        public ICollection<UserPhoneNumberRelationship> Relationships { get; set; } = new List<UserPhoneNumberRelationship>();
+
+        public DateTimeOffset? DeactivatedTimestamp { get; set; }
+
+        public string DeactivatedReason { get; set; } = null;
+
+        public Guid? DeactivatedBy { get; set; }
+
+        public Guid CreatedBy { get; set; }
+
+        public Guid LastModifiedBy { get; set; }
+
+        public DateTimeOffset CreatedTimestamp { get; set; }
+
+        public DateTimeOffset LastModifiedTimestamp { get; set; }
     }
 }

@@ -74,6 +74,17 @@
 	"country_name_es": "西班牙",
 	"country_name_gb": "英国",
 	"country_name_us": "美国",
+
+	"language_name_en": "英语",
+	"language_name_af": "南非荷兰语",
+	"language_name_zh": "中文",
+	"language_name_fr": "法语",
+	"language_name_he": "希伯来语",
+	"language_name_hi": "印地语",
+	"language_name_es": "西班牙语",
+	"language_name_ru": "俄语",
+	"language_name_zu": "祖鲁语",
+
 	"nav_menuitem_community_feed": "社区动态",
 	"nav_menuitem_pin_boards": "针板",
 	"nav_menuitem_news_reader": "新闻阅读器",

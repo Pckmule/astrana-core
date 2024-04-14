@@ -16,22 +16,22 @@ namespace Astrana.Core.Domain.Models.AudioClips
     {
         public AudioToAdd()
         {
-            NameUnique = ModelProperties.Audio.NameUnique;
-            NameSingularForm = ModelProperties.Audio.NameSingularForm;
-            NamePluralForm = ModelProperties.Audio.NamePluralForm;
+            NameUnique = ModelProperties.AudioClip.NameUnique;
+            NameSingularForm = ModelProperties.AudioClip.NameSingularForm;
+            NamePluralForm = ModelProperties.AudioClip.NamePluralForm;
         }
 
         [Required]
-        [MinLength(ModelProperties.Audio.MinimumLocationLength)]
-        [MaxLength(ModelProperties.Audio.MaximumLocationLength)]
+        [MinLength(ModelProperties.AudioClip.MinimumLocationLength)]
+        [MaxLength(ModelProperties.AudioClip.MaximumLocationLength)]
         public string Location { get; set; }
 
-        [MinLength(ModelProperties.Audio.MinimumCaptionLength)]
-        [MaxLength(ModelProperties.Audio.MaximumCaptionLength)]
+        [MinLength(ModelProperties.AudioClip.MinimumCaptionLength)]
+        [MaxLength(ModelProperties.AudioClip.MaximumCaptionLength)]
         public string? Caption { get; set; }
 
-        [MinLength(ModelProperties.Audio.MinimumCopyrightLength)]
-        [MaxLength(ModelProperties.Audio.MaximumCopyrightLength)]
+        [MinLength(ModelProperties.AudioClip.MinimumCopyrightLength)]
+        [MaxLength(ModelProperties.AudioClip.MaximumCopyrightLength)]
         public string? Copyright { get; set; }
 
         public override EntityValidationResult Validate()

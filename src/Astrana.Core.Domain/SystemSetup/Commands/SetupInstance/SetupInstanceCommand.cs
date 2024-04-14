@@ -5,7 +5,6 @@
 */
 
 using Astrana.Core.Configuration;
-using Astrana.Core.Constants;
 using Astrana.Core.Domain.Models.Results;
 using Astrana.Core.Domain.Models.Results.Enums;
 using Astrana.Core.Domain.Models.SystemSetup;
@@ -19,12 +18,14 @@ namespace Astrana.Core.Domain.SystemSetup.Commands.SetupInstance
     {
         private readonly ILogger<SetupInstanceCommand> _logger;
         private readonly IHostEnvironment _environment;
+        private readonly IDataProtectionEncryptionUtility _dataProtectionEncryptionUtility;
         private readonly ISetupInstanceUserCommand _setupInstanceUserCommand;
 
-        public SetupInstanceCommand(ILogger<SetupInstanceCommand> logger, IHostEnvironment environment, ISetupInstanceUserCommand setupInstanceUserCommand)
+        public SetupInstanceCommand(ILogger<SetupInstanceCommand> logger, IHostEnvironment environment, IDataProtectionEncryptionUtility dataProtectionEncryptionUtility, ISetupInstanceUserCommand setupInstanceUserCommand)
         {
             _logger = logger;
             _environment = environment;
+            _dataProtectionEncryptionUtility = dataProtectionEncryptionUtility;
             _setupInstanceUserCommand = setupInstanceUserCommand;
         }
 
@@ -44,10 +45,10 @@ namespace Astrana.Core.Domain.SystemSetup.Commands.SetupInstance
             if (createUserResult.Outcome == ResultOutcome.Failure)
                 return new ExecutionFailResult(createUserResult.Message);
 
-            EncryptionUtility.StoreEncryptionKey();
-            EncryptionUtility.StoreInitializationVector();
+            // EncryptionUtility.StoreEncryptionKey();
+            // EncryptionUtility.StoreInitializationVector();
 
-            var isConfigurationSecured = await new ConfigurationManager(Path.Combine(new[] { _environment.ContentRootPath, Application.SettingsFileName })).SecureAfterSetupAsync();
+            var isConfigurationSecured = await new ConfigurationManager(Path.Combine(new[] { _environment.ContentRootPath, Constants.Application.SettingsFileName }), _dataProtectionEncryptionUtility).SecureAfterSetupAsync();
 
             if (!isConfigurationSecured)
             {

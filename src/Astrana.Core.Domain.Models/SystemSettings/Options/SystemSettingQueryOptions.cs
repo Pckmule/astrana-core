@@ -20,6 +20,10 @@ namespace Astrana.Core.Domain.Models.SystemSettings.Options
 
         public List<string> Names { get; set; } = new();
 
-        public List<string> Categories { get; set; } = new();
+        public List<string> CategoryIds { get; set; } = new();
+
+        public bool? IncludeUserSettable { get; set; }
+
+        public bool? IncludeSystemSettable { get; set; }
     }
 }

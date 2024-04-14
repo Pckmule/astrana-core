@@ -4,6 +4,6 @@ namespace Astrana.Core.Domain.Peers.Queries
 {
     public interface IGetPeerSummaryQuery
     {
-        Task<PeerSummaryDto> ExecuteAsync(Guid peerId, Guid actioningUserId);
+        Task<PeerSummaryDto> ExecuteAsync(Guid actioningUserId, Guid peerId, bool includeStatistics = false);
     }
 }

@@ -63,6 +63,7 @@
 	"rejected": "अस्वीकार कर दिया",
 	"test_connection": "परीक्षण कनेक्शन",
 	"testing": "परिक्षण",
+
 	"country_name_au": "ऑस्ट्रेलिया",
 	"country_name_br": "ब्राज़िल",
 	"country_name_cn": "चीन",
@@ -74,6 +75,17 @@
 	"country_name_es": "स्पेन",
 	"country_name_gb": "यूनाइटेड किंगडम",
 	"country_name_us": "संयुक्त राज्य अमेरिका",
+
+	"language_name_en": "अंग्रेजी",
+	"language_name_af": "अफ़्रीकी",
+	"language_name_zh": "चीनी",
+	"language_name_fr": "फ़्रेंच",
+	"language_name_he": "हिब्रू",
+	"language_name_hi": "हिन्दी",
+	"language_name_es": "स्पेनिश",
+	"language_name_ru": "रूसी",
+	"language_name_zu": "ज़ुलु",
+
 	"nav_menuitem_community_feed": "सामुदायिक फ़ीड",
 	"nav_menuitem_pin_boards": "पिन बोर्ड",
 	"nav_menuitem_news_reader": "न्यूज रीडर",

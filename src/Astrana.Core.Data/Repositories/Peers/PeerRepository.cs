@@ -192,7 +192,7 @@ namespace Astrana.Core.Data.Repositories.Peers
 
                 // Return the current records.
                 if (returnRecords)
-                    return new AddSuccessResult<List<DM.Peers.Peer>>((await GetPeersAsync(new PeerQueryOptions<Guid, Guid> { Ids = newPeerIds })).Data, countAdded);
+                    return new AddSuccessResult<List<DM.Peers.Peer>>((await GetPeersAsync(new PeerQueryOptions<Guid, Guid>(newPeerIds))).Data, countAdded);
                 
                 return new AddSuccessResult<List<DM.Peers.Peer>>(new List<DM.Peers.Peer>(), countAdded);
             }
@@ -253,7 +253,7 @@ namespace Astrana.Core.Data.Repositories.Peers
 
                 // Return the current records.
                 if (returnRecords)
-                    return new UpdateSuccessResult<List<DM.Peers.Peer>>((await GetPeersAsync(new PeerQueryOptions<Guid, Guid>() { Ids = updatedPeerIds })).Data, countUpdated);
+                    return new UpdateSuccessResult<List<DM.Peers.Peer>>((await GetPeersAsync(new PeerQueryOptions<Guid, Guid>(updatedPeerIds))).Data, countUpdated);
                 
                 return new UpdateSuccessResult<List<DM.Peers.Peer>>(new List<DM.Peers.Peer>(), countUpdated);
             }
@@ -290,10 +290,10 @@ namespace Astrana.Core.Data.Repositories.Peers
 
             // Add Filters
             if (options.Ids.Any() || options.IdsMatchMode == QueryOptionsMatchMode.Strict)
-                query = query.Where(o => options.Ids.Contains(o.Id));
+                query = query.Where(o => options.Ids.Contains(o.PeerConnectionRequestReceivedId));
 
             if (options.ExcludeIds.Any())
-                query = query.Where(o => !options.ExcludeIds.Contains(o.Id));
+                query = query.Where(o => !options.ExcludeIds.Contains(o.PeerConnectionRequestReceivedId));
 
             if (options.CreatedBefore.HasValue)
                 query = query.Where(o => o.CreatedTimestamp < options.CreatedBefore.Value);
@@ -359,6 +359,7 @@ namespace Astrana.Core.Data.Repositories.Peers
 
             return CreateGetResultWithPagination(peerConnectionRequests, queryOptions, resultSetCount);
         }
+        
 
         /// <summary>
         /// Adds new Received Peer Connection Requests to the Data Source.
@@ -367,7 +368,7 @@ namespace Astrana.Core.Data.Repositories.Peers
         /// <param name="actioningUserId"></param>
         /// <param name="returnRecords"></param>
         /// <returns></returns>
-        public async Task<IAddResult<List<DM.Peers.PeerConnectionRequestReceived>>> CreateReceivedPeerConnectionRequestsAsync(IEnumerable<IPeerConnectionRequestReceivedToAdd> requestedAdditions, Guid actioningUserId, bool returnRecords = true)
+        public async Task<IAddResult<List<DM.Peers.PeerConnectionRequestReceived>>> CreateReceivedPeerConnectionRequestsAsync(IEnumerable<DM.Peers.PeerConnectionRequestReceived> requestedAdditions, Guid actioningUserId, bool returnRecords = true)
         {
             ValidateActioningUserId(actioningUserId);
 
@@ -380,7 +381,7 @@ namespace Astrana.Core.Data.Repositories.Peers
 
                 foreach (var addition in requestedAdditions)
                 {
-                    var newPeerConnectionRequestEntity = ModelMapper.MapModel<PeerConnectionRequestReceived, IPeerConnectionRequestReceivedToAdd>(addition);
+                    var newPeerConnectionRequestEntity = ModelMapper.MapModel<PeerConnectionRequestReceived, DM.Peers.PeerConnectionRequestReceived>(addition);
 
                     if (newPeerConnectionRequestEntity == null)
                         continue;
@@ -397,14 +398,14 @@ namespace Astrana.Core.Data.Repositories.Peers
 
                     countAdded++;
 
-                    newPeerConnectionRequestIds.Add(newPeerConnectionRequestEntity.Id);
+                    newPeerConnectionRequestIds.Add(newPeerConnectionRequestEntity.PeerConnectionRequestReceivedId);
                 }
 
                 logger.LogInformation(string.Format(MessageSuccessfullyCreatedEntity, newPeerConnectionRequestIds.Count, nameof(PeerConnectionRequestReceived) + "(s)"));
 
                 // Return the current records.
                 if (returnRecords)
-                    return new AddSuccessResult<List<DM.Peers.PeerConnectionRequestReceived>>((await GetReceivedPeerConnectionRequestsAsync(new ReceivedPeerConnectionRequestQueryOptions<Guid, Guid> { Ids = newPeerConnectionRequestIds, IdsMatchMode = QueryOptionsMatchMode.Strict})).Data, countAdded);
+                    return new AddSuccessResult<List<DM.Peers.PeerConnectionRequestReceived>>((await GetReceivedPeerConnectionRequestsAsync(new ReceivedPeerConnectionRequestQueryOptions<Guid, Guid>(newPeerConnectionRequestIds) { IdsMatchMode = QueryOptionsMatchMode.Strict})).Data, countAdded);
 
                 return new AddSuccessResult<List<DM.Peers.PeerConnectionRequestReceived>>(new List<DM.Peers.PeerConnectionRequestReceived>(), countAdded);
             }
@@ -434,7 +435,7 @@ namespace Astrana.Core.Data.Repositories.Peers
             {
                 var now = DateTime.UtcNow;
 
-                var existingPeerConnectionRequestEntity = await databaseSession.PeerConnectionRequestsReceived.FirstOrDefaultAsync(o => o.Id == requestedUpdateId);
+                var existingPeerConnectionRequestEntity = await databaseSession.PeerConnectionRequestsReceived.FirstOrDefaultAsync(o => o.PeerConnectionRequestReceivedId == requestedUpdateId);
 
                 if (existingPeerConnectionRequestEntity == null)
                     throw new EntityNotFoundException();
@@ -461,6 +462,7 @@ namespace Astrana.Core.Data.Repositories.Peers
                     // Build Peer record.
                     var newPeerEntity = new Peer
                     {
+                        VirtualProfileId = new Guid(),
                         FirstName = existingPeerConnectionRequestEntity.FirstName,
                         LastName = existingPeerConnectionRequestEntity.LastName,
                         Address = existingPeerConnectionRequestEntity.Address,
@@ -482,14 +484,14 @@ namespace Astrana.Core.Data.Repositories.Peers
 
                     countUpdated++;
 
-                    updatedPeerConnectionRequestIds.Add(existingPeerConnectionRequestEntity.Id);
+                    updatedPeerConnectionRequestIds.Add(existingPeerConnectionRequestEntity.PeerConnectionRequestReceivedId);
 
                     logger.LogInformation(string.Format(MessageSuccessfullyUpdatedEntity,
                         updatedPeerConnectionRequestIds.Count, nameof(PeerConnectionRequestReceived) + "(s)"));
 
                     // Return the current record.
                     if (returnRecords)
-                        return new UpdateSuccessResult<List<DM.Peers.PeerConnectionRequestReceived>>((await GetReceivedPeerConnectionRequestsAsync(new ReceivedPeerConnectionRequestQueryOptions<Guid, Guid> { Ids = updatedPeerConnectionRequestIds, IdsMatchMode = QueryOptionsMatchMode.Strict })).Data, countUpdated, "Successfully accepted peer connection request(s).");
+                        return new UpdateSuccessResult<List<DM.Peers.PeerConnectionRequestReceived>>((await GetReceivedPeerConnectionRequestsAsync(new ReceivedPeerConnectionRequestQueryOptions<Guid, Guid>(updatedPeerConnectionRequestIds) { IdsMatchMode = QueryOptionsMatchMode.Strict })).Data, countUpdated, "Successfully accepted peer connection request(s).");
 
                     return new UpdateSuccessResult<List<DM.Peers.PeerConnectionRequestReceived>>(new List<DM.Peers.PeerConnectionRequestReceived>(), countUpdated, "Successfully accepted peer connection request(s).");
                 }
@@ -530,7 +532,7 @@ namespace Astrana.Core.Data.Repositories.Peers
 
                 // Return the current records.
                 if (returnRecords)
-                    return new UpdateSuccessResult<List<DM.Peers.PeerConnectionRequestReceived>>((await GetReceivedPeerConnectionRequestsAsync(new ReceivedPeerConnectionRequestQueryOptions<Guid, Guid> { Ids = updatedPeerConnectionRequestIds, IdsMatchMode = QueryOptionsMatchMode.Strict })).Data, countUpdated, "Successfully accepted peer connection request(s).");
+                    return new UpdateSuccessResult<List<DM.Peers.PeerConnectionRequestReceived>>((await GetReceivedPeerConnectionRequestsAsync(new ReceivedPeerConnectionRequestQueryOptions<Guid, Guid>(updatedPeerConnectionRequestIds) { IdsMatchMode = QueryOptionsMatchMode.Strict })).Data, countUpdated, "Successfully accepted peer connection request(s).");
 
                 return new UpdateSuccessResult<List<DM.Peers.PeerConnectionRequestReceived>>(new List<DM.Peers.PeerConnectionRequestReceived>(), countUpdated, "Successfully accepted peer connection request(s).");
             }
@@ -562,7 +564,7 @@ namespace Astrana.Core.Data.Repositories.Peers
 
                 foreach (var updateId in requestedUpdateIds)
                 {
-                    var existingPeerConnectionRequestEntity = await databaseSession.PeerConnectionRequestsReceived.FirstOrDefaultAsync(o => o.Id == updateId);
+                    var existingPeerConnectionRequestEntity = await databaseSession.PeerConnectionRequestsReceived.FirstOrDefaultAsync(o => o.PeerConnectionRequestReceivedId == updateId);
 
                     if (existingPeerConnectionRequestEntity == null)
                         continue;
@@ -570,7 +572,7 @@ namespace Astrana.Core.Data.Repositories.Peers
                     if (existingPeerConnectionRequestEntity.Status != PeerConnectionRequestStatus.Default)
                     {
                         countUpdated++;
-                        updatedPeerConnectionRequestIds.Add(existingPeerConnectionRequestEntity.Id);
+                        updatedPeerConnectionRequestIds.Add(existingPeerConnectionRequestEntity.PeerConnectionRequestReceivedId);
                         
                         continue;
                     }
@@ -589,14 +591,14 @@ namespace Astrana.Core.Data.Repositories.Peers
 
                     countUpdated++;
 
-                    updatedPeerConnectionRequestIds.Add(existingPeerConnectionRequestEntity.Id);
+                    updatedPeerConnectionRequestIds.Add(existingPeerConnectionRequestEntity.PeerConnectionRequestReceivedId);
                 }
 
                 logger.LogInformation(string.Format(MessageSuccessfullyUpdatedEntity, updatedPeerConnectionRequestIds.Count, nameof(PeerConnectionRequestReceived) + "(s)"));
 
                 // Return the current records.
                 if (returnRecords)
-                    return new UpdateSuccessResult<List<DM.Peers.PeerConnectionRequestReceived>>((await GetReceivedPeerConnectionRequestsAsync(new ReceivedPeerConnectionRequestQueryOptions<Guid, Guid> { Ids = updatedPeerConnectionRequestIds, IdsMatchMode = QueryOptionsMatchMode.Strict})).Data, countUpdated);
+                    return new UpdateSuccessResult<List<DM.Peers.PeerConnectionRequestReceived>>((await GetReceivedPeerConnectionRequestsAsync(new ReceivedPeerConnectionRequestQueryOptions<Guid, Guid>(updatedPeerConnectionRequestIds) { IdsMatchMode = QueryOptionsMatchMode.Strict})).Data, countUpdated);
 
                 return new UpdateSuccessResult<List<DM.Peers.PeerConnectionRequestReceived>>(new List<DM.Peers.PeerConnectionRequestReceived>(), countUpdated);
             }
@@ -633,10 +635,10 @@ namespace Astrana.Core.Data.Repositories.Peers
 
             // Add Filters
             if (options.Ids.Any() || options.IdsMatchMode == QueryOptionsMatchMode.Strict)
-                query = query.Where(o => options.Ids.Contains(o.Id));
+                query = query.Where(o => options.Ids.Contains(o.PeerConnectionRequestSubmittedId));
 
             if (options.ExcludeIds.Any())
-                query = query.Where(o => !options.ExcludeIds.Contains(o.Id));
+                query = query.Where(o => !options.ExcludeIds.Contains(o.PeerConnectionRequestSubmittedId));
 
             if (options.CreatedBefore.HasValue)
                 query = query.Where(o => o.CreatedTimestamp < options.CreatedBefore.Value);
@@ -740,14 +742,14 @@ namespace Astrana.Core.Data.Repositories.Peers
 
                     countAdded++;
 
-                    newPeerConnectionRequestIds.Add(newPeerConnectionRequestEntity.Id);
+                    newPeerConnectionRequestIds.Add(newPeerConnectionRequestEntity.PeerConnectionRequestSubmittedId);
                 }
 
                 logger.LogInformation(string.Format(MessageSuccessfullyCreatedEntity, newPeerConnectionRequestIds.Count, nameof(PeerConnectionRequestSubmitted) + "(s)"));
 
                 // Return the current records.
                 if (returnRecords)
-                    return new AddSuccessResult<List<DM.Peers.PeerConnectionRequestSubmitted>>((await GetSubmittedPeerConnectionRequestsAsync(new SubmittedPeerConnectionRequestQueryOptions<Guid, Guid> { Ids = newPeerConnectionRequestIds, IdsMatchMode = QueryOptionsMatchMode.Strict })).Data, countAdded);
+                    return new AddSuccessResult<List<DM.Peers.PeerConnectionRequestSubmitted>>((await GetSubmittedPeerConnectionRequestsAsync(new SubmittedPeerConnectionRequestQueryOptions<Guid, Guid>(newPeerConnectionRequestIds) { IdsMatchMode = QueryOptionsMatchMode.Strict })).Data, countAdded);
 
                 return new AddSuccessResult<List<DM.Peers.PeerConnectionRequestSubmitted>>(new List<DM.Peers.PeerConnectionRequestSubmitted>(), countAdded);
             }

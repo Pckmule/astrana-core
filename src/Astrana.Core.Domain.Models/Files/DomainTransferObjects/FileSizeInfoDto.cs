@@ -11,17 +11,17 @@ namespace Astrana.Core.Domain.Models.Files.DomainTransferObjects
     public class FileSizeInfoDto
     {
         [JsonConstructor]
-        public FileSizeInfoDto(long sizeInBytes = 0, long width = 0, long height = 0)
+        public FileSizeInfoDto(long? sizeInBytes = 0, long? width = 0, long? height = 0)
         {
             Bytes = sizeInBytes;
             Width = width;
             Height = height;
         }
 
-        public long Bytes { get; set; }
+        public long? Bytes { get; set; }
 
-        public long Width { get; set; }
+        public long? Width { get; set; }
 
-        public long Height { get; set; }
+        public long? Height { get; set; }
     }
 }

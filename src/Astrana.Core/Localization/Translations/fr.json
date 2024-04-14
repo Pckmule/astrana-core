@@ -62,6 +62,7 @@
 	"rejected": "Rejeté",
 	"test_connection": "Tester la connexion",
 	"testing": "Test",
+
 	"country_name_au": "Australie",
 	"country_name_br": "Brésil",
 	"country_name_cn": "Chine",
@@ -73,6 +74,17 @@
 	"country_name_es": "Espagne",
 	"country_name_gb": "Royaume-Uni",
 	"country_name_us": "États-Unis",
+
+	"language_name_en": "Anglais",
+	"language_name_af": "Afrikaans",
+	"language_name_zh": "Chinois",
+	"language_name_fr": "Français",
+	"language_name_he": "Hébreu",
+	"language_name_hi": "Hindi",
+	"language_name_es": "Espagnol",
+	"language_name_ru": "Russe",
+	"language_name_zu": "Zoulou",
+
 	"nav_menuitem_community_feed": "Flux de la communauté",
 	"nav_menuitem_pin_boards": "Tableaux d'affichage",
 	"nav_menuitem_news_reader": "Lecteur de nouvelles",

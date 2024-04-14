@@ -12,8 +12,10 @@ namespace Astrana.Core.Constants
     {
         public const string Default = "0x0";
 
-        public const string OnlyOneAllowed = "0x1";
-        public const string UniqueValueRequired = "0x2";
+        public const string ActionAborted = "0x1";
+        public const string DuplicateKey = "0x2";
+        public const string OnlyOneAllowed = "0x3";
+        public const string UniqueValueRequired = "0x4";
 
         public const string PrerequisitesNotSatisfied = "0x301";
         public const string ConditionsNotMet = "0x302";

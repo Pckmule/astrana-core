@@ -5,11 +5,14 @@
 */
 
 using Astrana.Core.Data.Repositories.Peers;
+using Astrana.Core.Domain.Models.Notifications.DomainTransferObjects;
+using Astrana.Core.Domain.Models.Notifications.Enums;
 using Astrana.Core.Domain.Models.Peers;
 using Astrana.Core.Domain.Models.Peers.Constants;
 using Astrana.Core.Domain.Models.Results;
 using Astrana.Core.Domain.Models.Results.Enums;
 using Astrana.Core.Domain.Models.System.Enums;
+using Astrana.Core.Domain.Notifications.Commands.Handlers.CreateNotifications;
 using Astrana.Core.Extensions;
 using Microsoft.Extensions.Logging;
 using MRB = Astrana.Core.Domain.ResultMessageBuilder;
@@ -19,16 +22,19 @@ namespace Astrana.Core.Domain.Peers.Commands.CreatePeerConnectionRequests
     public class CreateReceivedPeerConnectionRequestsCommand : ICreateReceivedPeerConnectionRequestsCommand
     {
         private readonly ILogger<CreateReceivedPeerConnectionRequestsCommand> _logger;
+
+        private readonly ICreateNotificationsCommandHandler _createNotificationsCommandHandler;
         private readonly IPeerRepository<Guid> _peerRepository;
 
-        public CreateReceivedPeerConnectionRequestsCommand(ILogger<CreateReceivedPeerConnectionRequestsCommand> logger, IPeerRepository<Guid> peerRepository)
+        public CreateReceivedPeerConnectionRequestsCommand(ILogger<CreateReceivedPeerConnectionRequestsCommand> logger, ICreateNotificationsCommandHandler createNotificationsCommandHandler, IPeerRepository<Guid> peerRepository)
         {
             _logger = logger;
 
+            _createNotificationsCommandHandler = createNotificationsCommandHandler;
             _peerRepository = peerRepository;
         }
 
-        public async Task<AddResult<List<PeerConnectionRequestReceived>>> ExecuteAsync(IList<PeerConnectionRequestReceivedToAdd> peerConnectionRequestsToAdd, Guid actioningUserId)
+        public async Task<AddResult<List<PeerConnectionRequestReceived>>> ExecuteAsync(IList<PeerConnectionRequestReceived> peerConnectionRequestsToAdd, Guid actioningUserId)
         {
             if (!peerConnectionRequestsToAdd.Any())
             {
@@ -54,8 +60,21 @@ namespace Astrana.Core.Domain.Peers.Commands.CreatePeerConnectionRequests
             var result = await _peerRepository.CreateReceivedPeerConnectionRequestsAsync(validatedPeerConnectionRequestsToAdd, actioningUserId.UseSystemUserIdIfUserIsAnonymous());
 
             if (result.Outcome == ResultOutcome.Success)
+            {
+                var notifications = validatedPeerConnectionRequestsToAdd.Select(connectionRequestReceived => new AddNotificationDto
+                {
+                    Type = NotificationType.AcceptNewPeerConnectionRequest, 
+                    Message = (connectionRequestReceived.FirstName + " " + connectionRequestReceived.LastName).Trim() + " would like to connect.",
+                    SourceId = connectionRequestReceived.Address,
+                    SourceType = NotificationSourceType.Peer
+
+                }).ToList();
+
+                await _createNotificationsCommandHandler.ExecuteAsync(notifications, Constants.SystemUser.IdGuid);
+
                 return new AddSuccessResult<List<PeerConnectionRequestReceived>>(result.Data, result.Count, MRB.CreateSuccessResultMessage(ModelProperties.PeerConnectionRequestReceived.NameSingularForm, ModelProperties.PeerConnectionRequestReceived.NamePluralForm, result.Count));
-            
+            }
+
             return new AddFailResult<List<PeerConnectionRequestReceived>>(result.Data, result.Count, result.Message, result.ResultCode);
         }
     }

@@ -5,8 +5,8 @@
 */
 
 using Astrana.Core.Data.Repositories.ExternalContentSubscriptions;
-using Astrana.Core.Domain.Models.ExternalContentSubscriptions;
-using Astrana.Core.Domain.Models.ExternalContentSubscriptions.Constants;
+using Astrana.Core.Domain.Models.ExternalContent.Subscriptions;
+using Astrana.Core.Domain.Models.ExternalContent.Subscriptions.Constants;
 using Astrana.Core.Domain.Models.Results;
 using Astrana.Core.Domain.Models.Results.Enums;
 using Astrana.Core.Domain.Models.System.Enums;
@@ -26,7 +26,7 @@ namespace Astrana.Core.Domain.ExternalContentSubscriptions.Commands.UpdateExtern
             _externalContentSubscriptionRepository = externalContentSubscriptionRepository;
         }
 
-        public async Task<UpdateResult<List<ExternalSubscription>>> ExecuteAsync(IList<ExternalSubscription> externalContentSubscriptionsToUpdate, Guid actioningUserId)
+        public async Task<UpdateResult<List<ExternalContentSubscription>>> ExecuteAsync(IList<ExternalContentSubscription> externalContentSubscriptionsToUpdate, Guid actioningUserId)
         {
             if (!externalContentSubscriptionsToUpdate.Any())
             {
@@ -34,7 +34,7 @@ namespace Astrana.Core.Domain.ExternalContentSubscriptions.Commands.UpdateExtern
 
                 _logger.LogWarning(message);
 
-                return new UpdateFailResult<List<ExternalSubscription>>(new List<ExternalSubscription>(), 0, message);
+                return new UpdateFailResult<List<ExternalContentSubscription>>(new List<ExternalContentSubscription>(), 0, message);
             }
 
             var validatedExternalContentSubscriptionsToUpdate = externalContentSubscriptionsToUpdate.Where(o => o.IsValid).ToList();
@@ -44,15 +44,15 @@ namespace Astrana.Core.Domain.ExternalContentSubscriptions.Commands.UpdateExtern
 
                 _logger.LogWarning(message);
 
-                return new UpdateFailResult<List<ExternalSubscription>>(new List<ExternalSubscription>(), 0, message);
+                return new UpdateFailResult<List<ExternalContentSubscription>>(new List<ExternalContentSubscription>(), 0, message);
             }
 
             var result = await _externalContentSubscriptionRepository.UpdateAsync(validatedExternalContentSubscriptionsToUpdate, actioningUserId);
 
             if (result.Outcome == ResultOutcome.Success)
-                return new UpdateSuccessResult<List<ExternalSubscription>>(result.Data, result.Count, MRB.UpdateSuccessResultMessage(ModelProperties.ExternalContentSubscription.NameSingularForm, ModelProperties.ExternalContentSubscription.NamePluralForm, result.Count));
+                return new UpdateSuccessResult<List<ExternalContentSubscription>>(result.Data, result.Count, MRB.UpdateSuccessResultMessage(ModelProperties.ExternalContentSubscription.NameSingularForm, ModelProperties.ExternalContentSubscription.NamePluralForm, result.Count));
             
-            return new UpdateFailResult<List<ExternalSubscription>>(result.Data, 0, result.Message, result.ResultCode);
+            return new UpdateFailResult<List<ExternalContentSubscription>>(result.Data, 0, result.Message, result.ResultCode);
         }
     }
 }

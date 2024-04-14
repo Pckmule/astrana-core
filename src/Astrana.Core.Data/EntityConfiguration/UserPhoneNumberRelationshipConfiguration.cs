@@ -4,6 +4,16 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Astrana.Core.Data.EntityConfiguration
 {
+    public static partial class EntityConfigurationExtensions
+    {
+        public static ModelBuilder ConfigureUserPhoneNumberRelationship(this ModelBuilder modelBuilder)
+        {
+            modelBuilder.ApplyConfiguration(new UserPhoneNumberRelationshipConfiguration());
+
+            return modelBuilder;
+        }
+    }
+
     public class UserPhoneNumberRelationshipConfiguration : IEntityTypeConfiguration<UserPhoneNumberRelationship>
     {
         public void Configure(EntityTypeBuilder<UserPhoneNumberRelationship> entityTypeBuilder)
@@ -21,7 +31,7 @@ namespace Astrana.Core.Data.EntityConfiguration
 
             entityTypeBuilder
                 .HasOne(o => o.PhoneNumber)
-                .WithMany(o => o.PhoneNumbers)
+                .WithMany(o => o.Relationships)
                 .HasForeignKey(o => o.PhoneNumberId);
         }
     }

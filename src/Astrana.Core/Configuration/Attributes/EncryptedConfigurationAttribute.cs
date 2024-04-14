@@ -4,7 +4,7 @@
 * file, You can obtain one at https://mozilla.org/MPL/2.0/.
 */
 
-namespace Astrana.Core.Configuration.Attributes
+namespace Astrana.Core.Domain.Application.Configuration.Attributes
 {
     /// <summary>
     /// Indicates that a property is considered to contain data that should be encrypted at rest and in transit.

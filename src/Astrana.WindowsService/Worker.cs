@@ -6,9 +6,14 @@
 
 namespace Astrana.WindowsService
 {
+    /// <summary>
+    /// Astrana Windows Service Background Worker
+    /// </summary>
     public class Worker : BackgroundService
     {
         private readonly ILogger<Worker> _logger;
+
+        private const string ServiceName = Core.Constants.Application.Name + " Windows Service";
 
         public Worker(ILogger<Worker> logger)
         {
@@ -17,11 +22,17 @@ namespace Astrana.WindowsService
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            _logger.LogInformation($"{ServiceName} is starting.");
+
             while (!stoppingToken.IsCancellationRequested)
             {
-                _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
+                _logger.LogInformation("{serviceName} running at: {time}", ServiceName, DateTimeOffset.Now);
+
                 await Task.Delay(1000, stoppingToken);
             }
+
+
+            _logger.LogInformation("{ServiceName} has stopped.");
         }
     }
 }

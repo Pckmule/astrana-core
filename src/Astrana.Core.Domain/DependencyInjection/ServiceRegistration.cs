@@ -30,8 +30,9 @@ namespace Astrana.Core.Domain.DependencyInjection
             
             Lookups.DependencyInjection.Register(services);
             Languages.DependencyInjection.Register(services);
+            TimeZones.DependencyInjection.Register(services);
             Countries.DependencyInjection.Register(services);
-            Feelings.DependencyInjection.Register(services);
+            SkinTone.DependencyInjection.Register(services);
 
             UserAccounts.DependencyInjection.Register(services);
             
@@ -41,10 +42,12 @@ namespace Astrana.Core.Domain.DependencyInjection
             UserPreferences.DependencyInjection.Register(services);
             
             SystemSetup.DependencyInjection.Register(services);
-            
+            SystemUpdates.DependencyInjection.Register(services);
+
             Peers.DependencyInjection.Register(services);
             Audiences.DependencyInjection.Register(services);
 
+            Notifications.DependencyInjection.Register(services);
             NewContentWorkflowStages.DependencyInjection.Register(services);
 
             Files.DependencyInjection.Register(services);
@@ -58,6 +61,11 @@ namespace Astrana.Core.Domain.DependencyInjection
             Comments.DependencyInjection.Register(services);
 
             MainFeed.DependencyInjection.Register(services);
+            ExternalFeeds.DependencyInjection.Register(services);
+            ExternalContentSubscriptions.DependencyInjection.Register(services);
+
+            Markdown.DependencyInjection.Register(services);
+            Feeds.DependencyInjection.Register(services);
 
             return services;
         }

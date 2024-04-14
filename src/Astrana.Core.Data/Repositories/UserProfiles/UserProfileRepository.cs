@@ -51,10 +51,10 @@ namespace Astrana.Core.Data.Repositories.UserProfiles
 
             // Add Filters
             if (options.Ids.Any())
-                query = query.Where(o => options.Ids.Contains(o.Id));
+                query = query.Where(o => options.Ids.Contains(o.UserProfileId));
 
             if (options.ExcludeIds.Any())
-                query = query.Where(o => !options.ExcludeIds.Contains(o.Id));
+                query = query.Where(o => !options.ExcludeIds.Contains(o.UserProfileId));
             
             if (options.AccountIds.Any())
                 query = query.Where(o => options.AccountIds.Contains(o.UserAccountId));
@@ -197,7 +197,7 @@ namespace Astrana.Core.Data.Repositories.UserProfiles
 
                 countAdded++;
 
-                var newUserProfileId = newUserProfileEntity.Id;
+                var newUserProfileId = newUserProfileEntity.UserProfileId;
                
                 logger.LogInformation(string.Format(MessageSuccessfullyCreatedEntity, 1, nameof(UserProfile) + "(s)"));
 
@@ -262,7 +262,7 @@ namespace Astrana.Core.Data.Repositories.UserProfiles
 
                 foreach (var update in requestedUpdates)
                 {
-                    var existingUserProfileEntity = await databaseSession.UserProfiles.FirstOrDefaultAsync(o => o.Id == update.ProfileId);
+                    var existingUserProfileEntity = await databaseSession.UserProfiles.FirstOrDefaultAsync(o => o.UserProfileId == update.ProfileId);
 
                     if (existingUserProfileEntity == null)
                         continue;
@@ -287,14 +287,14 @@ namespace Astrana.Core.Data.Repositories.UserProfiles
 
                     countUpdated++;
 
-                    updatedUserProfileIds.Add(existingUserProfileEntity.Id);
+                    updatedUserProfileIds.Add(existingUserProfileEntity.UserProfileId);
                 }
 
                 logger.LogInformation(string.Format(MessageSuccessfullyUpdatedEntity, updatedUserProfileIds.Count, nameof(UserProfile) + "(s)"));
 
                 // Return the current records.
                 if (returnRecords)
-                    return new UpdateSuccessResult<List<DM.UserProfiles.UserProfile>>((await GetUserProfilesAsync(new UserProfileQueryOptions<Guid, Guid> { Ids = updatedUserProfileIds })).Data, countUpdated);
+                    return new UpdateSuccessResult<List<DM.UserProfiles.UserProfile>>((await GetUserProfilesAsync(new UserProfileQueryOptions<Guid, Guid>(updatedUserProfileIds))).Data, countUpdated);
 
                 return new UpdateSuccessResult<List<DM.UserProfiles.UserProfile>>(new List<DM.UserProfiles.UserProfile>(), countUpdated);
             }
@@ -328,7 +328,7 @@ namespace Astrana.Core.Data.Repositories.UserProfiles
             {
                 var now = DateTime.UtcNow;
 
-                var existingUserProfileEntity = await databaseSession.UserProfiles.FirstOrDefaultAsync(o => o.Id == userProfileId);
+                var existingUserProfileEntity = await databaseSession.UserProfiles.FirstOrDefaultAsync(o => o.UserProfileId == userProfileId);
 
                 if (existingUserProfileEntity == null)
                     return new UpdateFailResult<DM.UserProfiles.UserProfile>(null, countUpdated, "Profile ID is invalid.");
@@ -346,7 +346,7 @@ namespace Astrana.Core.Data.Repositories.UserProfiles
 
                 countUpdated++;
 
-                updatedUserProfileIds.Add(existingUserProfileEntity.Id);
+                updatedUserProfileIds.Add(existingUserProfileEntity.UserProfileId);
 
                 logger.LogInformation(string.Format(MessageSuccessfullyUpdatedEntity, updatedUserProfileIds.Count, nameof(UserProfile) + "(s)"));
 
@@ -382,7 +382,7 @@ namespace Astrana.Core.Data.Repositories.UserProfiles
 
             try
             {
-                var existingUserProfileEntity = await databaseSession.UserProfiles.FirstOrDefaultAsync(o => o.Id == userProfileId);
+                var existingUserProfileEntity = await databaseSession.UserProfiles.FirstOrDefaultAsync(o => o.UserProfileId == userProfileId);
                 
                 if(existingUserProfileEntity == null)
                     return new UpdateFailResult<DM.UserProfiles.UserProfile>(null, countUpdated, "User Profile Not Found");
@@ -410,7 +410,7 @@ namespace Astrana.Core.Data.Repositories.UserProfiles
 
                 countUpdated++;
 
-                updatedUserProfileIds.Add(existingUserProfileEntity.Id);
+                updatedUserProfileIds.Add(existingUserProfileEntity.UserProfileId);
 
                 logger.LogInformation(string.Format(MessageSuccessfullyUpdatedEntity, updatedUserProfileIds.Count, nameof(UserProfile) + "(s)"));
 
@@ -446,7 +446,7 @@ namespace Astrana.Core.Data.Repositories.UserProfiles
 
             try
             {
-                var existingUserProfileEntity = await databaseSession.UserProfiles.FirstOrDefaultAsync(o => o.Id == userProfileId);
+                var existingUserProfileEntity = await databaseSession.UserProfiles.FirstOrDefaultAsync(o => o.UserProfileId == userProfileId);
 
                 if (existingUserProfileEntity == null)
                     return new UpdateFailResult<DM.UserProfiles.UserProfile>(null, countUpdated, "User Profile Not Found");
@@ -474,7 +474,7 @@ namespace Astrana.Core.Data.Repositories.UserProfiles
 
                 countUpdated++;
 
-                updatedUserProfileIds.Add(existingUserProfileEntity.Id);
+                updatedUserProfileIds.Add(existingUserProfileEntity.UserProfileId);
 
                 logger.LogInformation(string.Format(MessageSuccessfullyUpdatedEntity, updatedUserProfileIds.Count, nameof(UserProfile) + "(s)"));
 
@@ -517,10 +517,10 @@ namespace Astrana.Core.Data.Repositories.UserProfiles
 
             // Add Filters
             if (options.Ids.Any())
-                query = query.Where(o => options.Ids.Contains(o.Id));
+                query = query.Where(o => options.Ids.Contains(o.UserProfileId));
 
             if (options.ExcludeIds.Any())
-                query = query.Where(o => !options.ExcludeIds.Contains(o.Id));
+                query = query.Where(o => !options.ExcludeIds.Contains(o.UserProfileId));
 
             if (options.Labels.Any())
                 query = query.Where(o => options.Labels.Contains(o.Label));
@@ -631,14 +631,14 @@ namespace Astrana.Core.Data.Repositories.UserProfiles
 
                     countAdded++;
 
-                    newUserProfileDetailIds.Add(newUserProfileDetailEntity.Id);
+                    newUserProfileDetailIds.Add(newUserProfileDetailEntity.UserProfileId);
                 }
 
                 logger.LogInformation(string.Format(MessageSuccessfullyCreatedEntity, newUserProfileDetailIds.Count, nameof(UserProfileDetail) + "(s)"));
 
                 // Return the current records.
                 if (returnRecords)
-                    return new AddSuccessResult<List<DM.UserProfiles.UserProfileDetail>>((await GetUserProfileDetailsAsync(new UserProfileDetailQueryOptions<Guid, Guid> { Ids = newUserProfileDetailIds })).Data, countAdded);
+                    return new AddSuccessResult<List<DM.UserProfiles.UserProfileDetail>>((await GetUserProfileDetailsAsync(new UserProfileDetailQueryOptions<Guid, Guid>(newUserProfileDetailIds))).Data, countAdded);
 
                 return new AddSuccessResult<List<DM.UserProfiles.UserProfileDetail>>(new List<DM.UserProfiles.UserProfileDetail>(), countAdded);
             }
@@ -670,7 +670,7 @@ namespace Astrana.Core.Data.Repositories.UserProfiles
 
                 foreach (var update in requestedUpdates)
                 {
-                    var existingUserProfileDetailEntity = await databaseSession.UserProfileDetails.FirstOrDefaultAsync(o => o.Id == update.UserProfileDetailId);
+                    var existingUserProfileDetailEntity = await databaseSession.UserProfileDetails.FirstOrDefaultAsync(o => o.UserProfileId == update.UserProfileDetailId);
 
                     if (existingUserProfileDetailEntity == null)
                         continue;
@@ -691,14 +691,14 @@ namespace Astrana.Core.Data.Repositories.UserProfiles
 
                     countUpdated++;
 
-                    updatedUserProfileDetailIds.Add(existingUserProfileDetailEntity.Id);
+                    updatedUserProfileDetailIds.Add(existingUserProfileDetailEntity.UserProfileId);
                 }
 
                 logger.LogInformation(string.Format(MessageSuccessfullyUpdatedEntity, updatedUserProfileDetailIds.Count, nameof(UserProfile) + "(s)"));
 
                 // Return the current records.
                 if (returnRecords)
-                    return new UpdateSuccessResult<List<DM.UserProfiles.UserProfileDetail>>((await GetUserProfileDetailsAsync(new UserProfileDetailQueryOptions<Guid, Guid> { Ids = updatedUserProfileDetailIds })).Data, countUpdated);
+                    return new UpdateSuccessResult<List<DM.UserProfiles.UserProfileDetail>>((await GetUserProfileDetailsAsync(new UserProfileDetailQueryOptions<Guid, Guid>(updatedUserProfileDetailIds))).Data, countUpdated);
 
                 return new UpdateSuccessResult<List<DM.UserProfiles.UserProfileDetail>>(new List<DM.UserProfiles.UserProfileDetail>(), countUpdated);
             }

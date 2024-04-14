@@ -4,16 +4,20 @@
 * file, You can obtain one at https://mozilla.org/MPL/2.0/.
 */
 
+using Astrana.Core.Enums;
+
 namespace Astrana.Core.Domain.Models.Languages.Contracts
 {
     public interface ILanguage
     {
         string Name { get; set; }
 
-        string Code { get; set; }
+        string NameTrxCode { get; set; }
 
         string TwoLetterCode { get; set; }
 
         string ThreeLetterCode { get; set; }
+
+        LanguageDirection Direction { get; set; }
     }
 }

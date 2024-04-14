@@ -96,7 +96,7 @@ namespace Astrana.Core.Data.Repositories.Links
             else
                 resultSetCount = queryResults.Count;
 
-            var links = queryResults.Select(link => ModelMapper.MapModel<DM.Links.Link, Link>(link)).ToList();
+            var links = queryResults.Select(Data.Entities.Content.ModelMappings.Link.MapToDomainModel).ToList();
 
             logger.LogInformation(string.Format(MessageRetrievedEntity, nameof(Link)), queryOptions);
 
@@ -161,7 +161,7 @@ namespace Astrana.Core.Data.Repositories.Links
 
                 // Return the current records.
                 if (returnRecords)
-                    return new AddSuccessResult<List<DM.Links.Link>>((await GetLinksAsync(new LinkQueryOptions<Guid, Guid> { Ids = newLinkIds })).Data, countAdded);
+                    return new AddSuccessResult<List<DM.Links.Link>>((await GetLinksAsync(new LinkQueryOptions<Guid, Guid>(newLinkIds))).Data, countAdded);
                 
                 return new AddSuccessResult<List<DM.Links.Link>>(new List<DM.Links.Link>(), countAdded);
             }
@@ -219,7 +219,7 @@ namespace Astrana.Core.Data.Repositories.Links
 
                 // Return the current records.
                 if (returnRecords)
-                    return new UpdateSuccessResult<List<DM.Links.Link>>((await GetLinksAsync(new LinkQueryOptions<Guid, Guid>() { Ids = updatedLinkIds })).Data, countUpdated);
+                    return new UpdateSuccessResult<List<DM.Links.Link>>((await GetLinksAsync(new LinkQueryOptions<Guid, Guid>(updatedLinkIds))).Data, countUpdated);
                 
                 return new UpdateSuccessResult<List<DM.Links.Link>>(new List<DM.Links.Link>(), countUpdated);
             }

@@ -7,6 +7,7 @@
 using Astrana.Core.Configuration;
 using Astrana.Core.Utilities;
 using System.Reflection;
+using Astrana.Core.Domain.Application.Configuration;
 
 namespace Astrana.Tools;
 
@@ -72,7 +73,7 @@ public class Program
 
                     var configurationFilePaths = new List<string> { outputFilePath };
 
-                    await new JsonConfigurationEncrypter().EncryptAsync(configurationFilePaths);
+                    await new JsonConfigurationEncrypter().EncryptAsync(null, configurationFilePaths);
 
                     Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine("AppSettings.json has been encrypted.");

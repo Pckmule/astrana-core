@@ -34,14 +34,14 @@ namespace Astrana.Core.Domain.UserPreferences.Queries
             _countryRepository = countryRepository;
         }
 
-        public async Task<Models.Preferences.UserPreferences> ExecuteAsync(Guid userAccountId, Guid actioningUserId)
+        public async Task<Models.Preferences.UserPreferencesDto> ExecuteAsync(Guid userAccountId, Guid actioningUserId)
         {
             var userAccount = await _userAccountRepository.GetUserAccountByIdAsync(userAccountId);
 
             var language = await _languageRepository.GetLanguageByCodeAsync(userAccount.LanguageCode);
             var country = await _countryRepository.GetCountryByCodeAsync(userAccount.CountryCode);
 
-            var preferences = new Models.Preferences.UserPreferences
+            var preferences = new Models.Preferences.UserPreferencesDto
             {
                 UserAccountId = userAccount.UserAccountId,
                 Language = new LanguageLite(language),

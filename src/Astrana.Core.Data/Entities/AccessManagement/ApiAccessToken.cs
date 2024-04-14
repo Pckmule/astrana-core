@@ -14,12 +14,26 @@ using DomainModelProperties = Astrana.Core.Domain.Models.ApiAccessTokens.Constan
 namespace Astrana.Core.Data.Entities.AccessManagement
 {
     [Table("ApiAccessTokens", Schema = SchemaNames.IdentityAccessManagement)]
-    public class ApiAccessToken: BaseDeactivatableEntity<Guid, Guid>
+    public class ApiAccessToken
     {
-        [Required]
+        [Key, Column(Order = 0)]
+        public Guid ApiAccessTokenId { get; set; }
+        
         [MinLength(DomainModelProperties.ApiAccessToken.MinimumTokenLength)]
-        [MaxLength(DomainModelProperties.ApiAccessToken.MaximumTokenLength)]
-        [Column(Order = 1)]
         public virtual string Token { get; set; }
+        
+        public DateTimeOffset? DeactivatedTimestamp { get; set; }
+
+        public string DeactivatedReason { get; set; } = null;
+
+        public Guid? DeactivatedBy { get; set; }
+
+        public Guid CreatedBy { get; set; }
+
+        public Guid LastModifiedBy { get; set; }
+
+        public DateTimeOffset CreatedTimestamp { get; set; }
+
+        public DateTimeOffset LastModifiedTimestamp { get; set; }
     }
 }

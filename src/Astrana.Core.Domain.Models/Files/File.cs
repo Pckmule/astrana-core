@@ -13,6 +13,7 @@ using Astrana.Core.Framework.Model.Validation;
 
 namespace Astrana.Core.Domain.Models.Files
 {
+    // DTO?
     public class File : DomainEntity, IFile
     {
         [JsonConstructor]

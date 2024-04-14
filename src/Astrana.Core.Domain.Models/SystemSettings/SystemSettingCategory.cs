@@ -32,7 +32,12 @@ namespace Astrana.Core.Domain.Models.SystemSettings
         }
 
         [Required]
-        public Guid LinkId { get; set; }
+        [JsonIgnore]
+        public Guid SystemSettingCategoryId
+        {
+            get => Id;
+            set => Id = value;
+        }
 
         [Required]
         [MinLength(ModelProperties.SystemSettingCategory.MinimumNameLength)]

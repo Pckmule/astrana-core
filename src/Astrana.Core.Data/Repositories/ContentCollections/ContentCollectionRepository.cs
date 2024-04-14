@@ -155,13 +155,14 @@ namespace Astrana.Core.Data.Repositories.ContentCollections
 
             try
             {
-                var now = DateTime.UtcNow;
-
                 foreach (var newContentCollection in newContentCollectionsToCreate)
                 {
                     var newContentCollectionEntity = new ContentCollection
                     {
-                        Name = newContentCollection.Name
+                        Name = newContentCollection.Name,
+                        CollectionType = newContentCollection.CollectionType,
+                        Caption = newContentCollection.Caption,
+                        Copyright = newContentCollection.Copyright
                     };
 
                     if (newContentCollection.ContentItems != null)
@@ -181,10 +182,7 @@ namespace Astrana.Core.Data.Repositories.ContentCollections
                     }
                     
                     newContentCollectionEntity.CreatedBy = actioningUserId;
-                    //newContentCollectionEntity.CreatedTimestamp = now;
-
                     newContentCollectionEntity.LastModifiedBy = actioningUserId;
-                    //newContentCollectionEntity.LastModifiedTimestamp = now;
 
                     // Save records.
                     databaseSession.ContentCollections.Add(newContentCollectionEntity);
@@ -199,7 +197,7 @@ namespace Astrana.Core.Data.Repositories.ContentCollections
 
                 // Return the current records.
                 if (returnRecords)
-                    return new AddSuccessResult<List<DM.ContentCollections.ContentCollection>>((await GetContentCollectionsAsync(new ContentCollectionQueryOptions<Guid, Guid> { Ids = newContentCollectionIds })).Data, countAdded);
+                    return new AddSuccessResult<List<DM.ContentCollections.ContentCollection>>((await GetContentCollectionsAsync(new ContentCollectionQueryOptions<Guid, Guid>(newContentCollectionIds))).Data, countAdded);
                 
                 return new AddSuccessResult<List<DM.ContentCollections.ContentCollection>>(new List<DM.ContentCollections.ContentCollection>(), countAdded);
             }
@@ -257,7 +255,7 @@ namespace Astrana.Core.Data.Repositories.ContentCollections
 
                 // Return the current records.
                 if (returnRecords)
-                    return new UpdateSuccessResult<List<DM.ContentCollections.ContentCollection>>((await GetContentCollectionsAsync(new ContentCollectionQueryOptions<Guid, Guid>() { Ids = updatedContentCollectionIds })).Data, countUpdated);
+                    return new UpdateSuccessResult<List<DM.ContentCollections.ContentCollection>>((await GetContentCollectionsAsync(new ContentCollectionQueryOptions<Guid, Guid>(updatedContentCollectionIds))).Data, countUpdated);
                 
                 return new UpdateSuccessResult<List<DM.ContentCollections.ContentCollection>>(new List<DM.ContentCollections.ContentCollection>(), countUpdated);
             }

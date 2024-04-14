@@ -15,39 +15,60 @@ using DomainModelProperties = Astrana.Core.Domain.Models.SystemSettings.Constant
 namespace Astrana.Core.Data.Entities.Configuration
 {
     [Table("Settings", Schema = SchemaNames.Configuration)]
-    public class SystemSetting : BaseEntity<Guid, Guid>
+    public class SystemSetting
     {
-        [Required]
+        [Key, Column(Order = 0)]
+        public Guid SystemSettingId { get; set; }
+
         [MinLength(DomainModelProperties.SystemSetting.MinimumNameLength)]
-        [MaxLength(DomainModelProperties.SystemSetting.MaximumNameLength)]
-        [Column(Order = 1)]
         public string Name { get; set; }
 
-        [Required]
-        [Column(Order = 2)]
-        public SystemDataType DataType { get; set; }
-        
-        [MinLength(DomainModelProperties.SystemSetting.MinimumShortDescriptionLength)]
-        [MaxLength(DomainModelProperties.SystemSetting.MaximumShortDescriptionLength)]
-        [Column(Order = 3)]
-        public string? ShortDescription { get; set; }
-        
-        [MinLength(DomainModelProperties.SystemSetting.MinimumHelpTextLength)]
-        [MaxLength(DomainModelProperties.SystemSetting.MaximumHelpTextLength)]
-        [Column(Order = 4)]
-        public string? HelpText { get; set; }
+        [MinLength(DomainModelProperties.SystemSetting.MinimumNameLength)]
+        public string NameTrxCode { get; set; }
 
-        [Required]
+        public SystemDataType DataType { get; set; }
+
+        [MinLength(DomainModelProperties.SystemSetting.MinimumShortDescriptionLength)]
+        public string ShortDescription { get; set; }
+
+        [MinLength(DomainModelProperties.SystemSetting.MaximumShortDescriptionTrxCodeLength)]
+        public string ShortDescriptionTrxCode { get; set; }
+
+        [MinLength(DomainModelProperties.SystemSetting.MinimumHelpTextLength)]
+        public string HelpText { get; set; }
+
+        [MinLength(DomainModelProperties.SystemSetting.MinimumHelpTextTrxCodeLength)]
+        public string HelpTextTrxCode { get; set; }
+
         [MinLength(DomainModelProperties.SystemSetting.MinimumDefaultValueLength)]
-        [MaxLength(DomainModelProperties.SystemSetting.MaximumDefaultValueLength)]
-        [Column(Order = 5)]
         public string DefaultValue { get; set; }
 
-        [Column(Order = 6)]
         [MinLength(DomainModelProperties.SystemSetting.MinimumValueLength)]
-        [MaxLength(DomainModelProperties.SystemSetting.MaximumValueLength)]
-        public string? Value { get; set; }
+        public string Value { get; set; }
+        
+        [MinLength(DomainModelProperties.SystemSetting.MinimumValueOptionsLookupNameLength)]
+        public string ValueChoicesLookupName { get; set; }
+
+        public int? MaximumValues { get; set; }
+
+        public int? MinimumValues { get; set; }
+
+        public int? MaximumValueLength { get; set; }
+
+        public int? MinimumValueLength { get; set; }
+
+        public Guid? SettingCategoryId { get; set; }
 
         public SystemSettingCategory SettingCategory { get; set; }
+
+        public bool UserMaySet { get; set; }
+        
+        public Guid CreatedBy { get; set; }
+
+        public Guid LastModifiedBy { get; set; }
+
+        public DateTimeOffset CreatedTimestamp { get; set; }
+
+        public DateTimeOffset LastModifiedTimestamp { get; set; }
     }
 }

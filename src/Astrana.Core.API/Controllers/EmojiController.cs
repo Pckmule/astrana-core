@@ -6,11 +6,9 @@
 
 using Astrana.Core.Domain.IdentityAccessManagement.Managers.SignIn;
 using Astrana.Core.Domain.Models.Emoji;
-using Astrana.Core.Domain.Models.Openmoji;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
-using Astrana.Core.Extensions;
 using System.Text.Json.Serialization;
 
 namespace Astrana.Core.API.Controllers
@@ -47,7 +45,7 @@ namespace Astrana.Core.API.Controllers
             return UnpagedGetResponse(emojis);
         }
 
-        private static async Task<List<EmojiGroup>> GetEmojis()
+        private static async Task<List<EmojiGroupDto>> GetEmojis()
         {
             var groupDefinitions = await ReadEmojiGroupConfigurationFile("D:\\repos\\Astrana\\Pckmule\\astrana-core\\src\\Astrana.Core\\Emoji\\emoji-groups.json");
 
@@ -67,28 +65,28 @@ namespace Astrana.Core.API.Controllers
             return definitions;
         }
 
-        private static async Task<List<EmojiGroup>> ReadEmojiConfigurationFile(string filePath)
+        private static async Task<List<EmojiGroupDto>> ReadEmojiConfigurationFile(string filePath)
         {
             await using var fileStream = System.IO.File.OpenRead(filePath);
 
-            return await JsonSerializer.DeserializeAsync<List<EmojiGroup>>(fileStream, new JsonSerializerOptions
+            return await JsonSerializer.DeserializeAsync<List<EmojiGroupDto>>(fileStream, new JsonSerializerOptions
             {
                 WriteIndented = true,
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
                 DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
-            }) ?? new List<EmojiGroup>();
+            }) ?? new List<EmojiGroupDto>();
         }
 
-        private static async Task<List<EmojiGroup>> ReadEmojiGroupConfigurationFile(string filePath)
+        private static async Task<List<EmojiGroupDto>> ReadEmojiGroupConfigurationFile(string filePath)
         {
             await using var fileStream = System.IO.File.OpenRead(filePath);
 
-            return await JsonSerializer.DeserializeAsync<List<EmojiGroup>>(fileStream, new JsonSerializerOptions
+            return await JsonSerializer.DeserializeAsync<List<EmojiGroupDto>>(fileStream, new JsonSerializerOptions
             {
                 WriteIndented = true,
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
                 DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
-            }) ?? new List<EmojiGroup>();
+            }) ?? new List<EmojiGroupDto>();
         }
     }
 }

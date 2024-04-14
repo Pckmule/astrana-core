@@ -11,6 +11,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Astrana.Core.Data.Entities
 {
+    [Obsolete]
     public abstract class BaseDeactivatableEntity<TPrimaryKeyId, TUserId> : BaseEntity<TPrimaryKeyId, TUserId>, IDeactivatableEntity<TUserId>
         where TPrimaryKeyId : struct
         where TUserId : struct

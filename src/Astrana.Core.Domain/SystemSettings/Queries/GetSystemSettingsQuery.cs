@@ -28,6 +28,22 @@ namespace Astrana.Core.Domain.SystemSettings.Queries
         {
             options ??= new SystemSettingQueryOptions<Guid, Guid>();
 
+            if (actioningUserId == Constants.AnonymousUser.IdGuid)
+            {
+                options.IncludeUserSettable = false;
+                options.IncludeSystemSettable = false;
+            }
+            else if (actioningUserId == Constants.SystemUser.IdGuid)
+            {
+                options.IncludeUserSettable = true;
+                options.IncludeSystemSettable = true;
+            }
+            else
+            {
+                options.IncludeUserSettable = true;
+                options.IncludeSystemSettable = false;
+            }
+
             var result = await _systemSettingRepository.GetSystemSettingsAsync(options);
 
             _logger.LogTrace($"Executed {nameof(GetSystemSettingsQuery).SplitOnUpperCase()}");

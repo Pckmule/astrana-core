@@ -6,9 +6,7 @@
 
 using Astrana.Core.Domain.Models.Results.Contracts;
 using Astrana.Core.Domain.Models.Results.Enums;
-using Astrana.Core.Framework.Domain;
-using Astrana.Core.Framework.Model;
-using System.Collections;
+using System.Text.Json.Serialization;
 
 namespace Astrana.Core.Domain.Models.Results
 {
@@ -30,7 +28,7 @@ namespace Astrana.Core.Domain.Models.Results
 
         public string? ResultCode { get; set; }
 
-        public IEnumerable<IResultError> Errors { get; set; } = new List<IResultError>();
+        public List<ResultError> Errors { get; set; } = new();
     }
 
     public class AddResult<TData> : AddResult, IAddResult<TData>
@@ -42,6 +40,7 @@ namespace Astrana.Core.Domain.Models.Results
 
         public TData Data { get; set; }
 
+        [JsonIgnore]
         public bool HasData => Data != null;
     }
     
@@ -73,5 +72,25 @@ namespace Astrana.Core.Domain.Models.Results
     public class AddFailResult<TQueuedData> : AddResult<TQueuedData>
     {
         public AddFailResult(TQueuedData resultData, long resultCount = 0, string? message = "", string? resultCode = null) : base(ResultOutcome.Failure, resultData, resultCount, message, resultCode) { }
+    }
+
+    public class AddAbortResult : AddResult
+    {
+        public AddAbortResult(long resultCount = 0, string? message = "", string? resultCode = null) : base(ResultOutcome.Failure, resultCount, message, resultCode) { }
+    }
+
+    public class AddAbortResult<TQueuedData> : AddResult<TQueuedData>
+    {
+        public AddAbortResult(TQueuedData resultData, long resultCount = 0, string? message = "", string? resultCode = null) : base(ResultOutcome.Aborted, resultData, resultCount, message, resultCode) { }
+    }
+
+    public class AddCancelledResult : AddResult
+    {
+        public AddCancelledResult(long resultCount = 0, string? message = "", string? resultCode = null) : base(ResultOutcome.Failure, resultCount, message, resultCode) { }
+    }
+
+    public class AddCancelledResult<TQueuedData> : AddResult<TQueuedData>
+    {
+        public AddCancelledResult(TQueuedData resultData, long resultCount = 0, string? message = "", string? resultCode = null) : base(ResultOutcome.Cancelled, resultData, resultCount, message, resultCode) { }
     }
 }

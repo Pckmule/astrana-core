@@ -23,5 +23,22 @@ namespace Astrana.Core.Utilities
         {
             return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(text.Trim().ToLower());
         }
+
+        public static string? NullIfEmpty(this string? value)
+        {
+            return string.IsNullOrWhiteSpace(value) ? null : value;
+        }
+
+        public static string? EmptyIfSame(this string? value, string? compareValue)
+        {
+            return value == compareValue ? string.Empty : value;
+        }
+
+        public static string? DefaultIfEmpty(this string? value, string? fallbackValue1, string? fallbackValue2 = "")
+        {
+            var fallbackValue = string.IsNullOrWhiteSpace(fallbackValue1) ? fallbackValue2 : fallbackValue1;
+
+            return string.IsNullOrWhiteSpace(value) ? fallbackValue : value;
+        }
     }
 }

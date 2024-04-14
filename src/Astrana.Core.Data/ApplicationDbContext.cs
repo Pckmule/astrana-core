@@ -8,7 +8,6 @@
 
 #pragma warning disable CS8618
 
-using Astrana.Core.Data.Entities;
 using Astrana.Core.Data.Entities.AccessManagement;
 using Astrana.Core.Data.Entities.Configuration;
 using Astrana.Core.Data.Entities.ContactInformation;
@@ -18,162 +17,157 @@ using Astrana.Core.Data.Entities.Peers;
 using Astrana.Core.Data.Entities.User;
 using Astrana.Core.Data.Entities.Workflow;
 using Astrana.Core.Data.EntityConfiguration;
+using Astrana.Core.Data.SeedData.Configuration;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
+using TimeZone = Astrana.Core.Data.Entities.Configuration.TimeZone;
 
 namespace Astrana.Core.Data
 {
-    public class ApplicationDbContext : DbContext
+    public sealed class ApplicationDbContext : DbContext
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
+
+        public override async Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
+        {
+            SetAuditTimestamps();
+
+            return await base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+        }
+
         public override int SaveChanges()
         {
-            var entries = ChangeTracker.Entries().Where(e => (e.Entity is BaseEntity<Guid, Guid> || e.Entity is BaseEntity<long, Guid> || e.Entity is BaseEntity<int, Guid>) && (e.State == EntityState.Added || e.State == EntityState.Modified));
+            SetAuditTimestamps();
 
-            foreach (var entityEntry in entries)
-            {
-                if (entityEntry.Entity is BaseEntity<Guid, Guid>)
-                {
-                    ((BaseEntity<Guid, Guid>)entityEntry.Entity).LastModifiedTimestamp = DateTime.UtcNow;
-
-                    if (entityEntry.State == EntityState.Added)
-                    {
-                        ((BaseEntity<Guid, Guid>)entityEntry.Entity).CreatedTimestamp = DateTime.UtcNow;
-                    }
-                }
-                else if (entityEntry.Entity is BaseEntity<long, Guid>)
-                {
-                    ((BaseEntity<long, Guid>)entityEntry.Entity).LastModifiedTimestamp = DateTime.UtcNow;
-
-                    if (entityEntry.State == EntityState.Added)
-                    {
-                        ((BaseEntity<long, Guid>)entityEntry.Entity).CreatedTimestamp = DateTime.UtcNow;
-                    }
-                }
-                else if (entityEntry.Entity is BaseEntity<int, Guid>)
-                {
-                    ((BaseEntity<int, Guid>)entityEntry.Entity).LastModifiedTimestamp = DateTime.UtcNow;
-
-                    if (entityEntry.State == EntityState.Added)
-                    {
-                        ((BaseEntity<int, Guid>)entityEntry.Entity).CreatedTimestamp = DateTime.UtcNow;
-                    }
-                }
-            }
-            
             return base.SaveChanges();
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfiguration(new SystemSettingConfiguration());
+            ConfigureEntities(modelBuilder);
+            AddSeedData(modelBuilder);
+        }
+
+        private static void ConfigureEntities(ModelBuilder modelBuilder)
+        {
+            modelBuilder.ConfigureSystemSettingCategory();
+            modelBuilder.ConfigureSystemSetting();
+
+            modelBuilder.ConfigureTimeZone();
+            modelBuilder.ConfigureLanguage();
+            modelBuilder.ConfigureCountry();
+            modelBuilder.ConfigureTopLevelDomain();
+            modelBuilder.ConfigureAudience();
+
+            modelBuilder.ConfigureNewContentWorkflowStage();
+            modelBuilder.ConfigureNotification();
+
+            modelBuilder.ConfigureApiAccessToken();
+
+            modelBuilder.ConfigureEmailAddress();
+            modelBuilder.ConfigurePhoneNumberType();
+            modelBuilder.ConfigurePhoneNumber();
+            modelBuilder.ConfigureMessengerUsername();
+
+            modelBuilder.ConfigureUserAccount();
+            modelBuilder.ConfigureUserAccountRoleRelationship();
+            modelBuilder.ConfigureUserEmailAddressRelationship();
+            modelBuilder.ConfigureUserPhoneNumberRelationship();
+            modelBuilder.ConfigureUserMessengerUsernameRelationship();
+
+            modelBuilder.ConfigureUserProfile();
+            modelBuilder.ConfigureUserProfileDetail();
+
+            modelBuilder.ConfigurePeer();
+            modelBuilder.ConfigurePeerCircle();
+
+            modelBuilder.ConfigurePeerConnectionRequestReceived();
+            modelBuilder.ConfigurePeerConnectionRequestSubmitted();
+
+            modelBuilder.ConfigureReactionTemplate();
+            modelBuilder.ConfigureFeelingTemplate();
+
+            modelBuilder.ConfigureContentSafetyRating();
+            modelBuilder.ConfigureTag();
+
+            modelBuilder.ConfigureImage();
+            modelBuilder.ConfigureVideo();
+            modelBuilder.ConfigureAudio();
+            modelBuilder.ConfigureLink();
+            modelBuilder.ConfigureFeeling();
+            modelBuilder.ConfigureLocation();
+
+            modelBuilder.ConfigureContentCollection();
+            modelBuilder.ConfigureContentCollectionItem();
             
-            modelBuilder.ApplyConfiguration(new LanguageConfiguration());
-            modelBuilder.ApplyConfiguration(new CountryConfiguration());
-            modelBuilder.ApplyConfiguration(new ReactionConfiguration());
-            modelBuilder.ApplyConfiguration(new FeelingConfiguration());
+            modelBuilder.ConfigurePost();
+            modelBuilder.ConfigurePostAttachment();
 
-            modelBuilder.ApplyConfiguration(new ApiAccessTokenConfiguration());
+            modelBuilder.ConfigureReaction();
+            modelBuilder.ConfigureComment();
+
+            modelBuilder.ConfigureExternalContentSubscription();
+            modelBuilder.ConfigureExternalContentSubscriptionContentItem();
+        }
+
+        private static void AddSeedData(ModelBuilder modelBuilder)
+        {
+            modelBuilder.AddSystemSettingCategoryData();
+            modelBuilder.AddSystemSettingData();
+
+            modelBuilder.AddSkinToneData();
+            modelBuilder.AddTimeZoneData();
+            modelBuilder.AddLanguageData();
+            modelBuilder.AddCountryData();
+            modelBuilder.AddTopLevelDomainData();
             
-            modelBuilder.ApplyConfiguration(new UserAccountConfiguration());
-            modelBuilder.ApplyConfiguration(new UserAccountRoleRelationshipConfiguration());
-            modelBuilder.ApplyConfiguration(new UserEmailAddressRelationshipConfiguration());
-            modelBuilder.ApplyConfiguration(new UserPhoneNumberRelationshipConfiguration());
-            modelBuilder.ApplyConfiguration(new UserMessengerUsernameRelationshipConfiguration());
+            modelBuilder.AddAudienceData();
+        }
 
-            modelBuilder.ApplyConfiguration(new PeerConnectionRequestReceivedConfiguration());
-            modelBuilder.ApplyConfiguration(new PeerConnectionRequestSubmittedConfiguration());
+        private void SetAuditTimestamps()
+        {
+            var entries = ChangeTracker.Entries();
 
-            /////
-            
-            modelBuilder.Entity<PostAttachment>()
-                .HasOne(l => l.Link)
-                .WithMany()
-                .HasForeignKey(u => u.LinkId)
-                .IsRequired(false)
-                .OnDelete(DeleteBehavior.Restrict);
+            foreach (var entityEntry in entries)
+            {
+                var entityType = entityEntry.Entity.GetType();
+                var createdTimestampProperty = entityType.GetProperty("CreatedTimestamp", BindingFlags.Public | BindingFlags.Instance);
+                var modifiedTimestampProperty = entityType.GetProperty("LastModifiedTimestamp", BindingFlags.Public | BindingFlags.Instance);
 
-            modelBuilder.Entity<PostAttachment>()
-                .HasOne(l => l.Image)
-                .WithMany()
-                .HasForeignKey(u => u.ImageId)
-                .IsRequired(false)
-                .OnDelete(DeleteBehavior.Restrict);
+                if (modifiedTimestampProperty != null && modifiedTimestampProperty.CanWrite)
+                    modifiedTimestampProperty.SetValue(entityEntry.Entity, DateTimeOffset.UtcNow, null);
 
-            modelBuilder.Entity<PostAttachment>()
-                .HasOne(l => l.ContentCollection)
-                .WithMany()
-                .HasForeignKey(u => u.ContentCollectionId)
-                .IsRequired(false)
-                .OnDelete(DeleteBehavior.Restrict);
+                if (entityEntry.State != EntityState.Added)
+                    continue;
 
-            modelBuilder.Entity<PostAttachment>()
-                .HasOne(l => l.Video)
-                .WithMany()
-                .HasForeignKey(u => u.VideoId)
-                .IsRequired(false)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<PostAttachment>()
-                .HasOne(l => l.Audio)
-                .WithMany()
-                .HasForeignKey(u => u.AudioId)
-                .IsRequired(false)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            /////
-
-            modelBuilder.Entity<ContentCollectionItem>()
-                .HasOne(l => l.Link)
-                .WithMany()
-                .HasForeignKey(u => u.LinkId)
-                .IsRequired(false)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<ContentCollectionItem>()
-                .HasOne(l => l.Image)
-                .WithMany()
-                .HasForeignKey(u => u.ImageId)
-                .IsRequired(false)
-                .OnDelete(DeleteBehavior.Restrict);
-            
-            modelBuilder.Entity<ContentCollectionItem>()
-                .HasOne(l => l.Video)
-                .WithMany()
-                .HasForeignKey(u => u.VideoId)
-                .IsRequired(false)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<ContentCollectionItem>()
-                .HasOne(l => l.Audio)
-                .WithMany()
-                .HasForeignKey(u => u.AudioId)
-                .IsRequired(false)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<ContentCollectionItem>()
-                .HasOne(l => l.Gif)
-                .WithMany()
-                .HasForeignKey(u => u.GifId)
-                .IsRequired(false)
-                .OnDelete(DeleteBehavior.Restrict);
+                if (createdTimestampProperty != null && createdTimestampProperty.CanWrite)
+                    createdTimestampProperty.SetValue(entityEntry.Entity, DateTimeOffset.UtcNow, null);
+            }
         }
 
         // Configuration Entities
 
-        public DbSet<SystemSetting> Settings { get; set; }
+        public DbSet<SystemSettingCategory> SystemSettingsCategories { get; set; }
+
+        public DbSet<SystemSetting> SystemSettings { get; set; }
 
         public DbSet<FeatureToggle> FeatureToggles { get; set; }
 
+        public DbSet<TimeZone> TimeZones { get; set; }
+
         public DbSet<Country> Countries { get; set; }
+
+        public DbSet<TopLevelDomain> TopLevelDomains { get; set; }
 
         public DbSet<Language> Languages { get; set; }
 
+        public DbSet<SkinTone> SkinTones { get; set; }
+
         public DbSet<PhoneNumberType> PhoneNumberTypes { get; set; }
 
-        public DbSet<Reaction> Reactions { get; set; }
+        public DbSet<ReactionTemplate> Reactions { get; set; }
 
         public DbSet<Feeling> Feelings { get; set; }
 
@@ -207,8 +201,14 @@ namespace Astrana.Core.Data
         public DbSet<UserEmailAddressRelationship> UserEmailAddresses { get; set; }
 
 
-        // Content Entities
+        // Workflow Entities
+
+        public DbSet<Notification> Notifications { get; set; }
+
         public DbSet<NewContentWorkflowStage> NewContentWorkflowStages { get; set; }
+
+
+        // Content Entities
 
         public DbSet<Tag> Tags { get; set; }
 
@@ -222,13 +222,15 @@ namespace Astrana.Core.Data
 
         public DbSet<Video> Videos { get; set; }
 
-        public DbSet<Audio> Audios { get; set; }
+        public DbSet<AudioClip> Audios { get; set; }
 
         public DbSet<ContentCollection> ContentCollections { get; set; }
 
         public DbSet<ContentSafetyRating> ContentSafetyRatings { get; set; }
-        
+
         public DbSet<ExternalContentSubscription> ExternalContentSubscriptions { get; set; }
+
+        public DbSet<ExternalContentSubscriptionContentItem> ExternalContentSubscriptionContentItems { get; set; }
 
 
         // Peers Entities

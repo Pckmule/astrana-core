@@ -4,7 +4,7 @@
 * file, You can obtain one at https://mozilla.org/MPL/2.0/.
 */
 
-using Astrana.Core.Data.Entities.Configuration;
+using Astrana.Core.Data.Entities.Content;
 using Astrana.Core.Data.Exceptions;
 using Astrana.Core.Domain.Models.Feelings.Contracts;
 using Astrana.Core.Domain.Models.Feelings.Options;
@@ -94,7 +94,7 @@ namespace Astrana.Core.Data.Repositories.Feelings
             else
                 resultSetCount = queryResults.Count;
 
-            var feelings = queryResults.Select(feeling => ModelMapper.MapModel<DM.Feelings.Feeling, Feeling>(feeling)).ToList();
+            var feelings = queryResults.Select(Data.Entities.Content.ModelMappings.Feeling.MapToDomainModel).ToList();
 
             logger.LogInformation(string.Format(MessageRetrievedEntity, nameof(Feeling)), queryOptions);
 
@@ -155,7 +155,7 @@ namespace Astrana.Core.Data.Repositories.Feelings
 
                 // Return the current records.
                 if (returnRecords)
-                    return new AddSuccessResult<List<DM.Feelings.Feeling>>((await GetFeelingsAsync(new FeelingsQueryOptions<Guid, Guid>() { Ids = newFeelingIds })).Data, countAdded);
+                    return new AddSuccessResult<List<DM.Feelings.Feeling>>((await GetFeelingsAsync(new FeelingsQueryOptions<Guid, Guid>(newFeelingIds))).Data, countAdded);
 
                 return new AddSuccessResult<List<DM.Feelings.Feeling>>(new List<DM.Feelings.Feeling>(), countAdded);
             }
@@ -213,7 +213,7 @@ namespace Astrana.Core.Data.Repositories.Feelings
 
                 // Return the current records.
                 if (returnRecords)
-                    return new UpdateSuccessResult<List<DM.Feelings.Feeling>>((await GetFeelingsAsync(new FeelingsQueryOptions<Guid, Guid>() { Ids = updatedFeelingIds })).Data, countUpdated);
+                    return new UpdateSuccessResult<List<DM.Feelings.Feeling>>((await GetFeelingsAsync(new FeelingsQueryOptions<Guid, Guid>(updatedFeelingIds))).Data, countUpdated);
 
                 return new UpdateSuccessResult<List<DM.Feelings.Feeling>>(new List<DM.Feelings.Feeling>(), countUpdated);
             }

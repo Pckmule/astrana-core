@@ -14,6 +14,7 @@ using Astrana.Core.Domain.Models.Links;
 using Astrana.Core.Domain.Models.Links.Options;
 using Astrana.Core.Domain.Models.Results.Enums;
 using Astrana.Core.Domain.Models.System.Enums;
+using Astrana.Core.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -65,8 +66,6 @@ namespace Astrana.Core.API.Controllers
 
             var queryOptions = new LinkQueryOptions<Guid, Guid>
             {
-                OwnerUserIds = createdById.HasValue ? new List<Guid> { createdById.Value } : new List<Guid>(),
-
                 CreatedAfter = createdAfter,
                 CreatedBefore = createdBefore,
 
@@ -76,6 +75,8 @@ namespace Astrana.Core.API.Controllers
                 OrderByDirection = orderByDirection,
                 OrderBy = orderBy
             };
+
+            queryOptions.SetOwnerUserIds(createdById.AsList());
 
             var result = await _getLinksQuery.ExecuteAsync(actioningUserId, queryOptions);
 
@@ -95,10 +96,7 @@ namespace Astrana.Core.API.Controllers
         {
             var actioningUserId = GetActioningUserId();
 
-            var queryOptions = new LinkQueryOptions<Guid, Guid>
-            {
-                Ids = new List<Guid> { id }
-            };
+            var queryOptions = new LinkQueryOptions<Guid, Guid>(id.AsList());
 
             var result = await _getLinksQuery.ExecuteAsync(actioningUserId, queryOptions);
 

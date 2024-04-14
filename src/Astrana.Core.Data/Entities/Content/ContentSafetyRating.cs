@@ -7,21 +7,35 @@
 using Astrana.Core.Data.Constants;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using ModelProperties = Astrana.Core.Domain.Models.ContentSafetyRatings.Constants.ModelProperties;
 
 #nullable disable
 
 namespace Astrana.Core.Data.Entities.Content
 {
     [Table("ContentSafetyRatings", Schema = SchemaNames.Content)]
-    public class ContentSafetyRating : BaseDeactivatableEntity<long, Guid>
+    public class ContentSafetyRating
     {
-        [Required]
-        [Column(Order = 1)]
+        [Key, Column(Order = 0)]
+        public Guid ContentSafetyRatingId { get; set; }
+        
         public string Name { get; set; }
 
-        [MinLength(1)]
-        [MaxLength(500)]
-        [Column(Order = 2)]
+        [MinLength(ModelProperties.ContentSafetyRating.MinimumDescriptionLength)]
         public string Description { get; set; }
+        
+        public DateTimeOffset? DeactivatedTimestamp { get; set; }
+        
+        public string DeactivatedReason { get; set; } = null;
+        
+        public Guid? DeactivatedBy { get; set; }
+        
+        public Guid CreatedBy { get; set; }
+        
+        public Guid LastModifiedBy { get; set; }
+        
+        public DateTimeOffset CreatedTimestamp { get; set; }
+        
+        public DateTimeOffset LastModifiedTimestamp { get; set; }
     }
 }

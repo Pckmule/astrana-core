@@ -52,11 +52,7 @@ namespace Astrana.Core.Domain.AstranaApi.Commands.CreateApiAccessToken
                 return new AddFailResult<ApiAccessToken>(null, 0, message);
             }
 
-            var peer = (await _peerRepository.GetPeersAsync(new PeerQueryOptions<Guid, Guid>
-            {
-                Ids = new List<Guid> { peerId }
-
-            })).Data.FirstOrDefault();
+            var peer = (await _peerRepository.GetPeersAsync(new PeerQueryOptions<Guid, Guid>(peerId.AsList()))).Data.FirstOrDefault();
 
             if (peer == null)
                 throw new EntityNotFoundException($"Peer with ID = {peerId} not found.");

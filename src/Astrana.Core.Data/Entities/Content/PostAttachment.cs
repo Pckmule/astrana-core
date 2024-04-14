@@ -5,76 +5,68 @@
 */
 
 using Astrana.Core.Data.Constants;
-using Astrana.Core.Data.Entities.Configuration;
 using Astrana.Core.Domain.Models.Attachments.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-#nullable disable
-
 namespace Astrana.Core.Data.Entities.Content
 {
     [Table("PostAttachments", Schema = SchemaNames.Content)]
-    public class PostAttachment : BaseDeactivatableEntity<Guid, Guid>
+    public class PostAttachment
     {
-        [MaxLength(250)]
-        [Column(Order = 1)]
-        public string Title { get; set; }
+        [Key, Column(Order = 0)]
+        public Guid PostAttachmentId { get; set; }
 
-        [MaxLength(250)]
-        [Column(Order = 2)]
-        public string Caption { get; set; }
+        public string? Title { get; set; }
 
-        [Required]
-        [Column(Order = 3)]
+        public string? Caption { get; set; }
+
         public AttachmentType Type { get; set; }
 
-        [Column(Order = 4)]
         public Link Link { get; set; }
 
-        [Column(Order = 4)]
         public Guid? LinkId { get; set; }
 
-        [Column(Order = 5)]
         public Image Image { get; set; }
 
-        [Column(Order = 5)]
         public Guid? ImageId { get; set; }
 
-        [Column(Order = 6)]
-        public Image Gif { get; set; }
+        public AudioClip AudioClip { get; set; }
 
-        [Column(Order = 6)]
-        public Guid? GifId { get; set; }
+        public Guid? AudioClipId { get; set; }
 
-        [Column(Order = 7)]
-        public Audio Audio { get; set; }
-
-        [Column(Order = 7)]
-        public Guid? AudioId { get; set; }
-
-        [Column(Order = 8)]
         public Video Video { get; set; }
         
-        [Column(Order = 8)]
         public Guid? VideoId { get; set; }
 
-        [Column(Order = 9)]
         public ContentCollection ContentCollection { get; set; }
 
-        [Column(Order = 9)]
         public Guid? ContentCollectionId { get; set; }
 
-        [Column(Order = 10)]
-        public Location Location { get; set; }
+        public Image Gif { get; set; }
 
-        [Column(Order = 10)]
-        public Guid? LocationId { get; set; }
+        public Guid? GifId { get; set; }
 
-        [Column(Order = 11)]
         public Feeling Feeling { get; set; }
 
-        [Column(Order = 11)]
         public Guid? FeelingId { get; set; }
+
+        public Location Location { get; set; }
+
+        public Guid? LocationId { get; set; }
+        
+        public DateTimeOffset? DeactivatedTimestamp { get; set; }
+
+        public string? DeactivatedReason { get; set; } = null;
+
+        public Guid? DeactivatedBy { get; set; }
+
+        public Guid CreatedBy { get; set; }
+
+        public Guid LastModifiedBy { get; set; }
+
+        public DateTimeOffset CreatedTimestamp { get; set; }
+
+        public DateTimeOffset LastModifiedTimestamp { get; set; }
     }
 }

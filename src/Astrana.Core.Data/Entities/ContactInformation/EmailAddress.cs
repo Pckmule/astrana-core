@@ -4,25 +4,41 @@
 * file, You can obtain one at https://mozilla.org/MPL/2.0/.
 */
 
-using Astrana.Core.Data.Attributes;
+using Astrana.Core.Attributes;
 using Astrana.Core.Data.Constants;
 using Astrana.Core.Data.Entities.User;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using DomainModelProperties = Astrana.Core.Domain.Models.Email.Constants.ModelProperties;
 
 #nullable disable
 
 namespace Astrana.Core.Data.Entities.ContactInformation
 {
     [Table("EmailAddresses", Schema = SchemaNames.ContactInformation)]
-    public class EmailAddress : BaseDeactivatableEntity<Guid, Guid>
+    public class EmailAddress
     {
+        [Key, Column(Order = 0)]
+        public Guid EmailAddressId { get; set; }
+
         [PersonalData]
-        [MaxLength(100)]
-        [Column(Order = 1)]
+        [MinLength(DomainModelProperties.Email.MinimumAddressLength)]
         public string Address { get; set; }
 
-        [Column(Order = 2)]
-        public ICollection<UserEmailAddressRelationship> EmailAddresses { get; set; } = new List<UserEmailAddressRelationship>();
+        public ICollection<UserEmailAddressRelationship> Relationships { get; set; } = new List<UserEmailAddressRelationship>();
+
+        public DateTimeOffset? DeactivatedTimestamp { get; set; }
+
+        public string DeactivatedReason { get; set; } = null;
+
+        public Guid? DeactivatedBy { get; set; }
+
+        public Guid CreatedBy { get; set; }
+
+        public Guid LastModifiedBy { get; set; }
+
+        public DateTimeOffset CreatedTimestamp { get; set; }
+
+        public DateTimeOffset LastModifiedTimestamp { get; set; }
     }
 }

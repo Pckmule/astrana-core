@@ -6,6 +6,7 @@
 
 using Astrana.Core.Data.Constants;
 using Astrana.Core.Domain.Models.Peers.Enums;
+using Astrana.Core.Domain.Models.UserProfiles.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using DomainModelProperties = Astrana.Core.Domain.Models.Peers.Constants.ModelProperties;
@@ -15,37 +16,44 @@ using DomainModelProperties = Astrana.Core.Domain.Models.Peers.Constants.ModelPr
 namespace Astrana.Core.Data.Entities.Peers
 {
     [Table("PeerConnectionRequestsSubmitted", Schema = SchemaNames.Default)]
-    public class PeerConnectionRequestSubmitted : BaseDeactivatableEntity<Guid, Guid>
+    public class PeerConnectionRequestSubmitted
     {
-        [Required]
+        [Key, Column(Order = 0)]
+        public Guid PeerConnectionRequestSubmittedId { get; set; }
+
         [MinLength(DomainModelProperties.PeerConnectionRequestReceived.MinimumFirstNameLength)]
-        [MaxLength(DomainModelProperties.PeerConnectionRequestReceived.MaximumFirstNameLength)]
-        [Column(Order = 1)]
         public string FirstName { get; set; }
 
-        [Required]
         [MinLength(DomainModelProperties.PeerConnectionRequestReceived.MinimumLastNameLength)]
-        [MaxLength(DomainModelProperties.PeerConnectionRequestReceived.MaximumLastNameLength)]
-        [Column(Order = 2)]
         public string LastName { get; set; }
 
-        [Required]
+        public short Age { get; set; }
+
+        public Sex Sex { get; set; }
+
         [MinLength(DomainModelProperties.PeerConnectionRequestReceived.MinimumAddressLength)]
-        [MaxLength(DomainModelProperties.PeerConnectionRequestReceived.MaximumAddressLength)]
-        [Column(Order = 3)]
         public string Address { get; set; }
 
         [MinLength(DomainModelProperties.PeerConnectionRequestReceived.MinimumNoteLength)]
-        [MaxLength(DomainModelProperties.PeerConnectionRequestReceived.MaximumNoteLength)]
-        [Column(Order = 4)]
         public string Note { get; set; }
 
-        [MaxLength(DomainModelProperties.PeerConnectionRequestReceived.MaximumPeerPreviewAccessTokenLength)]
-        [Column(Order = 5)]
+        [MinLength(DomainModelProperties.PeerConnectionRequestReceived.MinimumPeerPreviewAccessTokenLength)]
         public string PeerPreviewAccessToken { get; set; }
-
-        [Required]
-        [Column(Order = 6)]
+        
         public PeerConnectionRequestStatus Status { get; set; }
+
+        public DateTimeOffset? DeactivatedTimestamp { get; set; }
+
+        public string DeactivatedReason { get; set; } = null;
+
+        public Guid? DeactivatedBy { get; set; }
+
+        public Guid CreatedBy { get; set; }
+
+        public Guid LastModifiedBy { get; set; }
+
+        public DateTimeOffset CreatedTimestamp { get; set; }
+
+        public DateTimeOffset LastModifiedTimestamp { get; set; }
     }
 }

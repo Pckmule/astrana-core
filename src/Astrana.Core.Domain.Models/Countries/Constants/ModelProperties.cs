@@ -17,13 +17,16 @@ namespace Astrana.Core.Domain.Models.Countries.Constants
             public static readonly string NamePluralForm = $"{nameof(Country)}s".SplitOnUpperCase();
 
             public const int MinimumNameLength = 1;
-            public const int MaximumNameLength = 100;
+            public const int MaximumNameLength = 150;
 
             public const int MinimumNameTrxCodeLength = 1;
-            public const int MaximumNameTrxCodeLength = 100;
+            public const int MaximumNameTrxCodeLength = 150;
 
-            public const int MinimumCountryCodeLength = 2;
-            public const int MaximumCountryCodeLength = 3;
+            public const int MinimumOfficialNameLength = 1;
+            public const int MaximumOfficialNameLength = 150;
+
+            public const int MinimumOfficialNameTrxCodeLength = 1;
+            public const int MaximumOfficialNameTrxCodeLength = 150;
 
             public const int MinimumTwoLetterCodeLength = 2;
             public const int MaximumTwoLetterCodeLength = 2;

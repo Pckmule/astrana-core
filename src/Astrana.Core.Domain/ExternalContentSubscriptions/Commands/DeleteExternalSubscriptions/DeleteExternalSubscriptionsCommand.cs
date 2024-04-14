@@ -5,7 +5,7 @@
 */
 
 using Astrana.Core.Data.Repositories.ExternalContentSubscriptions;
-using Astrana.Core.Domain.Models.ExternalContentSubscriptions.Constants;
+using Astrana.Core.Domain.Models.ExternalContent.Subscriptions.Constants;
 using Astrana.Core.Domain.Models.Results;
 using Astrana.Core.Domain.Models.Results.Enums;
 using Astrana.Core.Domain.Models.System.Enums;

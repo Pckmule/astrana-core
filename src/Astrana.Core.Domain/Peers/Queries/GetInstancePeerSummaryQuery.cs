@@ -1,4 +1,5 @@
 ﻿using AgeCalculator;
+using Astrana.Core.Data.Repositories.Peers;
 using Astrana.Core.Data.Repositories.SystemSettings;
 using Astrana.Core.Data.Repositories.UserProfiles;
 using Astrana.Core.Domain.IdentityAccessManagement.Managers.User;
@@ -8,6 +9,7 @@ using Astrana.Core.Domain.Models.System.Enums;
 using Astrana.Core.Domain.Models.SystemSettings.Options;
 using Astrana.Core.Utilities;
 using Microsoft.Extensions.Logging;
+using System.Data;
 using SystemSettingDefinitions = Astrana.Core.Domain.Models.System.Constants.SettingDefinitions;
 
 namespace Astrana.Core.Domain.Peers.Queries
@@ -21,8 +23,9 @@ namespace Astrana.Core.Domain.Peers.Queries
         private readonly IUserManager _userManager;
         private readonly ISystemSettingRepository<Guid> _systemSettingRepository;
         private readonly IUserProfileRepository<Guid> _userProfileRepository;
+        private readonly IPeerRepository<Guid> _peerRepository;
 
-        public GetInstancePeerSummaryQuery(ILogger<GetInstancePeerSummaryQuery> logger, IAstranaApiInfo astranaApiInfo, IUserManager userManager, ISystemSettingRepository<Guid> systemSettingRepository, IUserProfileRepository<Guid> userProfileRepository)
+        public GetInstancePeerSummaryQuery(ILogger<GetInstancePeerSummaryQuery> logger, IAstranaApiInfo astranaApiInfo, IUserManager userManager, ISystemSettingRepository<Guid> systemSettingRepository, IUserProfileRepository<Guid> userProfileRepository, IPeerRepository<Guid> peerRepository)
         {
             _logger = logger;
 
@@ -31,9 +34,10 @@ namespace Astrana.Core.Domain.Peers.Queries
             _userManager = userManager;
             _systemSettingRepository = systemSettingRepository;
             _userProfileRepository = userProfileRepository;
+            _peerRepository = peerRepository;
         }
 
-        public async Task<PeerSummaryDto?> ExecuteAsync(Guid actioningUserId)
+        public async Task<PeerSummaryDto?> ExecuteAsync(Guid actioningUserId, bool includeStatistics = false)
         {
             var instanceUser = await _userManager.GetInstanceUserAsync();
 
@@ -68,7 +72,7 @@ namespace Astrana.Core.Domain.Peers.Queries
                 LastName = instanceUser.LastName,
 
                 Age = (short)peerAge.Years,
-                Gender = instanceUser.Sex,
+                Sex = instanceUser.Sex,
 
                 ProfilePicture = instanceUserProfile.ProfilePicturesCollection?.ContentItems?.FirstOrDefault()?.Image?.ToDomainTransferObject(),
                 ProfileCoverPicture = instanceUserProfile.CoverPicturesCollection?.ContentItems?.FirstOrDefault()?.Image?.ToDomainTransferObject()
@@ -82,6 +86,18 @@ namespace Astrana.Core.Domain.Peers.Queries
             if (peerSummary.ProfileCoverPicture != null && !string.IsNullOrEmpty(peerSummary.ProfileCoverPicture.Location) && peerSummary.ProfileCoverPicture.Location.StartsWith('/'))
             {
                 peerSummary.ProfileCoverPicture.Location = _astranaApiInfo.GetProxyEndpoint(AstranaContentType.Image, peerSummary.ProfileCoverPicture.Location);
+            }
+
+            if (includeStatistics)
+            {
+                var peerCount = (int)(await _peerRepository.GetPeersCountAsync()).Count;
+                var mutualPeerCount = 0;
+
+                peerSummary.Statistics = new PeerStatisticsDto
+                {
+                    PeerCount = peerCount,
+                    MutualPeerCount = mutualPeerCount
+                };
             }
 
             _logger.LogTrace($"Executed {nameof(GetInstancePeerSummaryQuery).SplitOnUpperCase()}");

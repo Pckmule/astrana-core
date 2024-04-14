@@ -15,6 +15,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Astrana.Core.Domain.Models.Languages
 {
+    // Reference Data?
     public class Language : DomainEntity, ILanguage, IAuditable<Guid>, IDeactivatable<Guid>
     {
         private string _code;
@@ -43,18 +44,9 @@ namespace Astrana.Core.Domain.Models.Languages
         public string NameTrxCode { get; set; }
 
         [Required]
-        [MinLength(ModelProperties.Language.MinimumCodeLength)]
-        [MaxLength(ModelProperties.Language.MaximumCodeLength)]
-        [LookupOptionValue]
-        public string Code
-        {
-            get => _code;
-            set => _code = value.ToUpperInvariant();
-        }
-
-        [Required]
         [MinLength(ModelProperties.Language.MinimumTwoLetterCodeLength)]
         [MaxLength(ModelProperties.Language.MaximumTwoLetterCodeLength)]
+        [LookupOptionValue]
         public string TwoLetterCode
         {
             get => _twoLetterCode;
@@ -89,7 +81,7 @@ namespace Astrana.Core.Domain.Models.Languages
         public string? DeactivatedReason { get; set; }
 
         public Guid? DeactivatedBy { get; set; }
-
+        
         public override EntityValidationResult Validate()
         {
             return this.ValidateDomainModel();

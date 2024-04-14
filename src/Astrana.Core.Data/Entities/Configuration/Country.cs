@@ -7,7 +7,6 @@
 using Astrana.Core.Data.Constants;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Index = Microsoft.EntityFrameworkCore.IndexAttribute;
 using DomainModelProperties = Astrana.Core.Domain.Models.Countries.Constants.ModelProperties;
 
 #nullable disable
@@ -15,32 +14,45 @@ using DomainModelProperties = Astrana.Core.Domain.Models.Countries.Constants.Mod
 namespace Astrana.Core.Data.Entities.Configuration
 {
     [Table("Countries", Schema = SchemaNames.Configuration)]
-    [Index(nameof(TwoLetterCode), IsUnique = true)]
-    [Index(nameof(ThreeLetterCode), IsUnique = true)]
-    public class Country : BaseDeactivatableEntity<long, Guid>
+    public class Country
     {
-        [Required]
+        [Key, Column(Order = 0)]
+        public long CountryId { get; set; }
+        
         [MinLength(DomainModelProperties.Country.MinimumNameLength)]
-        [MaxLength(DomainModelProperties.Country.MaximumNameLength)]
-        [Column(Order = 1)]
         public string Name { get; set; }
-
-        [Required]
+        
         [MinLength(DomainModelProperties.Country.MinimumNameTrxCodeLength)]
-        [MaxLength(DomainModelProperties.Country.MaximumNameTrxCodeLength)]
-        [Column(Order = 2)]
         public string NameTrxCode { get; set; }
-
-        [Required]
+        
+        [MinLength(DomainModelProperties.Country.MinimumOfficialNameLength)]
+        public string OfficialName { get; set; }
+        
+        [MinLength(DomainModelProperties.Country.MinimumOfficialNameTrxCodeLength)]
+        public string OfficialNameTrxCode { get; set; }
+        
         [MinLength(DomainModelProperties.Country.MinimumTwoLetterCodeLength)]
-        [MaxLength(DomainModelProperties.Country.MaximumTwoLetterCodeLength)]
-        [Column(Order = 3)]
         public string TwoLetterCode { get; set; }
-
-        [Required]
+        
         [MinLength(DomainModelProperties.Country.MinimumThreeLetterCodeLength)]
-        [MaxLength(DomainModelProperties.Country.MaximumThreeLetterCodeLength)]
-        [Column(Order = 4)]
         public string ThreeLetterCode { get; set; }
+
+        public int? NumberCode { get; set; }
+
+        public ICollection<TimeZone> TimeZones { get; set; } = new List<TimeZone>();
+
+        public DateTimeOffset? DeactivatedTimestamp { get; set; }
+
+        public string DeactivatedReason { get; set; } = null;
+
+        public Guid? DeactivatedBy { get; set; }
+
+        public Guid CreatedBy { get; set; }
+
+        public Guid LastModifiedBy { get; set; }
+
+        public DateTimeOffset CreatedTimestamp { get; set; }
+
+        public DateTimeOffset LastModifiedTimestamp { get; set; }
     }
 }

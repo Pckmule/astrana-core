@@ -14,6 +14,7 @@ using Astrana.Core.Domain.Models.Comments;
 using Astrana.Core.Domain.Models.Comments.DomainTransferObjects;
 using Astrana.Core.Domain.Models.Comments.Options;
 using Astrana.Core.Domain.Models.Results.Enums;
+using Astrana.Core.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -59,14 +60,14 @@ namespace Astrana.Core.API.Controllers
 
             var queryOptions = new CommentQueryOptions<Guid, Guid>
             {
-                OwnerUserIds = createdById.HasValue ? new List<Guid> { createdById.Value } : new List<Guid>(),
-
                 CreatedAfter = createdAfter,
                 CreatedBefore = createdBefore,
 
                 PageSize = pageSize,
                 CurrentPage = page
             };
+
+            queryOptions.SetOwnerUserIds(createdById.AsList());
 
             var result = await _getCommentsQuery.ExecuteAsync(actioningUserId, queryOptions);
 
@@ -86,10 +87,7 @@ namespace Astrana.Core.API.Controllers
         {
             var actioningUserId = GetActioningUserId();
 
-            var queryOptions = new CommentQueryOptions<Guid, Guid>
-            {
-                Ids = new List<Guid> { id }
-            };
+            var queryOptions = new CommentQueryOptions<Guid, Guid>(id.AsList());
 
             var result = await _getCommentsQuery.ExecuteAsync(actioningUserId, queryOptions);
 

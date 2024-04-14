@@ -18,6 +18,9 @@ namespace Astrana.Core.Domain.SystemSetup
             services.AddScoped<IGetSystemSetupStatusQuery, GetSystemSetupStatusQuery>();
             services.AddTransient<IGetSystemSetupStatusQuery, GetSystemSetupStatusQuery>();
 
+            services.AddScoped<IGetSystemSetupSuggestedDefaultsQuery, GetSystemSetupSuggestedDefaultsQuery>();
+            services.AddTransient<IGetSystemSetupSuggestedDefaultsQuery, GetSystemSetupSuggestedDefaultsQuery>();
+
             services.AddScoped<ISetupInstanceUserCommand, SetupInstanceUserCommand>();
             services.AddTransient<ISetupInstanceUserCommand, SetupInstanceUserCommand>();
 

@@ -36,10 +36,10 @@ namespace Astrana.Core.Data.Repositories.Audiences
 
             // Add Filters
             if (options.Ids.Any())
-                query = query.Where(o => options.Ids.Contains(o.Id));
+                query = query.Where(o => options.Ids.Contains(o.AudienceId));
 
             if (options.ExcludeIds.Any())
-                query = query.Where(o => !options.ExcludeIds.Contains(o.Id));
+                query = query.Where(o => !options.ExcludeIds.Contains(o.AudienceId));
 
             if (options.CreatedBefore.HasValue)
                 query = query.Where(o => o.CreatedTimestamp < options.CreatedBefore.Value);
@@ -96,7 +96,7 @@ namespace Astrana.Core.Data.Repositories.Audiences
             else
                 resultSetCount = queryResults.Count;
 
-            var countries = queryResults.Select(country => ModelMapper.MapModel<DM.Audiences.Audience, Audience>(country)).ToList();
+            var countries = queryResults.Select(Data.Entities.Configuration.ModelMappings.Audience.MapToDomainModel).ToList();
 
             logger.LogInformation(string.Format(MessageRetrievedEntity, nameof(Audience)), queryOptions);
 
@@ -129,35 +129,27 @@ namespace Astrana.Core.Data.Repositories.Audiences
 
             try
             {
-                var now = DateTime.UtcNow;
-
                 foreach (var addition in requestedAdditions)
                 {
-                    var newAudienceEntity = ModelMapper.MapModel<Audience, IAudienceToAdd>(addition);
+                    var newAudienceEntity =  ModelMapper.MapModel<Audience, IAudienceToAdd>(addition);
 
                     if (newAudienceEntity == null)
                         continue;
                     
-                    newAudienceEntity.CreatedBy = actioningUserId;
-                    newAudienceEntity.CreatedTimestamp = now;
-
-                    newAudienceEntity.LastModifiedBy = actioningUserId;
-                    newAudienceEntity.LastModifiedTimestamp = now;
-
                     // Save records.
                     databaseSession.Audiences.Add(newAudienceEntity);
                     await databaseSession.SaveChangesAsync();
 
                     countAdded++;
 
-                    newAudienceIds.Add(newAudienceEntity.Id);
+                    newAudienceIds.Add(newAudienceEntity.AudienceId);
                 }
 
                 logger.LogInformation(string.Format(MessageSuccessfullyCreatedEntity, newAudienceIds.Count, nameof(Audience) + "(s)"));
 
                 // Return the current records.
                 if (returnRecords)
-                    return new AddSuccessResult<List<DM.Audiences.Audience>>((await GetAudiencesAsync(new AudienceQueryOptions<Guid, Guid>() { Ids = newAudienceIds })).Data, countAdded);
+                    return new AddSuccessResult<List<DM.Audiences.Audience>>((await GetAudiencesAsync(new AudienceQueryOptions<Guid, Guid>(newAudienceIds))).Data, countAdded);
 
                 return new AddSuccessResult<List<DM.Audiences.Audience>>(new List<DM.Audiences.Audience>(), countAdded);
             }
@@ -189,7 +181,7 @@ namespace Astrana.Core.Data.Repositories.Audiences
 
                 foreach (var update in requestedUpdates)
                 {
-                    var existingAudienceEntity = await databaseSession.Audiences.FirstOrDefaultAsync(o => o.Id == update.LinkId);
+                    var existingAudienceEntity = await databaseSession.Audiences.FirstOrDefaultAsync(o => o.AudienceId == update.AudienceId);
 
                     if (existingAudienceEntity == null)
                         continue;
@@ -209,14 +201,14 @@ namespace Astrana.Core.Data.Repositories.Audiences
 
                     countUpdated++;
 
-                    updatedAudienceIds.Add(existingAudienceEntity.Id);
+                    updatedAudienceIds.Add(existingAudienceEntity.AudienceId);
                 }
 
                 logger.LogInformation(string.Format(MessageSuccessfullyUpdatedEntity, updatedAudienceIds.Count, nameof(Audience) + "(s)"));
 
                 // Return the current records.
                 if (returnRecords)
-                    return new UpdateSuccessResult<List<DM.Audiences.Audience>>((await GetAudiencesAsync(new AudienceQueryOptions<Guid, Guid>() { Ids = updatedAudienceIds })).Data, countUpdated);
+                    return new UpdateSuccessResult<List<DM.Audiences.Audience>>((await GetAudiencesAsync(new AudienceQueryOptions<Guid, Guid>(updatedAudienceIds))).Data, countUpdated);
 
                 return new UpdateSuccessResult<List<DM.Audiences.Audience>>(new List<DM.Audiences.Audience>(), countUpdated);
             }

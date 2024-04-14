@@ -27,7 +27,7 @@ namespace Astrana.Core.Domain.Models.UserProfiles.Constants
             public const int MaximumLastNameLength = ApplicationUser.MaximumLastNameLength;
 
             public const int MinimumIntroductionLength = 0;
-            public const int MaximumIntroductionLength = 100;
+            public const int MaximumIntroductionLength = 500;
         }
 
         public static class UserProfileDetail

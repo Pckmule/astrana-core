@@ -1,46 +1,57 @@
-﻿using Astrana.Core.Constants;
+﻿/*
+* This Source Code Form is subject to the terms of the Mozilla Public
+* License, v2.0. If a copy of the MPL was not distributed with this
+* file, You can obtain one at https://mozilla.org/MPL/2.0/.
+*/
+
 using Astrana.Core.Data.Entities.Configuration;
-using Astrana.Core.Domain.Models.System.Constants;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using DM = Astrana.Core.Domain.Models.SystemSettings;
+using DomainModelProperties = Astrana.Core.Domain.Models.SystemSettings.Constants.ModelProperties;
 
 namespace Astrana.Core.Data.EntityConfiguration
 {
-    public class SystemSettingCategoryConfiguration : IEntityTypeConfiguration<SystemSettingCategory>
+    public static partial class EntityConfigurationExtensions
     {
-        private readonly List<DM.SystemSettingCategory> _settingsToSeed = new();
-
-        public SystemSettingCategoryConfiguration()
+        public static ModelBuilder ConfigureSystemSettingCategory(this ModelBuilder modelBuilder)
         {
-            SettingCategoryDefinitions.Register(_settingsToSeed);
-            Domain.Models.IdentityAccessManagement.Constants.SettingCategoryDefinitions.Register(_settingsToSeed);
+            return modelBuilder.ApplyConfiguration(new SystemSettingCategoryConfiguration());
         }
+    }
 
+    public sealed class SystemSettingCategoryConfiguration : IEntityTypeConfiguration<SystemSettingCategory>
+    {
         public void Configure(EntityTypeBuilder<SystemSettingCategory> entityTypeBuilder)
         {
-            entityTypeBuilder.HasData
-            (
-                GetSettingsToSeed()
-            );
-        }
+            entityTypeBuilder.Property(p => p.Name)
+                .IsRequired()
+                .HasMaxLength(DomainModelProperties.SystemSettingCategory.MaximumNameLength)
+                .HasColumnOrder(1);
 
-        private IEnumerable<SystemSettingCategory> GetSettingsToSeed()
-        {
-            var now = DateTime.UtcNow;
-            var systemId = Guid.Parse(SystemUser.Id);
+            entityTypeBuilder.Property(p => p.NameTrxCode)
+                .IsRequired()
+                .HasMaxLength(DomainModelProperties.SystemSettingCategory.MaximumNameTrxCodeLength)
+                .HasColumnOrder(2);
 
-            return _settingsToSeed.Select(s => new SystemSettingCategory
-            {
-                Id = Guid.NewGuid(),
-                Name = s.Name,
-                Description = s.Description,
-                CreatedBy = systemId,
-                CreatedTimestamp = now,
-                LastModifiedBy = systemId,
-                LastModifiedTimestamp = now
+            entityTypeBuilder.HasIndex(p => p.NameTrxCode).IsUnique();
 
-            }).ToArray();
+            entityTypeBuilder.Property(p => p.Description)
+                .HasMaxLength(DomainModelProperties.SystemSettingCategory.MaximumDescriptionLength)
+                .HasColumnOrder(3);
+
+            entityTypeBuilder.Property(p => p.DescriptionTrxCode)
+                .HasMaxLength(DomainModelProperties.SystemSettingCategory.MaximumDescriptionTrxCodeLength)
+                .HasColumnOrder(4);
+
+            entityTypeBuilder.HasIndex(p => p.DescriptionTrxCode).IsUnique();
+
+            //entityTypeBuilder.Property(p => p.Settings)
+            //    .HasColumnOrder(5);
+
+            entityTypeBuilder.Property(p => p.CreatedBy).IsRequired().HasColumnOrder(99996);
+            entityTypeBuilder.Property(p => p.LastModifiedBy).IsRequired().HasColumnOrder(99997);
+            entityTypeBuilder.Property(p => p.CreatedTimestamp).IsRequired().HasColumnOrder(99998);
+            entityTypeBuilder.Property(p => p.LastModifiedTimestamp).IsRequired().HasColumnOrder(99999);
         }
     }
 }

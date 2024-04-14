@@ -13,6 +13,8 @@ namespace Astrana.Core.Domain.Models.Lookups.Contracts
         string? Label { get; set; }
 
         string? TrxCode { get; set; }
+        
+        string? IconName { get; set; }
 
         string? IconAddress { get; set; }
     }

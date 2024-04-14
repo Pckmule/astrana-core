@@ -4,7 +4,6 @@
 * file, You can obtain one at https://mozilla.org/MPL/2.0/.
 */
 
-using Astrana.Core.Configuration.Constants;
 using Astrana.Core.Configuration.Exceptions;
 using Astrana.Core.Enums;
 using Astrana.Core.Extensions;
@@ -22,7 +21,7 @@ namespace Astrana.Core.Configuration.Extensions
 
         public static bool IsSetupModeEnabled(this IConfiguration configuration)
         {
-            return configuration.HasKey(ApplicationConfigurationKeys.SetupMode);
+            return false; // configuration.HasKey(ApplicationConfigurationKeys.SetupMode);
         }
 
         public static DatabaseProvider GetDatabaseProvider(this IConfiguration? configuration)

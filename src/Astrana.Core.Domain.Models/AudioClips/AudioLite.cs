@@ -10,15 +10,15 @@ namespace Astrana.Core.Domain.Models.AudioClips
 {
     public sealed class AudioLite : IAudio
     {
-        public AudioLite(Audio fullModel)
+        public AudioLite(AudioClip fullModel)
         {
-            AudioId = fullModel.AudioId;
+            AudioClipId = fullModel.AudioClipId;
             Location = fullModel.Location;
             Caption = fullModel.Caption;
             Copyright = fullModel.Copyright;
         }
 
-        public Guid AudioId { get; set; }
+        public Guid AudioClipId { get; set; }
 
         public string Location { get; set; }
         

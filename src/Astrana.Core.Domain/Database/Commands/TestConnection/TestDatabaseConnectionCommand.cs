@@ -8,6 +8,7 @@ using Astrana.Core.Constants;
 using Astrana.Core.Domain.Models.Database;
 using Astrana.Core.Domain.Models.Results;
 using Astrana.Core.Domain.Models.SystemSetup;
+using Astrana.Core.Enums;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
 using MySqlConnector;
@@ -19,6 +20,11 @@ namespace Astrana.Core.Domain.Database.Commands.TestConnection
     public class TestDatabaseConnectionCommand : ITestDatabaseConnectionCommand
     {
         private readonly ILogger<TestDatabaseConnectionCommand> _logger;
+        
+        private const string UnsupportedDatabaseProviderMessage = "Unsupported Database Provider";
+        private const string DatabaseConnectionDetailsInvalidMessage = "Database Connection details are invalid.";
+        private const string DatabaseConnectionSuccessfulMessage = "Database Connection Successful";
+        private const string DatabaseConnectionFailedMessage = "Database Connection Failed";
 
         public TestDatabaseConnectionCommand(ILogger<TestDatabaseConnectionCommand> logger)
         {
@@ -28,44 +34,44 @@ namespace Astrana.Core.Domain.Database.Commands.TestConnection
         public async Task<ExecutionResult> ExecuteAsync(TestDatabaseConnectionRequest request, Guid actioningUserId)
         {
             if (!request.IsValid)
-                return new ExecutionFailResult("Database Connection details are invalid.");
+                return new ExecutionFailResult(DatabaseConnectionDetailsInvalidMessage);
                         
             try
             {
                 switch (request.DatabaseProvider)
                 {
-                    case Enums.DatabaseProvider.PostgreSQL:
+                    case DatabaseProvider.PostgreSQL:
                         await using (var conn = new NpgsqlConnection(new PostgreSqlConnectionString(request.DatabaseHost, request.DatabaseHostPort, request.DatabaseName, request.DatabaseUsername, request.DatabasePassword).GetString()))
                         {
                             await conn.OpenAsync();
                             await conn.CloseAsync();
 
-                            return new ExecutionSuccessResult("Database Connection Successful");
+                            return new ExecutionSuccessResult(DatabaseConnectionSuccessfulMessage);
                         }
 
-                    case Enums.DatabaseProvider.MySQL:
+                    case DatabaseProvider.MySQL:
 
                         await using (var connection = new MySqlConnection(new MySqlConnectionString(request.DatabaseHost, request.DatabaseHostPort, request.DatabaseName, request.DatabaseUsername, request.DatabasePassword).GetString()))
                         {
                             await connection.OpenAsync();
                             await connection.CloseAsync();
 
-                            return new ExecutionSuccessResult("Database Connection Successful");
+                            return new ExecutionSuccessResult(DatabaseConnectionSuccessfulMessage);
                         }
 
-                    case Enums.DatabaseProvider.MSSqlServer:
-                    case Enums.DatabaseProvider.Default:
+                    case DatabaseProvider.MSSqlServer:
+                    case DatabaseProvider.Default:
 
                         await using (var connection = new SqlConnection(new MsSqlServerConnectionString(request.DatabaseHost, request.DatabaseHostPort, request.DatabaseName, request.DatabaseUsername, request.DatabasePassword).GetString()))
                         {
                             await connection.OpenAsync();
                             await connection.CloseAsync();
 
-                            return new ExecutionSuccessResult("Database Connection Successful");
+                            return new ExecutionSuccessResult(DatabaseConnectionSuccessfulMessage);
                         }
                 }
 
-                return new ExecutionFailResult("Unsupported Database Provider", ErrorCodes.CannotConnect);
+                return new ExecutionFailResult(UnsupportedDatabaseProviderMessage, ErrorCodes.CannotConnect);
             }
             catch (PostgresException ex)
             {
@@ -74,7 +80,7 @@ namespace Astrana.Core.Domain.Database.Commands.TestConnection
                 if (ex.SqlState == PostgresErrorCodes.InvalidPassword)
                     errorCode = ErrorCodes.CannotConnect_AuthenticationFailed;
 
-                return new ExecutionFailResult("Database Connection Failed", errorCode);
+                return new ExecutionFailResult(DatabaseConnectionFailedMessage, errorCode);
             }
             catch (MySqlException ex)
             {
@@ -83,7 +89,7 @@ namespace Astrana.Core.Domain.Database.Commands.TestConnection
                 if (ex.ErrorCode == MySqlErrorCode.UnableToConnectToHost)
                     errorCode = ErrorCodes.CannotConnect_NetworkError;
 
-                return new ExecutionFailResult("Database Connection Failed", errorCode);
+                return new ExecutionFailResult(DatabaseConnectionFailedMessage, errorCode);
             }
             catch (SqlException ex)
             {
@@ -95,15 +101,15 @@ namespace Astrana.Core.Domain.Database.Commands.TestConnection
                 if (ex.Number == 18456)
                     errorCode = ErrorCodes.CannotConnect_AuthenticationFailed;
 
-                return new ExecutionFailResult("Database Connection Failed", errorCode);
+                return new ExecutionFailResult(DatabaseConnectionFailedMessage, errorCode);
             }
             catch (SocketException)
             {
-                return new ExecutionFailResult("Database Connection Failed", ErrorCodes.CannotConnect_NetworkError);
+                return new ExecutionFailResult(DatabaseConnectionFailedMessage, ErrorCodes.CannotConnect_NetworkError);
             }
             catch (Exception)
             {
-                return new ExecutionFailResult("Database Connection Failed", ErrorCodes.CannotConnect);
+                return new ExecutionFailResult(DatabaseConnectionFailedMessage, ErrorCodes.CannotConnect);
             }
         }
     }

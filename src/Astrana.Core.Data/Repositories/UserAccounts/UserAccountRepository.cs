@@ -65,10 +65,10 @@ namespace Astrana.Core.Data.Repositories.UserAccounts
 
             // Add Filters
             if (options.Ids.Any())
-                query = query.Where(o => options.Ids.Contains(o.Id));
+                query = query.Where(o => options.Ids.Contains(o.UserAccountId));
 
             if (options.ExcludeIds.Any())
-                query = query.Where(o => !options.ExcludeIds.Contains(o.Id));
+                query = query.Where(o => !options.ExcludeIds.Contains(o.UserAccountId));
 
             if (options.AccountTypes.Any())
                 query = query.Where(o => options.AccountTypes.Contains(o.Type));
@@ -131,7 +131,7 @@ namespace Astrana.Core.Data.Repositories.UserAccounts
             else
                 resultSetCount = queryResults.Count;
 
-            var userAccounts = queryResults.Select(userAccount => ModelMapper.MapModel<DM.UserAccounts.UserAccount, UserAccount>(userAccount)).ToList();
+            var userAccounts = queryResults.Select(Entities.Identity.ModelMappings.UserAccount.MapToDomainModel).ToList();
 
             logger.LogInformation(string.Format(MessageRetrievedEntity, nameof(UserAccount)), queryOptions);
 
@@ -225,7 +225,7 @@ namespace Astrana.Core.Data.Repositories.UserAccounts
 
                     countAdded++;
 
-                    newUserAccountIds.Add(newUserAccountEntity.Id);
+                    newUserAccountIds.Add(newUserAccountEntity.UserAccountId);
                 }
 
                 logger.LogInformation(string.Format(MessageSuccessfullyCreatedEntity, newUserAccountIds.Count, nameof(UserAccount) + "(s)"));
@@ -234,9 +234,9 @@ namespace Astrana.Core.Data.Repositories.UserAccounts
                 if (returnRecords)
                 {
                     if(results.Values.All(o => o.Count < 1))
-                        return new AddSuccessResult<List<DM.UserAccounts.UserAccount>>((await GetUserAccountsAsync(new UserAccountQueryOptions<Guid, Guid> { Ids = newUserAccountIds })).Data, countAdded);
+                        return new AddSuccessResult<List<DM.UserAccounts.UserAccount>>((await GetUserAccountsAsync(new UserAccountQueryOptions<Guid, Guid>(newUserAccountIds))).Data, countAdded);
 
-                    return new AddPartialSuccessResult<List<DM.UserAccounts.UserAccount>>((await GetUserAccountsAsync(new UserAccountQueryOptions<Guid, Guid> { Ids = newUserAccountIds })).Data, countAdded)
+                    return new AddPartialSuccessResult<List<DM.UserAccounts.UserAccount>>((await GetUserAccountsAsync(new UserAccountQueryOptions<Guid, Guid>(newUserAccountIds))).Data, countAdded)
                     {
                         Errors = results.Values.SelectMany(x => x).ToList()
                     };
@@ -291,7 +291,7 @@ namespace Astrana.Core.Data.Repositories.UserAccounts
 
                 foreach (var update in requestedUpdates)
                 {
-                    var existingUserAccountEntity = await databaseSession.UserAccounts.FirstOrDefaultAsync(o => o.Id == update.UserAccountId);
+                    var existingUserAccountEntity = await databaseSession.UserAccounts.FirstOrDefaultAsync(o => o.UserAccountId == update.UserAccountId);
 
                     if (existingUserAccountEntity == null)
                         continue;
@@ -311,14 +311,14 @@ namespace Astrana.Core.Data.Repositories.UserAccounts
 
                     countUpdated++;
 
-                    updatedUserAccountIds.Add(existingUserAccountEntity.Id);
+                    updatedUserAccountIds.Add(existingUserAccountEntity.UserAccountId);
                 }
 
                 logger.LogInformation(string.Format(MessageSuccessfullyUpdatedEntity, updatedUserAccountIds.Count, nameof(UserAccount) + "(s)"));
 
                 // Return the current records.
                 if (returnRecords)
-                    return new UpdateSuccessResult<List<DM.UserAccounts.UserAccount>>((await GetUserAccountsAsync(new UserAccountQueryOptions<Guid, Guid>() { Ids = updatedUserAccountIds })).Data, countUpdated);
+                    return new UpdateSuccessResult<List<DM.UserAccounts.UserAccount>>((await GetUserAccountsAsync(new UserAccountQueryOptions<Guid, Guid>(updatedUserAccountIds))).Data, countUpdated);
 
                 return new UpdateSuccessResult<List<DM.UserAccounts.UserAccount>>(new List<DM.UserAccounts.UserAccount>(), countUpdated);
             }

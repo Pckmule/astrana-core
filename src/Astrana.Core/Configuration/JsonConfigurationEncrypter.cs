@@ -4,11 +4,10 @@
 * file, You can obtain one at https://mozilla.org/MPL/2.0/.
 */
 
-using Astrana.Core.Configuration.Constants;
-using Astrana.Core.Configuration.Exceptions;
-using Astrana.Core.Configuration.Models;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Astrana.Core.Configuration.Constants;
+using Astrana.Core.Configuration.Exceptions;
 
 namespace Astrana.Core.Configuration
 {
@@ -21,8 +20,11 @@ namespace Astrana.Core.Configuration
             _configurationFilePaths = configurationFilePaths ?? new List<string>();
         }
 
-        public async Task EncryptAsync(List<string>? configurationFiles = null)
+        public async Task EncryptAsync(IDataProtectionEncryptionUtility dataProtectionEncryptionUtility, List<string>? configurationFiles = null)
         {
+            if (dataProtectionEncryptionUtility == null)
+                throw new ArgumentNullException(nameof(dataProtectionEncryptionUtility));
+
             configurationFiles ??= _configurationFilePaths;
 
             foreach (var configurationFile in configurationFiles)
@@ -39,7 +41,7 @@ namespace Astrana.Core.Configuration
 
                     await using (var fileStream = File.OpenRead(configurationFile))
                     {
-                        var settings = await JsonSerializer.DeserializeAsync<ApplicationSettings>(fileStream, new JsonSerializerOptions()
+                        var settings = await JsonSerializer.DeserializeAsync<Core.Settings.Models.ApplicationSettings>(fileStream, new JsonSerializerOptions()
                         {
                             Converters =
                             {
@@ -52,25 +54,25 @@ namespace Astrana.Core.Configuration
 
                         foreach (var connectionString in settings.ConnectionStrings)
                         {
-                            settings.ConnectionStrings[connectionString.Key] = EncryptionUtility.EncryptString(connectionString.Value);
+                            settings.ConnectionStrings[connectionString.Key] = dataProtectionEncryptionUtility.EncryptString(connectionString.Value);
                         }
 
                         var msSqlServerSinkSettings = settings.Serilog.WriteTo.FirstOrDefault(o => o.Name == ApplicationConfigurationKeys.SerilogSinkMsSqlServerName);
                         if (msSqlServerSinkSettings != null && msSqlServerSinkSettings.Args.Any(o => o.Key == ApplicationConfigurationKeys.SerilogSinkMsSqlServerArgConnectionString))
                         {
-                            msSqlServerSinkSettings.Args[ApplicationConfigurationKeys.SerilogSinkMsSqlServerArgConnectionString] = EncryptionUtility.EncryptString(msSqlServerSinkSettings.Args[ApplicationConfigurationKeys.SerilogSinkMsSqlServerArgConnectionString].ToString()!);
+                            msSqlServerSinkSettings.Args[ApplicationConfigurationKeys.SerilogSinkMsSqlServerArgConnectionString] = dataProtectionEncryptionUtility.EncryptString(msSqlServerSinkSettings.Args[ApplicationConfigurationKeys.SerilogSinkMsSqlServerArgConnectionString].ToString()!);
                         }
 
                         var postgreSqlSinkSettings = settings.Serilog.WriteTo.FirstOrDefault(o => o.Name == ApplicationConfigurationKeys.SerilogSinkPostgreSqlName);
                         if (postgreSqlSinkSettings != null && postgreSqlSinkSettings.Args.Any(o => o.Key == ApplicationConfigurationKeys.SerilogSinkPostgreSqlArgConnectionString))
                         {
-                            postgreSqlSinkSettings.Args[ApplicationConfigurationKeys.SerilogSinkPostgreSqlArgConnectionString] = EncryptionUtility.EncryptString(postgreSqlSinkSettings.Args[ApplicationConfigurationKeys.SerilogSinkPostgreSqlArgConnectionString].ToString()!);
+                            postgreSqlSinkSettings.Args[ApplicationConfigurationKeys.SerilogSinkPostgreSqlArgConnectionString] = dataProtectionEncryptionUtility.EncryptString(postgreSqlSinkSettings.Args[ApplicationConfigurationKeys.SerilogSinkPostgreSqlArgConnectionString].ToString()!);
                         }
 
                         var mySqlSinkSettings = settings.Serilog.WriteTo.FirstOrDefault(o => o.Name == ApplicationConfigurationKeys.SerilogSinkMySqlName);
                         if (mySqlSinkSettings != null && mySqlSinkSettings.Args.Any(o => o.Key == ApplicationConfigurationKeys.SerilogSinkMySqlArgConnectionString))
                         {
-                            mySqlSinkSettings.Args[ApplicationConfigurationKeys.SerilogSinkMySqlArgConnectionString] = EncryptionUtility.EncryptString(mySqlSinkSettings.Args[ApplicationConfigurationKeys.SerilogSinkMySqlArgConnectionString].ToString()!);
+                            mySqlSinkSettings.Args[ApplicationConfigurationKeys.SerilogSinkMySqlArgConnectionString] = dataProtectionEncryptionUtility.EncryptString(mySqlSinkSettings.Args[ApplicationConfigurationKeys.SerilogSinkMySqlArgConnectionString].ToString()!);
                         }
 
                         encryptedContents = JsonSerializer.Serialize(settings, new JsonSerializerOptions
@@ -87,6 +89,8 @@ namespace Astrana.Core.Configuration
                 }
                 catch (Exception ex)
                 {
+                    // TODO: _logger.LogError(ex, ex.Message);
+
                     Console.WriteLine(ex.Message);
                 }
             }

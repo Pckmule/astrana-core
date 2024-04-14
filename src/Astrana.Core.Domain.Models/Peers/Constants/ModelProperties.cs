@@ -29,6 +29,7 @@ namespace Astrana.Core.Domain.Models.Peers.Constants
             public const int MinimumNoteLength = 0;
             public const int MaximumNoteLength = 500;
 
+            public const int MinimumPeerAccessTokenLength = 0;
             public const int MaximumPeerAccessTokenLength = 2000;
         }
 
@@ -51,6 +52,25 @@ namespace Astrana.Core.Domain.Models.Peers.Constants
             public const int MaximumIntroductionLength = 100;
         }
 
+        public static class PeerCircle
+        {
+            public static readonly string NameUnique = nameof(PeerCircle).SplitOnUpperCase();
+            public static readonly string NameSingularForm = nameof(PeerCircle).SplitOnUpperCase();
+            public static readonly string NamePluralForm = $"{nameof(PeerCircle)}s".SplitOnUpperCase();
+
+            public const int MinimumNameLength = 1;
+            public const int MaximumNameLength = 100;
+
+            public const int MinimumNameTrxCodeLength = 1;
+            public const int MaximumNameTrxCodeLength = 100;
+
+            public const int MinimumDescriptionLength = 1;
+            public const int MaximumDescriptionLength = 100;
+
+            public const int MinimumDescriptionTrxCodeLength = 1;
+            public const int MaximumDescriptionTrxCodeLength = 100;
+        }
+
         public static class PeerConnectionRequestReceived
         {
             public static readonly string NameUnique = nameof(PeerConnectionRequestReceived).SplitOnUpperCase();
@@ -69,6 +89,7 @@ namespace Astrana.Core.Domain.Models.Peers.Constants
             public const int MinimumNoteLength = 0;
             public const int MaximumNoteLength = 500;
 
+            public const int MinimumPeerPreviewAccessTokenLength = 0;
             public const int MaximumPeerPreviewAccessTokenLength = 2000;
         }
 
@@ -90,6 +111,7 @@ namespace Astrana.Core.Domain.Models.Peers.Constants
             public const int MinimumNoteLength = 0;
             public const int MaximumNoteLength = 500;
 
+            public const int MinimumPeerPreviewAccessTokenLength = 0;
             public const int MaximumPeerPreviewAccessTokenLength = 2000;
         }
     }

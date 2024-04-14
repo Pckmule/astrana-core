@@ -36,10 +36,10 @@ namespace Astrana.Core.Data.Repositories.ApiAccessTokens
 
             // Add Filters
             if (options.Ids.Any())
-                query = query.Where(o => options.Ids.Contains(o.Id));
+                query = query.Where(o => options.Ids.Contains(o.ApiAccessTokenId));
 
             if (options.ExcludeIds.Any())
-                query = query.Where(o => !options.ExcludeIds.Contains(o.Id));
+                query = query.Where(o => !options.ExcludeIds.Contains(o.ApiAccessTokenId));
 
             if (options.CreatedBefore.HasValue)
                 query = query.Where(o => o.CreatedTimestamp < options.CreatedBefore.Value);
@@ -96,7 +96,7 @@ namespace Astrana.Core.Data.Repositories.ApiAccessTokens
             else
                 resultSetCount = queryResults.Count;
 
-            var apiAccessTokens = queryResults.Select(apiAccessToken => ModelMapper.MapModel<DM.ApiAccessTokens.ApiAccessToken, ApiAccessToken>(apiAccessToken)).ToList();
+            var apiAccessTokens = queryResults.Select(Data.Entities.AccessManagement.ModelMappings.ApiAccessToken.MapToDomainModel).ToList();
 
             logger.LogInformation(string.Format(MessageRetrievedEntity, nameof(ApiAccessToken)), queryOptions);
 
@@ -110,7 +110,7 @@ namespace Astrana.Core.Data.Repositories.ApiAccessTokens
         /// <returns></returns>
         public async Task<DM.ApiAccessTokens.ApiAccessToken> GetByIdAsync(Guid recordId)
         {
-            return (await GetAsync(new ApiAccessTokenQueryOptions<Guid, Guid> { Ids = new List<Guid> { recordId } })).Data.FirstOrDefault();
+            return (await GetAsync(new ApiAccessTokenQueryOptions<Guid, Guid>(new List<Guid> { recordId }))).Data.FirstOrDefault();
         }
 
         /// <summary>
@@ -147,14 +147,14 @@ namespace Astrana.Core.Data.Repositories.ApiAccessTokens
 
                     countAdded++;
 
-                    newApiAccessTokenIds.Add(newApiAccessTokenEntity.Id);
+                    newApiAccessTokenIds.Add(newApiAccessTokenEntity.ApiAccessTokenId);
                 }
 
                 logger.LogInformation(string.Format(MessageSuccessfullyCreatedEntity, newApiAccessTokenIds.Count, nameof(ApiAccessToken) + "(s)"));
 
                 // Return the current records.
                 if (returnRecords)
-                    return new AddSuccessResult<List<DM.ApiAccessTokens.ApiAccessToken>>((await GetAsync(new ApiAccessTokenQueryOptions<Guid, Guid> { Ids = newApiAccessTokenIds })).Data, countAdded);
+                    return new AddSuccessResult<List<DM.ApiAccessTokens.ApiAccessToken>>((await GetAsync(new ApiAccessTokenQueryOptions<Guid, Guid>(newApiAccessTokenIds))).Data, countAdded);
                 
                 return new AddSuccessResult<List<DM.ApiAccessTokens.ApiAccessToken>>(new List<DM.ApiAccessTokens.ApiAccessToken>(), countAdded);
             }

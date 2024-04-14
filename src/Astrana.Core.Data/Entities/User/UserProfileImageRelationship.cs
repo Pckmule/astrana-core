@@ -12,6 +12,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Astrana.Core.Data.Entities.User
 {
+    [Obsolete]
     [Table("UserProfileImageRel", Schema = SchemaNames.User)]
     public class UserProfileImageRelationship : BaseRelationshipEntity<Guid>
     {

@@ -39,9 +39,9 @@ namespace Astrana.Core.Domain.Models.Results
 
     public class ExecutionResult<TData> : ExecutionResult, IExecutionResult<TData>
     {
-        public ExecutionResult(ResultOutcome outcome, TData queuedData, string? message = "", string? resultCode = null) : base(outcome, message, resultCode)
+        public ExecutionResult(ResultOutcome outcome, TData data, string? message = "", string? resultCode = null) : base(outcome, message, resultCode)
         {
-            Data = queuedData;
+            Data = data;
         }
 
         public TData Data { get; set; }
@@ -49,7 +49,7 @@ namespace Astrana.Core.Domain.Models.Results
 
     public class ExecutionSuccessResult<TData> : ExecutionResult<TData>
     {
-        public ExecutionSuccessResult(TData queuedData, string? message = "", string? resultCode = null) : base(ResultOutcome.Success, queuedData, message, resultCode) { }
+        public ExecutionSuccessResult(TData data, string? message = "", string? resultCode = null) : base(ResultOutcome.Success, data, message, resultCode) { }
     }
 
     public class ExecutionFailResult<TData> : ExecutionResult<TData>

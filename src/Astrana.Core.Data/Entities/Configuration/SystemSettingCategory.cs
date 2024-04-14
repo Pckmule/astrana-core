@@ -14,21 +14,30 @@ using DomainModelProperties = Astrana.Core.Domain.Models.SystemSettings.Constant
 namespace Astrana.Core.Data.Entities.Configuration
 {
     [Table("SettingCategories", Schema = SchemaNames.Configuration)]
-    public class SystemSettingCategory : BaseEntity<Guid, Guid>
+    public class SystemSettingCategory
     {
-        [Required]
+        [Key, Column(Order = 0)]
+        public Guid SystemSettingCategoryId { get; set; }
+
         [MinLength(DomainModelProperties.SystemSettingCategory.MinimumNameLength)]
-        [MaxLength(DomainModelProperties.SystemSettingCategory.MaximumNameLength)]
-        [Column(Order = 1)]
         public string Name { get; set; }
 
+        [MinLength(DomainModelProperties.SystemSettingCategory.MinimumNameTrxCodeLength)]
+        public string NameTrxCode { get; set; }
+
         [MinLength(DomainModelProperties.SystemSettingCategory.MinimumDescriptionLength)]
-        [MaxLength(DomainModelProperties.SystemSettingCategory.MaximumDescriptionLength)]
-        [Column(Order = 2)]
         public string? Description { get; set; }
 
-        [Required]
-        [Column(Order = 3)]
-        public ICollection<SystemSetting> Settings { get; set; }
+        public string? DescriptionTrxCode { get; set; }
+
+        public ICollection<SystemSetting> Settings { get; set; } = new HashSet<SystemSetting>();
+        
+        public Guid CreatedBy { get; set; }
+
+        public Guid LastModifiedBy { get; set; }
+
+        public DateTimeOffset CreatedTimestamp { get; set; }
+
+        public DateTimeOffset LastModifiedTimestamp { get; set; }
     }
 }

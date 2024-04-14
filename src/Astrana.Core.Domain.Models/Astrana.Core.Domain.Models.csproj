@@ -1,19 +1,23 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Magick.NET.Core" Version="13.2.0" />
+    <PackageReference Include="Magick.NET.Core" Version="13.6.0" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Astrana.Core.Domain.Framework\Astrana.Core.Framework.csproj" />
     <ProjectReference Include="..\Astrana.Core\Astrana.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Database\Enums\" />
   </ItemGroup>
 
 </Project>

@@ -4,16 +4,16 @@
 * file, You can obtain one at https://mozilla.org/MPL/2.0/.
 */
 
+using Astrana.Core.Constants;
 using Astrana.Core.Data.Entities.Content;
 using Astrana.Core.Data.Exceptions;
-using Astrana.Core.Domain.Models.ExternalContentSubscriptions.Contracts;
-using Astrana.Core.Domain.Models.ExternalContentSubscriptions.Options;
+using Astrana.Core.Domain.Models.ExternalContent.Subscriptions.Options;
 using Astrana.Core.Domain.Models.Results;
 using Astrana.Core.Domain.Models.Results.Contracts;
 using Astrana.Core.Utilities;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using DM = Astrana.Core.Domain.Models;
 
 namespace Astrana.Core.Data.Repositories.ExternalContentSubscriptions
 {
@@ -32,14 +32,17 @@ namespace Astrana.Core.Data.Repositories.ExternalContentSubscriptions
         {
             options ??= new ExternalContentSubscriptionQueryOptions<Guid, Guid>();
 
-            var query = databaseSession.ExternalContentSubscriptions.AsQueryable();
+            var query = databaseSession.ExternalContentSubscriptions
+                .Include(o => o.IconImage)
+                .Include(o => o.LogoImage)
+                .Include(o => o.CoverImage).AsQueryable();
 
             // Add Filters
             if (options.Ids.Any())
-                query = query.Where(o => options.Ids.Contains(o.Id));
+                query = query.Where(o => options.Ids.Contains(o.ExternalContentSubscriptionId));
 
             if (options.ExcludeIds.Any())
-                query = query.Where(o => !options.ExcludeIds.Contains(o.Id));
+                query = query.Where(o => !options.ExcludeIds.Contains(o.ExternalContentSubscriptionId));
 
             if (options.CreatedBefore.HasValue)
                 query = query.Where(o => o.CreatedTimestamp < options.CreatedBefore.Value);
@@ -79,7 +82,7 @@ namespace Astrana.Core.Data.Repositories.ExternalContentSubscriptions
         /// </summary>
         /// <param name="queryOptions"></param>
         /// <returns></returns>
-        public async Task<IGetResult<DM.ExternalContentSubscriptions.ExternalSubscription>> GetExternalContentSubscriptionsAsync(ExternalContentSubscriptionQueryOptions<Guid, Guid>? queryOptions = null)
+        public async Task<IGetResult<Domain.Models.ExternalContent.Subscriptions.ExternalContentSubscription>> GetExternalContentSubscriptionsAsync(ExternalContentSubscriptionQueryOptions<Guid, Guid>? queryOptions = null)
         {
             queryOptions ??= new ExternalContentSubscriptionQueryOptions<Guid, Guid>();
 
@@ -96,11 +99,11 @@ namespace Astrana.Core.Data.Repositories.ExternalContentSubscriptions
             else
                 resultSetCount = queryResults.Count;
 
-            var links = queryResults.Select(link => ModelMapper.MapModel<DM.ExternalContentSubscriptions.ExternalSubscription, ExternalContentSubscription>(link)).ToList();
+            var externalContentSubscriptions = queryResults.Select(Entities.Content.ModelMappings.ExternalContentSubscription.MapToDomainModel).ToList();
 
             logger.LogInformation(string.Format(MessageRetrievedEntity, nameof(ExternalContentSubscription)), queryOptions);
 
-            return CreateGetResultWithPagination(links, queryOptions, resultSetCount);
+            return CreateGetResultWithPagination(externalContentSubscriptions, queryOptions, resultSetCount);
         }
 
         /// <summary>
@@ -108,7 +111,7 @@ namespace Astrana.Core.Data.Repositories.ExternalContentSubscriptions
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<DM.ExternalContentSubscriptions.ExternalSubscription?> GetExternalContentSubscriptionByIdAsync(Guid id)
+        public async Task<Domain.Models.ExternalContent.Subscriptions.ExternalContentSubscription?> GetExternalContentSubscriptionByIdAsync(Guid id)
         {
             return (await GetExternalContentSubscriptionsAsync(new ExternalContentSubscriptionQueryOptions<Guid, Guid>(new List<Guid> { id }))).Data.FirstOrDefault();
         }
@@ -120,7 +123,7 @@ namespace Astrana.Core.Data.Repositories.ExternalContentSubscriptions
         /// <param name="actioningUserId"></param>
         /// <param name="returnRecords"></param>
         /// <returns></returns>
-        public async Task<IAddResult<List<DM.ExternalContentSubscriptions.ExternalSubscription>>> CreateAsync(IEnumerable<IExternalSubscriptionToAdd> requestedAdditions, Guid actioningUserId, bool returnRecords = true)
+        public async Task<IAddResult<List<Domain.Models.ExternalContent.Subscriptions.ExternalContentSubscription>>> CreateAsync(IEnumerable<Domain.Models.ExternalContent.Subscriptions.ExternalContentSubscription> requestedAdditions, Guid actioningUserId, bool returnRecords = true)
         {
             ValidateActioningUserId(actioningUserId);
 
@@ -133,12 +136,32 @@ namespace Astrana.Core.Data.Repositories.ExternalContentSubscriptions
 
                 foreach (var addition in requestedAdditions)
                 {
-                    var newExternalContentSubscriptionEntity = ModelMapper.MapModel<ExternalContentSubscription, IExternalSubscriptionToAdd>(addition);
+                    var newExternalContentSubscriptionEntity = new ExternalContentSubscription
+                    {
+                        Url = addition.Url,
+                        
+                        Title = addition.Title,
+                        SubTitle = addition.SubTitle,
 
-                    if (newExternalContentSubscriptionEntity == null)
-                        continue;
-                    
-                    newExternalContentSubscriptionEntity.CreatedBy = actioningUserId;
+                        Description = addition.Description,
+                        WebsiteUrl = addition.WebsiteUrl,
+                        Copyright = addition.Copyright,
+
+                        Locale = addition.Locale,
+                        Language = addition.Language,
+
+                        AccessToken = addition.AccessToken
+                    };
+
+                    if (addition.IconImage != null)
+                        newExternalContentSubscriptionEntity.IconImageId = addition.IconImage.ImageId;
+
+                    if (addition.LogoImage != null)
+                        newExternalContentSubscriptionEntity.LogoImageId = addition.LogoImage.ImageId;
+
+                    if (addition.CoverImage != null)
+                        newExternalContentSubscriptionEntity.CoverImageId = addition.CoverImage.ImageId;
+
                     newExternalContentSubscriptionEntity.CreatedTimestamp = now;
 
                     newExternalContentSubscriptionEntity.LastModifiedBy = actioningUserId;
@@ -150,20 +173,32 @@ namespace Astrana.Core.Data.Repositories.ExternalContentSubscriptions
 
                     countAdded++;
 
-                    newExternalContentSubscriptionIds.Add(newExternalContentSubscriptionEntity.Id);
+                    newExternalContentSubscriptionIds.Add(newExternalContentSubscriptionEntity.ExternalContentSubscriptionId);
                 }
 
                 logger.LogInformation(string.Format(MessageSuccessfullyCreatedEntity, newExternalContentSubscriptionIds.Count, nameof(ExternalContentSubscription) + "(s)"));
 
                 // Return the current records.
                 if (returnRecords)
-                    return new AddSuccessResult<List<DM.ExternalContentSubscriptions.ExternalSubscription>>((await GetExternalContentSubscriptionsAsync(new ExternalContentSubscriptionQueryOptions<Guid, Guid> { Ids = newExternalContentSubscriptionIds })).Data, countAdded);
+                    return new AddSuccessResult<List<Domain.Models.ExternalContent.Subscriptions.ExternalContentSubscription>>((await GetExternalContentSubscriptionsAsync(new ExternalContentSubscriptionQueryOptions<Guid, Guid>(newExternalContentSubscriptionIds))).Data, countAdded);
                 
-                return new AddSuccessResult<List<DM.ExternalContentSubscriptions.ExternalSubscription>>(new List<DM.ExternalContentSubscriptions.ExternalSubscription>(), countAdded);
+                return new AddSuccessResult<List<Domain.Models.ExternalContent.Subscriptions.ExternalContentSubscription>>(new List<Domain.Models.ExternalContent.Subscriptions.ExternalContentSubscription>(), countAdded);
             }
             catch (Exception ex)
             {
                 logger.LogError(ex, ex.Message);
+
+                if (ex.InnerException is SqlException sqlException)
+                {
+                    if (sqlException.Number == 2601)
+                    {
+                        var result = new AddAbortResult<List<Domain.Models.ExternalContent.Subscriptions.ExternalContentSubscription>>(null, 0, "Duplicate key exists.");
+
+                        result.Errors.Add(new ResultError("", "Duplicate key exists", ErrorCodes.DuplicateKey));
+
+                        return result;
+                    }
+                }
 
                 throw new CannotCreateRecordsException(ex);
             }
@@ -176,7 +211,7 @@ namespace Astrana.Core.Data.Repositories.ExternalContentSubscriptions
         /// <param name="actioningUserId"></param>
         /// <param name="returnRecords"></param>
         /// <returns></returns>
-        public async Task<IUpdateResult<List<DM.ExternalContentSubscriptions.ExternalSubscription>>> UpdateAsync(IEnumerable<IExternalSubscription> requestedUpdates, Guid actioningUserId, bool returnRecords = true)
+        public async Task<IUpdateResult<List<Domain.Models.ExternalContent.Subscriptions.ExternalContentSubscription>>> UpdateAsync(IEnumerable<Domain.Models.ExternalContent.Subscriptions.ExternalContentSubscription> requestedUpdates, Guid actioningUserId, bool returnRecords = true)
         {
             ValidateActioningUserId(actioningUserId);
 
@@ -189,7 +224,7 @@ namespace Astrana.Core.Data.Repositories.ExternalContentSubscriptions
 
                 foreach (var update in requestedUpdates)
                 {
-                    var existingExternalContentSubscriptionEntity = await databaseSession.ExternalContentSubscriptions.FirstOrDefaultAsync(o => o.Id == update.LinkId);
+                    var existingExternalContentSubscriptionEntity = await databaseSession.ExternalContentSubscriptions.FirstOrDefaultAsync(o => o.ExternalContentSubscriptionId == update.ExternalContentSubscriptionId);
 
                     if (existingExternalContentSubscriptionEntity == null)
                         continue;
@@ -208,16 +243,16 @@ namespace Astrana.Core.Data.Repositories.ExternalContentSubscriptions
 
                     countUpdated++;
 
-                    updatedExternalContentSubscriptionIds.Add(existingExternalContentSubscriptionEntity.Id);
+                    updatedExternalContentSubscriptionIds.Add(existingExternalContentSubscriptionEntity.ExternalContentSubscriptionId);
                 }
 
                 logger.LogInformation(string.Format(MessageSuccessfullyUpdatedEntity, updatedExternalContentSubscriptionIds.Count, nameof(ExternalContentSubscription) + "(s)"));
 
                 // Return the current records.
                 if (returnRecords)
-                    return new UpdateSuccessResult<List<DM.ExternalContentSubscriptions.ExternalSubscription>>((await GetExternalContentSubscriptionsAsync(new ExternalContentSubscriptionQueryOptions<Guid, Guid>() { Ids = updatedExternalContentSubscriptionIds })).Data, countUpdated);
+                    return new UpdateSuccessResult<List<Domain.Models.ExternalContent.Subscriptions.ExternalContentSubscription>>((await GetExternalContentSubscriptionsAsync(new ExternalContentSubscriptionQueryOptions<Guid, Guid>(updatedExternalContentSubscriptionIds))).Data, countUpdated);
                 
-                return new UpdateSuccessResult<List<DM.ExternalContentSubscriptions.ExternalSubscription>>(new List<DM.ExternalContentSubscriptions.ExternalSubscription>(), countUpdated);
+                return new UpdateSuccessResult<List<Domain.Models.ExternalContent.Subscriptions.ExternalContentSubscription>>(new List<Domain.Models.ExternalContent.Subscriptions.ExternalContentSubscription>(), countUpdated);
             }
             catch (Exception ex)
             {

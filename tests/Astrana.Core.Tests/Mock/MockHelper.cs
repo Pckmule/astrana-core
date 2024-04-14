@@ -16,7 +16,7 @@ namespace Astrana.Core.Tests.Mock
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile(configurationFileName, optional: false, reloadOnChange: false);
-            
+
             return builder.Build() as IConfiguration;
         }
     }

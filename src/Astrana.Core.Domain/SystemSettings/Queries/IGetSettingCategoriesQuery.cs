@@ -10,6 +10,6 @@ namespace Astrana.Core.Domain.SystemSettings.Queries
 {
     public interface IGetSettingCategoriesQuery
     {
-        List<SystemSettingCategory> Execute(Guid actioningUserId);
+        Task<List<SystemSettingCategory>> ExecuteAsync(Guid actioningUserId);
     }
 }

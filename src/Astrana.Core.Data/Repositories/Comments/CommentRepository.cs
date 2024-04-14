@@ -96,7 +96,7 @@ namespace Astrana.Core.Data.Repositories.Comments
             else
                 resultSetCount = queryResults.Count;
 
-            var comments = queryResults.Select(comment => ModelMapper.MapModel<DM.Comments.Comment, Comment>(comment)).ToList();
+            var comments = queryResults.Select(Data.Entities.Content.ModelMappings.Comment.MapToDomainModel).ToList();
 
             logger.LogInformation(string.Format(MessageRetrievedEntity, nameof(Comment)), queryOptions);
 
@@ -157,7 +157,7 @@ namespace Astrana.Core.Data.Repositories.Comments
 
                 // Return the current records.
                 if (returnRecords)
-                    return new AddSuccessResult<List<DM.Comments.Comment>>((await GetCommentsAsync(new CommentQueryOptions<Guid, Guid> { Ids = newCommentIds })).Data, countAdded);
+                    return new AddSuccessResult<List<DM.Comments.Comment>>((await GetCommentsAsync(new CommentQueryOptions<Guid, Guid>(newCommentIds))).Data, countAdded);
                 
                 return new AddSuccessResult<List<DM.Comments.Comment>>(new List<DM.Comments.Comment>(), countAdded);
             }
@@ -215,7 +215,7 @@ namespace Astrana.Core.Data.Repositories.Comments
 
                 // Return the current records.
                 if (returnRecords)
-                    return new UpdateSuccessResult<List<DM.Comments.Comment>>((await GetCommentsAsync(new CommentQueryOptions<Guid, Guid>() { Ids = updatedCommentIds })).Data, countUpdated);
+                    return new UpdateSuccessResult<List<DM.Comments.Comment>>((await GetCommentsAsync(new CommentQueryOptions<Guid, Guid>(updatedCommentIds))).Data, countUpdated);
                 
                 return new UpdateSuccessResult<List<DM.Comments.Comment>>(new List<DM.Comments.Comment>(), countUpdated);
             }

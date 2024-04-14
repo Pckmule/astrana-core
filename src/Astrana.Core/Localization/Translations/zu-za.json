@@ -63,6 +63,7 @@
 	"rejected": "Kwaliwe",
 	"test_connection": "Hlola uxhumano",
 	"testing": "Ukuhlola",
+
 	"country_name_au": "Australia",
 	"country_name_br": "Brazil",
 	"country_name_cn": "China",
@@ -74,6 +75,17 @@
 	"country_name_es": "Spain",
 	"country_name_gb": "United Kingdom",
 	"country_name_us": "United States",
+
+	"language_name_en": "English",
+	"language_name_af": "Afrikaans",
+	"language_name_zh": "Chinese",
+	"language_name_fr": "French",
+	"language_name_he": "Hebrew",
+	"language_name_hi": "Hindi",
+	"language_name_es": "Spanish",
+	"language_name_ru": "Russian",
+	"language_name_zu": "Zulu",
+
 	"nav_menuitem_community_feed": "Isiphakeli somphakathi",
 	"nav_menuitem_pin_boards": "Amabhodi Ophini",
 	"nav_menuitem_news_reader": "Umfundi Wezindaba",

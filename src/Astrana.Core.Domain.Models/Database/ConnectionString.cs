@@ -6,14 +6,14 @@
 
 using Astrana.Core.Domain.Models.Database.Constants;
 using Astrana.Core.Domain.Models.Database.Contracts;
-using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
 using Astrana.Core.Framework.Domain;
 using Astrana.Core.Framework.Model.Validation;
+using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Astrana.Core.Domain.Models.Database
 {
-    public abstract class ConnectionString : DomainEntity, IConnectionString
+    public abstract class ConnectionString : DomainValueObject, IConnectionString
     {
         [JsonConstructor]
         protected ConnectionString() { }
@@ -56,7 +56,16 @@ namespace Astrana.Core.Domain.Models.Database
 
         public abstract void Parse(string connectionString);
 
-        public new virtual EntityValidationResult Validate()
+        protected override IEnumerable<object> GetEqualityComponents()
+        {
+            yield return HostAddress;
+            yield return HostAddressPort;
+            yield return DatabaseName;
+            yield return UserId;
+            yield return Password;
+        }
+
+        public virtual EntityValidationResult Validate()
         {
             return this.ValidateDomainModel();
         }

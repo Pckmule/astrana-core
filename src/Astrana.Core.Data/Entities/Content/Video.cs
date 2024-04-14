@@ -7,6 +7,7 @@
 using Astrana.Core.Data.Constants;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using DomainModelProperties = Astrana.Core.Domain.Models.Videos.Constants.ModelProperties;
 
 #nullable disable
 
@@ -17,40 +18,28 @@ namespace Astrana.Core.Data.Entities.Content
     {
         [Key, Column(Order = 0)]
         public Guid VideoId { get; set; }
-
-        [Required]
-        [Column(Order = 1)]
+        
+        [MinLength(DomainModelProperties.Video.MinimumLocationLength)]
         public string Location { get; set; }
 
-        [MinLength(1)]
-        [MaxLength(500)]
-        [Column(Order = 2)]
+        [MinLength(DomainModelProperties.Video.MinimumCaptionLength)]
         public string Caption { get; set; }
 
-        [MaxLength(250)]
-        [Column(Order = 3)]
+        [MinLength(DomainModelProperties.Video.MinimumCopyrightLength)]
         public string Copyright { get; set; }
-
-
-        [Column(Order = 99993)]
+        
         public DateTimeOffset? DeactivatedTimestamp { get; set; }
 
-        [Column(Order = 99994)]
         public string? DeactivatedReason { get; set; } = null;
 
-        [Column(Order = 99995)]
         public Guid? DeactivatedBy { get; set; }
 
-        [Required, Column(Order = 99996)]
         public Guid CreatedBy { get; set; }
 
-        [Required, Column(Order = 99997)]
         public Guid LastModifiedBy { get; set; }
 
-        [Required, Column(Order = 99998)]
-        public DateTimeOffset CreatedTimestamp { get; set; } = DateTimeOffset.UtcNow;
+        public DateTimeOffset CreatedTimestamp { get; set; }
 
-        [Required, Column(Order = 99999)]
-        public DateTimeOffset LastModifiedTimestamp { get; set; } = DateTimeOffset.UtcNow;
+        public DateTimeOffset LastModifiedTimestamp { get; set; }
     }
 }

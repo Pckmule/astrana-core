@@ -10,11 +10,11 @@ namespace Astrana.Core.Domain.Models.AudioClips.Constants
 {
     public static class ModelProperties
     {
-        public static class Audio
+        public static class AudioClip
         {
-            public static readonly string NameUnique = nameof(Audio).SplitOnUpperCase();
-            public static readonly string NameSingularForm = nameof(Audio).SplitOnUpperCase();
-            public static readonly string NamePluralForm = $"{nameof(Audio)}s".SplitOnUpperCase();
+            public static readonly string NameUnique = nameof(AudioClip).SplitOnUpperCase();
+            public static readonly string NameSingularForm = nameof(AudioClip).SplitOnUpperCase();
+            public static readonly string NamePluralForm = $"{nameof(AudioClip)}s".SplitOnUpperCase();
             
             public const int MinimumLocationLength = 1;
             public const int MaximumLocationLength = 2500;

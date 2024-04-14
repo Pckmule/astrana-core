@@ -21,7 +21,7 @@ namespace Astrana.Core.Domain.Peers.Queries
             _peerRepository = peerRepository;
         }
 
-        public async Task<PeerSummaryDto?> ExecuteAsync(Guid peerId, Guid actioningUserId)
+        public async Task<PeerSummaryDto> ExecuteAsync(Guid actioningUserId, Guid peerId, bool includeStatistics = false)
         {
             if (peerId.IsEmpty())
                 throw new ArgumentException($"{nameof(peerId)} cannot be empty.");
@@ -44,12 +44,25 @@ namespace Astrana.Core.Domain.Peers.Queries
                 LastName = peer.LastName,
 
                 Age = peer.Age,
-                Gender = peer.Sex,
+                Sex = peer.Sex,
 
                 // TODO: 
                 // ProfileCoverPicture = peer.CoverPicturesCollection?.ContentItems?.FirstOrDefault()?.Image?.ToDomainTransferObject(),
                 // ProfilePicture = peer.ProfilePicturesCollection?.ContentItems?.FirstOrDefault()?.Image?.ToDomainTransferObject()
             };
+
+            if (includeStatistics)
+            {
+                var peerCount = (int)(await _peerRepository.GetPeersCountAsync()).Count;
+                var mutualPeerCount = 0;
+
+                peerSummary.Statistics = new PeerStatisticsDto
+                {
+                    PeerCount = peerCount,
+                    MutualPeerCount = mutualPeerCount,
+                    ConnectionDate = peer.CreatedTimestamp.Date
+                };
+            }
 
             _logger.LogTrace($"Executed {nameof(GetPeerSummaryQuery).SplitOnUpperCase()}");
 

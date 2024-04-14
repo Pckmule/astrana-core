@@ -11,6 +11,7 @@ using Astrana.Core.Domain.Models.ContentCollections;
 using Astrana.Core.Domain.Models.Feelings;
 using Astrana.Core.Domain.Models.Images;
 using Astrana.Core.Domain.Models.Links;
+using Astrana.Core.Domain.Models.Locations;
 using Astrana.Core.Domain.Models.Posts.Constants;
 using Astrana.Core.Domain.Models.Posts.Contracts;
 using Astrana.Core.Domain.Models.Posts.DomainTransferObjects;
@@ -64,7 +65,7 @@ namespace Astrana.Core.Domain.Models.Posts
                 VideoId = dto.VideoId;
 
             if (dto.Audio != null)
-                Audio = new Audio(dto.Audio);
+                Audio = new AudioClip(dto.Audio);
 
             if (dto.AudioId.HasValue && !dto.AudioId.Value.IsEmpty())
                 AudioId = dto.AudioId;
@@ -111,7 +112,78 @@ namespace Astrana.Core.Domain.Models.Posts
                 throw new InvalidDomainEntityStateException(validationResult.ValidatedEntityName, new Exception(validationResult.Message));
         }
 
+        public PostAttachment(PostAttachmentToAddDto dto) : this()
+        {
+            if (dto == null)
+                throw new ArgumentNullException(nameof(dto));
+
+            PostAttachmentId = Guid.Empty;
+
+            if (dto.Type.HasValue)
+                Type = dto.Type.Value;
+
+            if (dto.Link != null)
+                Link = new Link(dto.Link);
+
+            if (dto.LinkId.HasValue && !dto.LinkId.Value.IsEmpty())
+                LinkId = dto.LinkId;
+
+            if (dto.Image != null)
+                Image = new Image(dto.Image);
+
+            if (dto.ImageId.HasValue && !dto.ImageId.Value.IsEmpty())
+                ImageId = dto.ImageId;
+
+            if (dto.Video != null)
+                Video = new Video(dto.Video);
+
+            if (dto.VideoId.HasValue && !dto.VideoId.Value.IsEmpty())
+                VideoId = dto.VideoId;
+
+            if (dto.Audio != null)
+                Audio = new AudioClip(dto.Audio);
+
+            if (dto.AudioId.HasValue && !dto.AudioId.Value.IsEmpty())
+                AudioId = dto.AudioId;
+
+            if (dto.ContentCollection != null)
+                ContentCollection = new ContentCollection(dto.ContentCollection);
+
+            if (dto.ContentCollectionId.HasValue && !dto.ContentCollectionId.Value.IsEmpty())
+                ContentCollectionId = dto.ContentCollectionId;
+
+            if (dto.Gif != null)
+                Gif = new Image(dto.Gif);
+
+            if (dto.GifId.HasValue && !dto.GifId.Value.IsEmpty())
+                GifId = dto.GifId;
+
+            if (dto.Feeling != null)
+                Feeling = new Feeling(dto.Feeling);
+
+            if (dto.FeelingId.HasValue && !dto.FeelingId.Value.IsEmpty())
+                FeelingId = dto.FeelingId;
+
+            if (dto.Location != null)
+                Location = new Location(dto.Location);
+
+            if (dto.LocationId.HasValue && !dto.LocationId.Value.IsEmpty())
+                LocationId = dto.LocationId;
+
+            if (!string.IsNullOrEmpty(dto.Title))
+                Title = dto.Title;
+
+            if (!string.IsNullOrEmpty(dto.Caption))
+                Caption = dto.Caption;
+
+            var validationResult = Validate();
+
+            if (!validationResult.IsSuccess)
+                throw new InvalidDomainEntityStateException(validationResult.ValidatedEntityName, new Exception(validationResult.Message));
+        }
+
         [ValidId]
+        [JsonIgnore]
         public Guid PostAttachmentId
         {
             get => Id;
@@ -133,7 +205,7 @@ namespace Astrana.Core.Domain.Models.Posts
 
         public Guid? VideoId { get; set; }
 
-        public Audio? Audio { get; set; }
+        public AudioClip? Audio { get; set; }
 
         public Guid? AudioId { get; set; }
 
@@ -149,6 +221,11 @@ namespace Astrana.Core.Domain.Models.Posts
         public Image? Gif { get; set; }
         
         public Guid? GifId { get; set; }
+
+        [JsonIgnore]
+        public Location? Location { get; set; }
+
+        public Guid? LocationId { get; set; }
 
         [MaxLength(ModelProperties.PostAttachment.MaximumTitleLength)]
         public string? Title { get; set; }
@@ -181,6 +258,7 @@ namespace Astrana.Core.Domain.Models.Posts
                 ContentCollection = ContentCollection == null ? null : ContentCollection.ToDomainTransferObject(includeId, includeAuditData),
                 Feeling = Feeling == null ? null : Feeling.ToDomainTransferObject(includeId, includeAuditData),
                 Gif = Gif == null ? null : Gif.ToDomainTransferObject(includeId, includeAuditData),
+                Location = Location == null ? null : Location.ToDomainTransferObject(includeId, includeAuditData),
 
                 LinkId = LinkId,
                 ImageId = ImageId,
@@ -189,6 +267,7 @@ namespace Astrana.Core.Domain.Models.Posts
                 ContentCollectionId = ContentCollectionId,
                 FeelingId = FeelingId,
                 GifId = GifId,
+                LocationId = LocationId,
 
                 Title = Title,
                 Caption = Caption

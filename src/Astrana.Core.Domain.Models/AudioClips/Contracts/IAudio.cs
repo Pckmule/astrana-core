@@ -8,7 +8,7 @@ namespace Astrana.Core.Domain.Models.AudioClips.Contracts
 {
     public interface IAudio
     {
-        Guid AudioId { get; set; }
+        Guid AudioClipId { get; set; }
 
         string Location { get; set; }
 

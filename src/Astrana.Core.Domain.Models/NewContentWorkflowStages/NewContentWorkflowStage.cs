@@ -13,6 +13,7 @@ using Astrana.Core.Framework.Domain;
 using Astrana.Core.Framework.Model;
 using Astrana.Core.Framework.Model.Validation;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Astrana.Core.Domain.Models.NewContentWorkflowStages
 {
@@ -59,8 +60,31 @@ namespace Astrana.Core.Domain.Models.NewContentWorkflowStages
             if (!validationResult.IsSuccess)
                 throw new InvalidDomainEntityStateException(validationResult.ValidatedEntityName, new Exception(validationResult.Message));
         }
+        
+        public NewContentWorkflowStage(NewContentWorkflowStageToAddDto dto) : this()
+        {
+            if (dto == null)
+                throw new ArgumentNullException(nameof(dto));
 
+            NewContentWorkflowStageId = Guid.Empty;
+
+            if (!string.IsNullOrEmpty(dto.ContentEntityId))
+                ContentEntityId = dto.ContentEntityId;
+
+            if (!string.IsNullOrEmpty(dto.ContentEntityTypeId))
+                ContentEntityTypeId = dto.ContentEntityTypeId;
+
+            if (dto.Stage.HasValue)
+                Stage = dto.Stage.Value;
+
+            var validationResult = Validate();
+
+            if (!validationResult.IsSuccess)
+                throw new InvalidDomainEntityStateException(validationResult.ValidatedEntityName, new Exception(validationResult.Message));
+        }
+        
         [Required]
+        [JsonIgnore]
         public Guid NewContentWorkflowStageId
         {
             get => Id; 

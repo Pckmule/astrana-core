@@ -8,13 +8,16 @@ Param(
 
 $Platform = $Platform.ToLower()
 
+
 $ServiceName = "Astrana"
 $ServiceDisplayName = "Astrana Application Service"
 $ServiceDescription = "The Astrana application service."
 
+$ServiceUserName = "${$ServiceName}User"
+
 Write-Host "Installing the $ServiceName daemon/service on $Platform..." -ForegroundColor Cyan
 
-If($Platform -eq "windows")
+if($Platform -eq "windows")
 {
 	$service = Get-Service -Name $ServiceName -ErrorAction SilentlyContinue
 
@@ -34,4 +37,9 @@ If($Platform -eq "windows")
 	{
 		Start-Service -Name $ServiceName
 	}
+}
+
+function CreateServiceUserAccount
+{
+	New-LocalUser -Name $ServiceUserName
 }

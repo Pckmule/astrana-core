@@ -152,8 +152,6 @@ namespace Astrana.Core.Domain.Posts.Repositories
 
             try
             {
-                var now = DateTime.UtcNow;
-
                 foreach (var postToAdd in postsToAdd)
                 {
                     var newPostEntity = new Post
@@ -173,99 +171,109 @@ namespace Astrana.Core.Domain.Posts.Repositories
                             CreatedBy = actioningUserId,
                             LastModifiedBy = actioningUserId,
                         };
-                        
-                        if (attachment.Type == AttachmentType.Link)
-                        {
-                            var linkId = attachment.LinkId ?? attachment.Link?.Id;
 
-                            if (!linkId.HasValue && attachment.Link == null)
-                                continue;
+                        switch (attachment.Type)
+                        {
+                            case AttachmentType.Link:
+                            {
+                                var linkId = attachment.LinkId ?? attachment.Link?.Id;
+
+                                if (!linkId.HasValue && attachment.Link == null)
+                                    continue;
                             
-                            if (linkId.HasValue && await databaseSession.Links.FindAsync(linkId) != null)
-                            {
-                                newAttachmentEntity.LinkId = linkId;
-                            }
-                            else if (!linkId.HasValue && attachment.Link != null)
-                            {
-                                newAttachmentEntity.Link = new Link
+                                if (linkId.HasValue && await databaseSession.Links.FindAsync(linkId) != null)
                                 {
-                                    Url = attachment.Link.Url,
-                                    Title = attachment.Link.Title,
-                                    Description = attachment.Link.Description,
-                                    Locale = attachment.Link.Locale,
-                                    CharSet = attachment.Link.CharSet,
-                                    Robots = attachment.Link.Robots,
-                                    SiteName = attachment.Link.SiteName
-                                };
-                            }
-
-                            newPostEntity.Attachments.Add(newAttachmentEntity);
-                        }
-                        else if (attachment.Type == AttachmentType.Image)
-                        {
-                            var attachmentEntity = await databaseSession.Images.FindAsync(attachment.ImageId);
-
-                            if (attachmentEntity != null)
-                            {
-                                newAttachmentEntity.ImageId = attachment.ImageId;
-                            }
-                            else if (attachment.Image != null)
-                            {
-                                newAttachmentEntity.Image = new Image
+                                    newAttachmentEntity.LinkId = linkId;
+                                }
+                                else if (!linkId.HasValue && attachment.Link != null)
                                 {
-                                    Caption = attachment.Image.Caption,
-                                    Copyright = attachment.Image.Copyright,
-                                    Location = attachment.Image.Location
-                                };
+                                    newAttachmentEntity.Link = new Link
+                                    {
+                                        Url = attachment.Link.Url,
+                                        Title = attachment.Link.Title,
+                                        Description = attachment.Link.Description,
+                                        Locale = attachment.Link.Locale,
+                                        CharSet = attachment.Link.CharSet,
+                                        Robots = attachment.Link.Robots,
+                                        SiteName = attachment.Link.SiteName
+                                    };
+                                }
+
+                                newPostEntity.Attachments.Add(newAttachmentEntity);
+                                break;
                             }
 
-                            newPostEntity.Attachments.Add(newAttachmentEntity);
-                        }
-                        else if (attachment.Type == AttachmentType.Video)
-                        {
-                            var attachmentEntity = await databaseSession.Videos.FindAsync(attachment.VideoId);
+                            case AttachmentType.Image:
+                            {
+                                var attachmentEntity = await databaseSession.Images.FindAsync(attachment.ImageId);
 
-                            if (attachmentEntity != null)
-                            {
-                                newAttachmentEntity.VideoId = attachment.VideoId;
-                            }
-                            else if (attachment.Video != null)
-                            {
-                                newAttachmentEntity.Video = new Video
+                                if (attachmentEntity != null)
                                 {
-                                    Caption = attachment.Video.Caption,
-                                    Copyright = attachment.Video.Copyright,
-                                    Location = attachment.Video.Location
-                                };
-                            }
-
-                            newPostEntity.Attachments.Add(newAttachmentEntity);
-                        }
-                        else if(attachment.Type == AttachmentType.ContentCollection)
-                        {
-                            var attachmentEntity = await databaseSession.ContentCollections.FindAsync(attachment.ContentCollectionId);
-
-                            if (attachmentEntity != null)
-                            {
-                                newAttachmentEntity.ContentCollectionId = attachment.ContentCollectionId;
-                            }
-                            else if (attachment.ContentCollection != null)
-                            {
-                                newAttachmentEntity.ContentCollection = new ContentCollection
+                                    newAttachmentEntity.ImageId = attachment.ImageId;
+                                }
+                                else if (attachment.Image != null)
                                 {
-                                    Name = attachment.ContentCollection.Name
-                                };
+                                    newAttachmentEntity.Image = new Image
+                                    {
+                                        Caption = attachment.Image.Caption,
+                                        Copyright = attachment.Image.Copyright,
+                                        Location = attachment.Image.Location
+                                    };
+                                }
+
+                                newPostEntity.Attachments.Add(newAttachmentEntity);
+                                break;
                             }
 
-                            newPostEntity.Attachments.Add(newAttachmentEntity);
+                            case AttachmentType.Video:
+                            {
+                                var attachmentEntity = await databaseSession.Videos.FindAsync(attachment.VideoId);
+
+                                if (attachmentEntity != null)
+                                {
+                                    newAttachmentEntity.VideoId = attachment.VideoId;
+                                }
+                                else if (attachment.Video != null)
+                                {
+                                    newAttachmentEntity.Video = new Video
+                                    {
+                                        Caption = attachment.Video.Caption,
+                                        Copyright = attachment.Video.Copyright,
+                                        Location = attachment.Video.Location
+                                    };
+                                }
+
+                                newPostEntity.Attachments.Add(newAttachmentEntity);
+                                break;
+                            }
+
+                            case AttachmentType.ContentCollection:
+                            {
+                                var attachmentEntity = await databaseSession.ContentCollections.FindAsync(attachment.ContentCollectionId);
+
+                                if (attachmentEntity != null)
+                                {
+                                    newAttachmentEntity.ContentCollectionId = attachment.ContentCollectionId;
+                                }
+                                else if (attachment.ContentCollection != null)
+                                {
+                                    newAttachmentEntity.ContentCollection = new ContentCollection
+                                    {
+                                        Name = attachment.ContentCollection.Name
+                                    };
+                                }
+
+                                newPostEntity.Attachments.Add(newAttachmentEntity);
+                                break;
+                            }
                         }
                     }
 
                     newPostEntity.CreatedBy = actioningUserId;
                     newPostEntity.LastModifiedBy = actioningUserId;
 
-                    // Save records.
                     databaseSession.Posts.Add(newPostEntity);
+
                     await databaseSession.SaveChangesAsync();
 
                     countAdded++;
@@ -277,7 +285,7 @@ namespace Astrana.Core.Domain.Posts.Repositories
 
                 // Return the current records.
                 if (returnRecords)
-                    return new AddSuccessResult<List<DM.Posts.Post>>((await GetPostsAsync(new PostQueryOptions<long, Guid> { Ids = newEntityIds })).Data, countAdded);
+                    return new AddSuccessResult<List<DM.Posts.Post>>((await GetPostsAsync(new PostQueryOptions<long, Guid>(newEntityIds))).Data, countAdded);
                 
                 return new AddSuccessResult<List<DM.Posts.Post>>(new List<DM.Posts.Post>(), countAdded);
             }
@@ -305,8 +313,6 @@ namespace Astrana.Core.Domain.Posts.Repositories
 
             try
             {
-                var now = DateTime.UtcNow;
-
                 foreach (var update in requestedUpdates)
                 {
                     //var existingPostEntity = await ctx.Posts.FirstOrDefaultAsync(o => o.Id == update.Id);
@@ -335,7 +341,7 @@ namespace Astrana.Core.Domain.Posts.Repositories
 
                 // Return the current records.
                 if (returnRecords)
-                    return new UpdateSuccessResult<List<DM.Posts.Post>>((await GetPostsAsync(new PostQueryOptions<long, Guid>() { Ids = updatedPostIds })).Data, countUpdated);
+                    return new UpdateSuccessResult<List<DM.Posts.Post>>((await GetPostsAsync(new PostQueryOptions<long, Guid>(updatedPostIds))).Data, countUpdated);
                 
                 return new UpdateSuccessResult<List<DM.Posts.Post>>(new List<DM.Posts.Post>(), countUpdated);
             }

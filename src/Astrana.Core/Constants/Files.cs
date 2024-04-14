@@ -21,7 +21,12 @@ namespace Astrana.Core.Constants
 
         public static readonly IReadOnlyList<string> SupportedImageFileTypes = new List<string>
         {
-            "gif", "jpg", "jpeg", "png", "webp"
+            "gif", "jpg", "jpeg", "png", "webp", "svg"
+        };
+
+        public static readonly IReadOnlyList<string> SupportedIconFileTypes = new List<string>
+        {
+            "gif", "jpg", "jpeg", "png", "webp", "svg", "ico"
         };
 
         public static readonly IReadOnlyList<string> SupportedAudioFileTypes = new List<string>
@@ -42,10 +47,11 @@ namespace Astrana.Core.Constants
 
                 fileTypes.AddRange(SupportedDocumentFileTypes);
                 fileTypes.AddRange(SupportedImageFileTypes);
+                fileTypes.AddRange(SupportedIconFileTypes);
                 fileTypes.AddRange(SupportedAudioFileTypes);
                 fileTypes.AddRange(SupportedVideoFileTypes);
 
-                return fileTypes;
+                return fileTypes.Distinct().ToList();
             }
         }
 
@@ -58,7 +64,7 @@ namespace Astrana.Core.Constants
                 fileTypes.AddRange(SupportedImageFileTypes);
                 fileTypes.AddRange(SupportedVideoFileTypes);
 
-                return fileTypes;
+                return fileTypes.Distinct().ToList();
             }
         }
     }

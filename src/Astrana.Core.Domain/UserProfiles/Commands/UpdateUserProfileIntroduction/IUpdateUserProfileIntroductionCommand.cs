@@ -11,6 +11,6 @@ namespace Astrana.Core.Domain.UserProfiles.Commands.UpdateUserProfileIntroductio
 {
     public interface IUpdateUserProfileIntroductionCommand
     {
-        Task<UpdateResult<UserProfile>> ExecuteAsync(Guid userProfileId, string updatedUserProfileIntroduction, Guid actioningUserId);
+        Task<UpdateResult<UserProfile>> ExecuteAsync(Guid actioningUserId, string updatedIntroduction);
     }
 }

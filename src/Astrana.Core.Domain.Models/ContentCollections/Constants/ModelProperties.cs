@@ -16,11 +16,8 @@ namespace Astrana.Core.Domain.Models.ContentCollections.Constants
             public static readonly string NameSingularForm = nameof(ContentCollection).SplitOnUpperCase();
             public static readonly string NamePluralForm = $"{nameof(ContentCollection)}s".SplitOnUpperCase();
 
-            public const int IdMinLength = 1;
-            public const int IdMaxLength = int.MaxValue;
-
-            public const int MinimumTitleLength = 0;
-            public const int MaximumTitleLength = 250;
+            public const int MinimumNameLength = 0;
+            public const int MaximumNameLength = 250;
 
             public const int MinimumCaptionLength = 1;
             public const int MaximumCaptionLength = 500;

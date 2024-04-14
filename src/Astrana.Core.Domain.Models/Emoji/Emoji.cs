@@ -4,9 +4,12 @@
 * file, You can obtain one at https://mozilla.org/MPL/2.0/.
 */
 
+using Astrana.Core.Framework.Model;
+
 namespace Astrana.Core.Domain.Models.Emoji
 {
-    public class Emoji
+    // DTO?
+    public class Emoji : IDomainTransferObject
     {
         public string Character { get; set; }
         

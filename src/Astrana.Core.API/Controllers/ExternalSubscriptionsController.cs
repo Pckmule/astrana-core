@@ -7,12 +7,14 @@
 using Astrana.Core.Constants;
 using Astrana.Core.Domain.ExternalContentSubscriptions.Commands.CreateExternalSubscriptions;
 using Astrana.Core.Domain.ExternalContentSubscriptions.Commands.DeleteExternalSubscriptions;
-using Astrana.Core.Domain.IdentityAccessManagement.Managers.SignIn;
 using Astrana.Core.Domain.ExternalContentSubscriptions.Commands.UpdateExternalSubscriptions;
 using Astrana.Core.Domain.ExternalContentSubscriptions.Queries;
-using Astrana.Core.Domain.Models.ExternalContentSubscriptions;
-using Astrana.Core.Domain.Models.ExternalContentSubscriptions.Options;
+using Astrana.Core.Domain.ExternalFeeds.Queries;
+using Astrana.Core.Domain.IdentityAccessManagement.Managers.SignIn;
+using Astrana.Core.Domain.Models.ExternalContent.Subscriptions;
+using Astrana.Core.Domain.Models.ExternalContent.Subscriptions.Options;
 using Astrana.Core.Domain.Models.Results.Enums;
+using Astrana.Core.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -27,9 +29,9 @@ namespace Astrana.Core.API.Controllers
         private readonly ICreateExternalSubscriptionsCommand _createExternalSubscriptionsCommand;
         private readonly IUpdateExternalSubscriptionsCommand _updateExternalSubscriptionsCommand;
         private readonly IDeleteExternalSubscriptionsCommand _deleteExternalSubscriptionsCommand;
-        private readonly IGetExternalSummaryQuery _getExternalSummaryQuery;
+        private readonly IGetExternalFeedSummaryQuery _getExternalFeedSummaryQuery;
 
-        public ExternalSubscriptionsController(ILogger<ExternalSubscriptionsController> logger, ISignInManager signInManager, IGetExternalSubscriptionsQuery getExternalSubscriptionsQuery, ICreateExternalSubscriptionsCommand createExternalSubscriptionsCommand, IUpdateExternalSubscriptionsCommand updateExternalSubscriptionsCommand, IDeleteExternalSubscriptionsCommand deleteExternalSubscriptionsCommand, IGetExternalSummaryQuery getExternalSummaryQuery) : base(logger, signInManager)
+        public ExternalSubscriptionsController(ILogger<ExternalSubscriptionsController> logger, ISignInManager signInManager, IGetExternalSubscriptionsQuery getExternalSubscriptionsQuery, ICreateExternalSubscriptionsCommand createExternalSubscriptionsCommand, IUpdateExternalSubscriptionsCommand updateExternalSubscriptionsCommand, IDeleteExternalSubscriptionsCommand deleteExternalSubscriptionsCommand, IGetExternalFeedSummaryQuery getExternalFeedSummaryQuery) : base(logger, signInManager)
         {
             _logger = logger;
 
@@ -37,7 +39,7 @@ namespace Astrana.Core.API.Controllers
             _createExternalSubscriptionsCommand = createExternalSubscriptionsCommand;
             _updateExternalSubscriptionsCommand = updateExternalSubscriptionsCommand;
             _deleteExternalSubscriptionsCommand = deleteExternalSubscriptionsCommand;
-            _getExternalSummaryQuery = getExternalSummaryQuery;
+            _getExternalFeedSummaryQuery = getExternalFeedSummaryQuery;
         }
 
         /// <summary>
@@ -49,7 +51,7 @@ namespace Astrana.Core.API.Controllers
         /// <param name="page"></param>
         /// <param name="pageSize"></param>
         /// <returns></returns>
-        /// <response code="200">ExternalContentSubscription(s) successfully retrieved.</response>
+        /// <response code="200">External Content Subscription(s) successfully retrieved.</response>
         /// <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
         /// <response code="500">Something went wrong.</response>
         [HttpGet]
@@ -59,14 +61,14 @@ namespace Astrana.Core.API.Controllers
 
             var queryOptions = new ExternalContentSubscriptionQueryOptions<Guid, Guid>
             {
-                OwnerUserIds = createdById.HasValue ? new List<Guid> { createdById.Value } : new List<Guid>(),
-
                 CreatedAfter = createdAfter,
                 CreatedBefore = createdBefore,
 
                 PageSize = pageSize,
                 CurrentPage = page
             };
+
+            queryOptions.SetOwnerUserIds(createdById.AsList());
 
             var result = await _getExternalSubscriptionsQuery.ExecuteAsync(actioningUserId, queryOptions);
 
@@ -86,10 +88,7 @@ namespace Astrana.Core.API.Controllers
         {
             var actioningUserId = GetActioningUserId();
 
-            var queryOptions = new ExternalContentSubscriptionQueryOptions<Guid, Guid>
-            {
-                Ids = new List<Guid> { id }
-            };
+            var queryOptions = new ExternalContentSubscriptionQueryOptions<Guid, Guid>(id.AsList());
 
             var result = await _getExternalSubscriptionsQuery.ExecuteAsync(actioningUserId, queryOptions);
 
@@ -105,7 +104,7 @@ namespace Astrana.Core.API.Controllers
         /// <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
         /// <response code="500">Something went wrong.</response>
         [HttpPut]
-        public async Task<IActionResult> CreateExternalContentSubscriptions(IList<ExternalSubscriptionToAdd> externalContentSubscriptions)
+        public async Task<IActionResult> CreateExternalContentSubscriptions(IList<ExternalContentSubscriptionToAdd> externalContentSubscriptions)
         {
             var actioningUserId = GetActioningUserId();
 
@@ -114,9 +113,10 @@ namespace Astrana.Core.API.Controllers
                 var result = await _createExternalSubscriptionsCommand.ExecuteAsync(externalContentSubscriptions, actioningUserId);
 
                 if (result.Outcome == ResultOutcome.Success)
-                {
                     return CreatedSuccessResponse(result, result.Message);
-                }
+
+                if (result.Outcome == ResultOutcome.Aborted)
+                    return ValidationResponse(result.Errors, result.Message);
 
                 return ErrorResponse(result, result.Message);
             }
@@ -137,7 +137,7 @@ namespace Astrana.Core.API.Controllers
         /// <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
         /// <response code="500">Something went wrong.</response>
         [HttpPost]
-        public async Task<IActionResult> UpdateExternalContentSubscriptions(IList<ExternalSubscription> externalContentSubscriptions)
+        public async Task<IActionResult> UpdateExternalContentSubscriptions(IList<ExternalContentSubscription> externalContentSubscriptions)
         {
             var actioningUserId = GetActioningUserId();
 
@@ -198,7 +198,7 @@ namespace Astrana.Core.API.Controllers
         {
             var actioningUserId = GetActioningUserId();
 
-            var result = await _getExternalSummaryQuery.ExecuteAsync(url, actioningUserId);
+            var result = await _getExternalFeedSummaryQuery.ExecuteAsync(url, actioningUserId);
 
             if (result.Outcome != ResultOutcome.Success)
                 return ErrorResponse(result.Data, result.Message);

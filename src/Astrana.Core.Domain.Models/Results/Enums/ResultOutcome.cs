@@ -8,10 +8,39 @@ namespace Astrana.Core.Domain.Models.Results.Enums
 {
     public enum ResultOutcome
     {
+        /// <summary>
+        /// Indicates an unknown outcome of an operation.
+        /// </summary>
         Unknown,
+
+        /// <summary>
+        /// Indicates the associated operation completed successfully.
+        /// </summary>
         Success,
+
+        /// <summary>
+        /// Indicates that only part of the associated operation completed successfully.
+        /// </summary>
         PartialSuccess,
+
+        /// <summary>
+        /// Indicates the associated operation did not complete successfully.
+        /// </summary>
         Failure,
-        PartialFailure
+
+        /// <summary>
+        /// Indicates that part of the associated operation completed with failures.
+        /// </summary>
+        PartialFailure,
+
+        /// <summary>
+        /// Indicates the associated operation was was stopped during execution.
+        /// </summary>
+        Aborted,
+
+        /// <summary>
+        /// Indicates the associated operation was was stopped before execution began.
+        /// </summary>
+        Cancelled
     }
 }

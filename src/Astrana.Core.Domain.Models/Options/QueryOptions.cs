@@ -23,20 +23,49 @@ namespace Astrana.Core.Domain.Models.Options
         protected const string StringSeparator = "; ";
 
         [JsonConstructor]
-        public QueryOptions() { }
+        public QueryOptions()
+        {
+            Ids = new List<TRecordId>();
+            ExcludeIds = new List<TRecordId>();
+            OwnerUserIds = new List<TOwnerUserId>();
+        }
 
-        public QueryOptions(List<TRecordId> ids)
+        public QueryOptions(List<TRecordId> ids): this()
         {
             Ids = ids;
         }
 
+        public void SetIds(List<TRecordId>? ids)
+        {
+            if (ids == null)
+                return;
+
+            Ids.AddRange(ids);
+        }
+
+        public void SetExcludeIds(List<TRecordId>? excludeIds)
+        {
+            if (excludeIds == null)
+                return;
+
+            ExcludeIds.AddRange(excludeIds);
+        }
+
+        public void SetOwnerUserIds(List<TOwnerUserId>? ownerUserIds)
+        {
+            if (ownerUserIds == null)
+                return;
+
+            OwnerUserIds.AddRange(ownerUserIds);
+        }
+
         public QueryOptionsMatchMode IdsMatchMode { get; set; }
 
-        public List<TRecordId>? Ids { get; set; } = new();
+        public List<TRecordId> Ids { get; }
 
-        public List<TRecordId>? ExcludeIds { get; set; } = new();
+        public List<TRecordId> ExcludeIds { get; }
 
-        public List<TOwnerUserId>? OwnerUserIds { get; set; } = new();
+        public List<TOwnerUserId> OwnerUserIds { get; }
 
         public DateTimeOffset? CreatedBefore { get; set; }
 
@@ -72,6 +101,7 @@ namespace Astrana.Core.Domain.Models.Options
             };
 
             propertyValues.AddRange(Ids.Select(id => $"{nameof(Ids).ToCamelCase()}={id}"));
+            propertyValues.AddRange(ExcludeIds.Select(uid => $"{nameof(ExcludeIds).ToCamelCase()}={uid}"));
             propertyValues.AddRange(OwnerUserIds.Select(uid => $"{nameof(OwnerUserIds).ToCamelCase()}={uid}"));
 
             return propertyValues;
@@ -96,6 +126,7 @@ namespace Astrana.Core.Domain.Models.Options
                 $"{nameof(OrderByDirection).ToCamelCase()}={OrderByDirection}",
                 $"{nameof(IncludeDeactivated).ToCamelCase()}={IncludeDeactivated}",
                 $"{nameof(Ids).ToCamelCase()}={string.Join(',', Ids == null ? "" : Ids.Select(id => id.ToString()))}",
+                $"{nameof(ExcludeIds).ToCamelCase()}={string.Join(',', ExcludeIds == null ? "" : ExcludeIds.Select(excludeId => excludeId.ToString()))}",
                 $"{nameof(OwnerUserIds).ToCamelCase()}={string.Join(',', OwnerUserIds == null ? "" : OwnerUserIds.Select(uid => uid.ToString()))}"
             };
 

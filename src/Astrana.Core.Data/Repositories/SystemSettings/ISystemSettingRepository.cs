@@ -14,6 +14,10 @@ namespace Astrana.Core.Data.Repositories.SystemSettings
 {
     public interface ISystemSettingRepository<TUserId> where TUserId : struct
     {
+        Task<ICountResult> GetSystemSettingCategoriesCountAsync(SystemSettingCategoryQueryOptions<Guid, TUserId>? queryOptions = null);
+
+        Task<IGetResult<SystemSettingCategory>> GetSystemSettingCategoriesAsync(SystemSettingCategoryQueryOptions<Guid, TUserId>? queryOptions = null);
+
         Task<ICountResult> GetSystemSettingsCountAsync(SystemSettingQueryOptions<Guid, TUserId>? queryOptions = null);
 
         Task<IGetResult<SystemSetting>> GetSystemSettingsAsync(SystemSettingQueryOptions<Guid, TUserId>? queryOptions = null);

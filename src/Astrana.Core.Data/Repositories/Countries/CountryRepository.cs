@@ -36,10 +36,10 @@ namespace Astrana.Core.Data.Repositories.Countries
 
             // Add Filters
             if (options.Ids.Any())
-                query = query.Where(o => options.Ids.Contains(o.Id));
+                query = query.Where(o => options.Ids.Contains(o.CountryId));
 
             if (options.ExcludeIds.Any())
-                query = query.Where(o => !options.ExcludeIds.Contains(o.Id));
+                query = query.Where(o => !options.ExcludeIds.Contains(o.CountryId));
 
             if (options.CreatedBefore.HasValue)
                 query = query.Where(o => o.CreatedTimestamp < options.CreatedBefore.Value);
@@ -96,7 +96,7 @@ namespace Astrana.Core.Data.Repositories.Countries
             else
                 resultSetCount = queryResults.Count;
 
-            var countries = queryResults.Select(country => ModelMapper.MapModel<DM.Countries.Country, Country>(country)).ToList();
+            var countries = queryResults.Select(Data.Entities.Configuration.ModelMappings.Country.MapToDomainModel).ToList();
 
             logger.LogInformation(string.Format(MessageRetrievedEntity, nameof(Country)), queryOptions);
 
@@ -163,14 +163,14 @@ namespace Astrana.Core.Data.Repositories.Countries
 
                     countAdded++;
 
-                    newCountryIds.Add(newCountryEntity.Id);
+                    newCountryIds.Add(newCountryEntity.CountryId);
                 }
 
                 logger.LogInformation(string.Format(MessageSuccessfullyCreatedEntity, newCountryIds.Count, nameof(Country) + "(s)"));
 
                 // Return the current records.
                 if (returnRecords)
-                    return new AddSuccessResult<List<DM.Countries.Country>>((await GetCountriesAsync(new CountryQueryOptions<long, Guid>() { Ids = newCountryIds })).Data, countAdded);
+                    return new AddSuccessResult<List<DM.Countries.Country>>((await GetCountriesAsync(new CountryQueryOptions<long, Guid>(newCountryIds))).Data, countAdded);
 
                 return new AddSuccessResult<List<DM.Countries.Country>>(new List<DM.Countries.Country>(), countAdded);
             }
@@ -202,7 +202,7 @@ namespace Astrana.Core.Data.Repositories.Countries
 
                 foreach (var update in requestedUpdates)
                 {
-                    var existingCountryEntity = await databaseSession.Countries.FirstOrDefaultAsync(o => o.Id == update.CountryId);
+                    var existingCountryEntity = await databaseSession.Countries.FirstOrDefaultAsync(o => o.CountryId == update.CountryId);
 
                     if (existingCountryEntity == null)
                         continue;
@@ -223,14 +223,14 @@ namespace Astrana.Core.Data.Repositories.Countries
 
                     countUpdated++;
 
-                    updatedCountryIds.Add(existingCountryEntity.Id);
+                    updatedCountryIds.Add(existingCountryEntity.CountryId);
                 }
 
                 logger.LogInformation(string.Format(MessageSuccessfullyUpdatedEntity, updatedCountryIds.Count, nameof(Country) + "(s)"));
 
                 // Return the current records.
                 if (returnRecords)
-                    return new UpdateSuccessResult<List<DM.Countries.Country>>((await GetCountriesAsync(new CountryQueryOptions<long, Guid>() { Ids = updatedCountryIds })).Data, countUpdated);
+                    return new UpdateSuccessResult<List<DM.Countries.Country>>((await GetCountriesAsync(new CountryQueryOptions<long, Guid>(updatedCountryIds))).Data, countUpdated);
 
                 return new UpdateSuccessResult<List<DM.Countries.Country>>(new List<DM.Countries.Country>(), countUpdated);
             }

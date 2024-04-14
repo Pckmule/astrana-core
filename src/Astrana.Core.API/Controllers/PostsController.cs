@@ -9,7 +9,6 @@ using Astrana.Core.Data.Repositories.Peers;
 using Astrana.Core.Domain.AstranaApi.Services;
 using Astrana.Core.Domain.IdentityAccessManagement.Managers.SignIn;
 using Astrana.Core.Domain.Models.Attachments.Enums;
-using Astrana.Core.Domain.Models.ContentCollections.Options;
 using Astrana.Core.Domain.Models.Posts;
 using Astrana.Core.Domain.Models.Posts.DomainTransferObjects;
 using Astrana.Core.Domain.Models.Posts.Options;
@@ -76,8 +75,6 @@ namespace Astrana.Core.API.Controllers
 
             var queryOptions = new PostQueryOptions<long, Guid>
             {
-                OwnerUserIds = createdById.HasValue ? new List<Guid> { createdById.Value } : new List<Guid>(),
-
                 AttachmentTypes = attachmentTypes?.Distinct().ToList(),
 
                 CreatedAfter = createdAfter,
@@ -89,6 +86,8 @@ namespace Astrana.Core.API.Controllers
                 OrderByDirection = orderByDirection,
                 OrderBy = orderBy
             };
+
+            queryOptions.OwnerUserIds.AddRange(createdById.HasValue ? new List<Guid> { createdById.Value } : new List<Guid>());
 
             if (peerProfileId.HasValue)
             {
@@ -135,14 +134,14 @@ namespace Astrana.Core.API.Controllers
 
             var queryOptions = new PostQueryOptions<long, Guid>
             {
-                OwnerUserIds = createdById.HasValue ? new List<Guid> { createdById.Value } : new List<Guid>(),
-
                 CreatedAfter = createdAfter,
                 CreatedBefore = createdBefore,
 
                 PageSize = pageSize,
                 CurrentPage = page
             };
+
+            queryOptions.OwnerUserIds.AddRange(createdById.HasValue ? new List<Guid> { createdById.Value } : new List<Guid>());
 
             var result = await _discoverPostsQuery.ExecuteAsync(actioningUserId, queryOptions);
 
@@ -164,10 +163,7 @@ namespace Astrana.Core.API.Controllers
         {
             var actioningUserId = GetActioningUserId();
 
-            var queryOptions = new PostQueryOptions<long, Guid>
-            {
-                Ids = new List<long> { id }
-            };
+            var queryOptions = new PostQueryOptions<long, Guid>(new List<long> { id });
 
             var result = await _getPostsQuery.ExecuteAsync(actioningUserId, queryOptions);
 

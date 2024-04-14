@@ -44,6 +44,9 @@ namespace Astrana.Core.Domain.AstranaApi.Services
         /// <param name="parameters"></param>
         public async Task<ApiCallerResult> HeadAsync(string host, string controllerName, string controllerMethodName = DefaultControllerMethodName, IEnumerable<object>? parameters = null)
         {
+            if (host.EndsWith('/'))
+                host = host[..^1];
+
             try
             {
                 if (!string.IsNullOrWhiteSpace(_authorizationToken))
@@ -80,6 +83,9 @@ namespace Astrana.Core.Domain.AstranaApi.Services
         {
             AddAuthorizationHeader();
 
+            if (host.EndsWith('/'))
+                host = host[..^1];
+
             try
             {
                 using var response = await _httpClient.GetAsync(BuildEndpoint(host, controllerName, controllerMethodName, parameters));
@@ -113,9 +119,13 @@ namespace Astrana.Core.Domain.AstranaApi.Services
         {
             AddAuthorizationHeader();
 
+            if (host.EndsWith('/'))
+                host = host[..^1];
+
             try
             {
-                using var response = await _httpClient.PutAsync(BuildEndpoint(host, controllerName, controllerMethodName), BuildRequestBody(payload));
+                var target = BuildEndpoint(host, controllerName, controllerMethodName);
+                using var response = await _httpClient.PutAsync(target, BuildRequestBody(payload));
                 return new ApiCallerResult<TData>(HttpMethod.Put, response);
             }
             catch (Exception ex)
@@ -146,6 +156,9 @@ namespace Astrana.Core.Domain.AstranaApi.Services
         {
             AddAuthorizationHeader();
 
+            if (host.EndsWith('/'))
+                host = host[..^1];
+
             try
             {
                 using var response = await _httpClient.PostAsync(BuildEndpoint(host, controllerName, controllerMethodName), BuildRequestBody(payload));
@@ -170,6 +183,9 @@ namespace Astrana.Core.Domain.AstranaApi.Services
 
         private static Uri BuildEndpoint(string host, string controllerName, string controllerMethodName = DefaultControllerMethodName, IEnumerable<object>? parameters = null)
         {
+            if (host.EndsWith('/'))
+                host = host[..^1];
+
             if (host.Contains("://"))
                 host = host.Split("://")[1];
 

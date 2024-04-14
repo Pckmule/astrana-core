@@ -41,5 +41,11 @@ namespace Astrana.Core.Framework.Model.Validation
                 return "Prerequisites are satisfied.";
             }
         }
+
+        public string? GetFirstFailureMessage()
+        {
+            return FailedValidations.FirstOrDefault()?.Message ?? "";
+        }
+        
     }
 }

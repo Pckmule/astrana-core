@@ -77,7 +77,7 @@ namespace Astrana.Core.Domain.Posts.Commands.Handlers.CreatePosts
 
                 return new AddFailResult<List<Post>>(new List<Post>(), 0, message);
             }
-            catch(Exception)
+            catch(Exception ex)
             {
                 return new AddFailResult<List<Post>>(null);
             }

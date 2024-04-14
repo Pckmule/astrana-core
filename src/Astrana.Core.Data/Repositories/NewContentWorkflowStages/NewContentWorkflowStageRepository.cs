@@ -151,7 +151,7 @@ namespace Astrana.Core.Data.Repositories.NewContentWorkflowStages
 
                 // Return the current records.
                 if (returnRecords)
-                    return new AddSuccessResult<List<DM.NewContentWorkflowStages.NewContentWorkflowStage>>((await GetNewContentWorkflowStagesAsync(new NewContentWorkflowStageQueryOptions<Guid, Guid> { Ids = newNewContentWorkflowStageIds })).Data, countAdded);
+                    return new AddSuccessResult<List<DM.NewContentWorkflowStages.NewContentWorkflowStage>>((await GetNewContentWorkflowStagesAsync(new NewContentWorkflowStageQueryOptions<Guid, Guid>(newNewContentWorkflowStageIds))).Data, countAdded);
                 
                 return new AddSuccessResult<List<DM.NewContentWorkflowStages.NewContentWorkflowStage>>(new List<DM.NewContentWorkflowStages.NewContentWorkflowStage>(), countAdded);
             }
@@ -210,7 +210,7 @@ namespace Astrana.Core.Data.Repositories.NewContentWorkflowStages
 
                 // Return the current records.
                 if (returnRecords)
-                    return new UpdateSuccessResult<List<DM.NewContentWorkflowStages.NewContentWorkflowStage>>((await GetNewContentWorkflowStagesAsync(new NewContentWorkflowStageQueryOptions<Guid, Guid>() { Ids = updatedNewContentWorkflowStageIds })).Data, countUpdated);
+                    return new UpdateSuccessResult<List<DM.NewContentWorkflowStages.NewContentWorkflowStage>>((await GetNewContentWorkflowStagesAsync(new NewContentWorkflowStageQueryOptions<Guid, Guid>(updatedNewContentWorkflowStageIds))).Data, countUpdated);
                 
                 return new UpdateSuccessResult<List<DM.NewContentWorkflowStages.NewContentWorkflowStage>>(new List<DM.NewContentWorkflowStages.NewContentWorkflowStage>(), countUpdated);
             }

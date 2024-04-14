@@ -30,27 +30,27 @@ namespace Astrana.Core.Domain.AudioClips.Commands.SaveRemoteAudio
             _uploadAudioCommand = uploadAudioCommand;
         }
 
-        public async Task<AddResult<List<Audio>>> ExecuteAsync(Uri url, Guid actioningUserId)
+        public async Task<AddResult<List<AudioClip>>> ExecuteAsync(Uri url, Guid actioningUserId)
         {
             try
             {
                 var remoteAudio = await GetRemoteAudioAsync(url);
 
                 if (remoteAudio.Length == 0)
-                    return new AddFailResult<List<Audio>>(new List<Audio>(), 1, "Remote file save failed.", "Audio has no content.");
+                    return new AddFailResult<List<AudioClip>>(new List<AudioClip>(), 1, "Remote file save failed.", "Audio has no content.");
 
                 var audioSaveResult = await _uploadAudioCommand.ExecuteAsync(new List<IFormFile> { remoteAudio }, actioningUserId);
 
                 if (audioSaveResult.Outcome == ResultOutcome.Success)
                 {
-                    return new AddSuccessResult<List<Audio>>(audioSaveResult.Data, audioSaveResult.Count, "Remote file save successful.");
+                    return new AddSuccessResult<List<AudioClip>>(audioSaveResult.Data, audioSaveResult.Count, "Remote file save successful.");
                 }
 
-                return new AddFailResult<List<Audio>>(null, 0, "Remote file save failed.", ErrorCodes.Default);
+                return new AddFailResult<List<AudioClip>>(null, 0, "Remote file save failed.", ErrorCodes.Default);
             }
             catch (Exception ex)
             {
-                return new AddFailResult<List<Audio>>(null, 0, "Remote file save failed. " + ex.Message, ErrorCodes.Default);
+                return new AddFailResult<List<AudioClip>>(null, 0, "Remote file save failed. " + ex.Message, ErrorCodes.Default);
             }
         }
 

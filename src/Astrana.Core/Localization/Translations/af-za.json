@@ -63,6 +63,7 @@
 	"rejected": "Verwerp",
 	"test_connection": "Toets verbinding",
 	"testing": "Toets",
+
 	"country_name_au": "Australië",
 	"country_name_br": "Brasilië",
 	"country_name_cn": "China",
@@ -74,6 +75,17 @@
 	"country_name_es": "Spanje",
 	"country_name_gb": "Verenigde Koninkryk",
 	"country_name_us": "Verenigde State",
+
+	"language_name_en": "Engels",
+	"language_name_af": "Afrikaans",
+	"language_name_zh": "Chinees",
+	"language_name_fr": "Frans",
+	"language_name_he": "Hebreeus",
+	"language_name_hi": "Hindi",
+	"language_name_es": "Spaans",
+	"language_name_ru": "Russies",
+	"language_name_zu": "Zoeloe",
+
 	"nav_menuitem_community_feed": "Gemeenskapstroom",
 	"nav_menuitem_pin_boards": "Speldborde",
 	"nav_menuitem_news_reader": "Nuusleser",

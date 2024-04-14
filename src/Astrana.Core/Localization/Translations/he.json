@@ -63,6 +63,7 @@
 	"rejected": "נִדחֶה",
 	"test_connection": "בדיקת חיבור",
 	"testing": "בדיקה",
+
 	"country_name_au": "אוֹסטְרַלִיָה",
 	"country_name_br": "בְּרָזִיל",
 	"country_name_cn": "חרסינה",
@@ -74,6 +75,17 @@
 	"country_name_es": "סְפָרַד",
 	"country_name_gb": "הממלכה המאוחדת",
 	"country_name_us": "ארצות הברית",
+
+	"language_name_en": "אנגלית",
+	"language_name_af": "אפריקנית",
+	"language_name_zh": "סינית",
+	"language_name_fr": "צרפתית",
+	"language_name_he": "עברית",
+	"language_name_hi": "הינדי",
+	"language_name_es": "ספרדית",
+	"language_name_ru": "רוסית",
+	"language_name_zu": "זולו",
+
 	"nav_menuitem_community_feed": "עדכון קהילתי",
 	"nav_menuitem_pin_boards": "לוחות סיכות",
 	"nav_menuitem_news_reader": "קורא חדשות",

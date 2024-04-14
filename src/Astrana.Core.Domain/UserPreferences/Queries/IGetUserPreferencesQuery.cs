@@ -8,6 +8,6 @@ namespace Astrana.Core.Domain.UserPreferences.Queries
 {
     public interface IGetUserPreferencesQuery
     {
-        Task<Models.Preferences.UserPreferences> ExecuteAsync(Guid userAccountId, Guid actioningUserId);
+        Task<Models.Preferences.UserPreferencesDto> ExecuteAsync(Guid userAccountId, Guid actioningUserId);
     }
 }

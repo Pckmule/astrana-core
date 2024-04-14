@@ -33,7 +33,7 @@ namespace Astrana.Core.Data.Repositories.Peers
 
         Task<IGetResult<PeerConnectionRequestReceived>> GetReceivedPeerConnectionRequestsAsync(ReceivedPeerConnectionRequestQueryOptions<Guid, TUserId>? queryOptions = null);
 
-        Task<IAddResult<List<PeerConnectionRequestReceived>>> CreateReceivedPeerConnectionRequestsAsync(IEnumerable<IPeerConnectionRequestReceivedToAdd> requestedAdditions, TUserId actioningUserId, bool returnRecords = true);
+        Task<IAddResult<List<PeerConnectionRequestReceived>>> CreateReceivedPeerConnectionRequestsAsync(IEnumerable<PeerConnectionRequestReceived> requestedAdditions, TUserId actioningUserId, bool returnRecords = true);
 
         Task<IUpdateResult<List<PeerConnectionRequestReceived>>> AcceptPeerConnectionRequestAsync(Guid requestedUpdateId, TUserId actioningUserId, bool returnRecords = true);
 

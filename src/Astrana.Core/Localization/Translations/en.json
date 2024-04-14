@@ -61,8 +61,10 @@
 	"not_set": "Not Set",
 	"accepted": "Accepted",
 	"rejected": "Rejected",
+	"new": "New",
 	"test_connection": "Test Connection",
 	"testing": "Testing",
+
 	"country_name_au": "Australia",
 	"country_name_br": "Brazil",
 	"country_name_cn": "China",
@@ -74,10 +76,27 @@
 	"country_name_es": "Spain",
 	"country_name_gb": "United Kingdom",
 	"country_name_us": "United States",
+
+	"language_name_en": "English",
+	"language_name_af": "Afrikaans",
+	"language_name_zh": "Chinese",
+	"language_name_fr": "French",
+	"language_name_he": "Hebrew",
+	"language_name_hi": "Hindi",
+	"language_name_es": "Spanish",
+	"language_name_ru": "Russian",
+	"language_name_zu": "Zulu",
+	"language_name_de": "German",
+	"language_name_it": "Italian",
+	"language_name_ja": "Japanese",
+	"language_name_xh": "Xhosa",
+
 	"nav_menuitem_community_feed": "Community Feed",
 	"nav_menuitem_pin_boards": "Pin Boards",
 	"nav_menuitem_news_reader": "News Reader",
 	"nav_menuitem_profile": "Profile",
+	"nav_menuitem_read_later": "Read Later",
+	"nav_menuitem_discover": "Discover",
 	"heading_intro": "Intro",
 	"heading_posts": "Posts",
 	"heading_about": "About",
@@ -88,12 +107,16 @@
 	"heading_all_peers": "All Peers",
 	"heading_all_photos": "All Photos",
 	"heading_all_videos": "All Videos",
+	"heading_system_update": "System Update",
 	"mutual_peers": "Mutual Peers",
+	"mutual_peers_lowercase": "mutual peers",
 	"mutual_peer": "Mutual Peer",
+	"mutual_peer_lowercase": "mutual peer",
 	"all_peers": "All Peers",
 	"birthday": "Birthday",
 	"birthdays": "Birthdays",
 	"add_bio": "Add Bio",
+	"edit_bio": "Edit Bio",
 	"add_details": "Add Details",
 	"edit_cover_photo": "Edit Cover Photo",
 	"add_photos_slash_videos": "Add Photos/Videos",
@@ -148,13 +171,21 @@
 	"comment": "Comment",
 	"share": "Share",
 
+	"read_later": "Read Later",
+	"bookmark": "Bookmark",
+
 	"cancel": "Cancel",
 
 	"edit": "Edit",
 	"heading_profile_details": "Profile Details",
 
+	"photos": "Photos",
 	"your_photos": "Your Photos",
+
+	"videos": "Videos",
 	"your_videos": "Your Videos",
+
+	"albums": "Albums",
 	"your_albums": "Your Albums",
 	"add_album": "Add Album",
 	"create_album": "Create Album",
@@ -167,5 +198,47 @@
 
 	"sort_by": "Sort By",
 
-	"profile_introduction_placeholder": "Describe who you are"
+	"profile_introduction_placeholder": "Describe who you are",
+	"detail_name": "Label",
+	"detail_value": "Value",
+
+	"connected_since": "Connected {{date}}",
+	"peer_connection_requested_at": "Requested {{date}}",
+
+	"heading_connect_to_a_peer": "Connect to a Peer",
+	"btn_manage_peer": "Friends",
+	"mute": "Mute",
+	"block": "Block",
+
+	"all": "All",
+	"unread": "Unread",
+
+	"time": "Time",
+	"popularity": "Popularity",
+
+	"heading_setup_finished": "Setup Finished",
+	"setup_is_already_complete": "Setup is already complete",
+
+	"filter_by_tags": "Filter by Tags",
+
+	"settings_and_privacy": "Settings and Privacy",
+	"display_and_accessibility": "Display and Accessibility",
+
+	"checking_for_updates": "Checking for updates...",
+	"message_no_updates_available": "You have latest version of Astrana! Nice!",
+
+	"version": "Version",
+	"announcement": "Announcement",
+	"release_notes": "Release Notes",
+	"release_date": "Release Date",
+
+	"update_deadline": "Update Deadline",
+	"update_deadline_explanation": "Occasionally it may be necessary to force Astrana instance owners to upgrade to a particular version.\n\n For example, when a critical security issue is discovered or to ensure instances remain compatible with each other. ",
+
+	"this_is_a_release_type": "This is a {{release_type}} release",
+	"install_update": "Install Update",
+
+	"setup_completed_message": "Your're all set up!'",
+
+	"authored_by": "Authored by"
 }

@@ -1,33 +1,39 @@
-﻿using FeelingDataEntity = Astrana.Core.Data.Entities.Configuration.Feeling;
+﻿/*
+* This Source Code Form is subject to the terms of the Mozilla Public
+* License, v2.0. If a copy of the MPL was not distributed with this
+* file, You can obtain one at https://mozilla.org/MPL/2.0/.
+*/
+
+using FeelingDataEntity = Astrana.Core.Data.Entities.Content.Feeling;
 using FeelingDomainEntity = Astrana.Core.Domain.Models.Feelings.Feeling;
 
 namespace Astrana.Core.Data.Entities.Content.ModelMappings
 {
     public static class Feeling
     {
-        public static FeelingDomainEntity MapToDomainModel(FeelingDataEntity contentCollectionDataEntity)
+        public static FeelingDomainEntity MapToDomainModel(FeelingDataEntity feelingDataEntity)
         {
             var domainModel = new FeelingDomainEntity
             {
-                FeelingId = contentCollectionDataEntity.FeelingId,
+                FeelingId = feelingDataEntity.FeelingId,
 
-                Name = contentCollectionDataEntity.Name,
-                NameTrxCode = contentCollectionDataEntity.NameTrxCode,
+                Name = feelingDataEntity.Name,
+                NameTrxCode = feelingDataEntity.NameTrxCode,
                 
-                IconName = contentCollectionDataEntity.IconName,
+                IconName = feelingDataEntity.IconName,
                 
-                UnicodeIcon = contentCollectionDataEntity.UnicodeIcon,
-                ShortCode = contentCollectionDataEntity.ShortCode,
+                UnicodeIcon = feelingDataEntity.UnicodeIcon,
+                ShortCode = feelingDataEntity.ShortCode,
 
-                CreatedBy = contentCollectionDataEntity.CreatedBy,
-                CreatedTimestamp = contentCollectionDataEntity.CreatedTimestamp,
+                CreatedBy = feelingDataEntity.CreatedBy,
+                CreatedTimestamp = feelingDataEntity.CreatedTimestamp,
 
-                LastModifiedBy = contentCollectionDataEntity.LastModifiedBy,
-                LastModifiedTimestamp = contentCollectionDataEntity.LastModifiedTimestamp,
+                LastModifiedBy = feelingDataEntity.LastModifiedBy,
+                LastModifiedTimestamp = feelingDataEntity.LastModifiedTimestamp,
 
-                DeactivatedBy = contentCollectionDataEntity.DeactivatedBy,
-                DeactivatedTimestamp = contentCollectionDataEntity.DeactivatedTimestamp,
-                DeactivatedReason = contentCollectionDataEntity.DeactivatedReason
+                DeactivatedBy = feelingDataEntity.DeactivatedBy,
+                DeactivatedTimestamp = feelingDataEntity.DeactivatedTimestamp,
+                DeactivatedReason = feelingDataEntity.DeactivatedReason
             };
 
             return domainModel;

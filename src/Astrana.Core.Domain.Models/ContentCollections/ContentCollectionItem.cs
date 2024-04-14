@@ -62,7 +62,7 @@ namespace Astrana.Core.Domain.Models.ContentCollections
                 AudioId = dto.AudioId.Value;
 
             if (dto.Audio != null)
-                Audio = new Audio(dto.Audio);
+                Audio = new AudioClip(dto.Audio);
             
             if (dto.CreatedBy.HasValue)
                 CreatedBy = dto.CreatedBy.Value;
@@ -108,7 +108,7 @@ namespace Astrana.Core.Domain.Models.ContentCollections
 
         public Guid? VideoId { get; set; }
 
-        public Audio? Audio { get; set; }
+        public AudioClip? Audio { get; set; }
 
         public Guid? AudioId { get; set; }
 
@@ -142,16 +142,16 @@ namespace Astrana.Core.Domain.Models.ContentCollections
                 MediaType = MediaType,
 
                 ImageId = ImageId,
-                Image = Image == null ? null : Image.ToDomainTransferObject(),
+                Image = Image == null ? null : Image.ToDomainTransferObject(includeId, includeAuditData, includeDeactivationData),
 
                 VideoId = VideoId,
-                Video = Video == null ? null : Video.ToDomainTransferObject(),
+                Video = Video == null ? null : Video.ToDomainTransferObject(includeId, includeAuditData, includeDeactivationData),
 
                 AudioId = AudioId,
-                Audio = Audio == null ? null : Audio.ToDomainTransferObject(),
+                Audio = Audio == null ? null : Audio.ToDomainTransferObject(includeId, includeAuditData, includeDeactivationData),
                 
                 LinkId = LinkId,
-                Link = Link == null ? null : Link.ToDomainTransferObject()
+                Link = Link == null ? null : Link.ToDomainTransferObject(includeId, includeAuditData, includeDeactivationData)
             };
 
             if (includeId)

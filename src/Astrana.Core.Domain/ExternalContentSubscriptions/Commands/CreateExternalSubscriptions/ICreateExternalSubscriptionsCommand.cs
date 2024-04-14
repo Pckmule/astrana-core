@@ -4,13 +4,13 @@
 * file, You can obtain one at https://mozilla.org/MPL/2.0/.
 */
 
-using Astrana.Core.Domain.Models.ExternalContentSubscriptions;
+using Astrana.Core.Domain.Models.ExternalContent.Subscriptions;
 using Astrana.Core.Domain.Models.Results;
 
 namespace Astrana.Core.Domain.ExternalContentSubscriptions.Commands.CreateExternalSubscriptions
 {
     public interface ICreateExternalSubscriptionsCommand
     {
-        Task<AddResult<List<ExternalSubscription>>> ExecuteAsync(IList<ExternalSubscriptionToAdd> linksToAdd, Guid actioningUserId);
+        Task<AddResult<List<ExternalContentSubscription>>> ExecuteAsync(IList<ExternalContentSubscriptionToAdd> externalContentSubscriptionsToAdd, Guid actioningUserId);
     }
 }

@@ -4,13 +4,11 @@
 * file, You can obtain one at https://mozilla.org/MPL/2.0/.
 */
 
-using System.Collections.ObjectModel;
 using Astrana.Core.Data.Constants;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using Astrana.Core.Data.Entities.Content;
 using Astrana.Core.Data.Entities.Peers;
-using Index = Microsoft.EntityFrameworkCore.IndexAttribute;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using DomainModelProperties = Astrana.Core.Domain.Models.Audiences.Constants.ModelProperties;
 
 #nullable disable
@@ -18,37 +16,49 @@ using DomainModelProperties = Astrana.Core.Domain.Models.Audiences.Constants.Mod
 namespace Astrana.Core.Data.Entities.Configuration
 {
     [Table("Audiences", Schema = SchemaNames.Configuration)]
-    [Index(nameof(Name), IsUnique = true)]
-    public class Audience : BaseDeactivatableEntity<Guid, Guid>
+    public class Audience
     {
-        [Required]
+        [Key, Column(Order = 0)]
+        public Guid AudienceId { get; set; }
+
         [MinLength(DomainModelProperties.Audience.MinimumNameLength)]
-        [MaxLength(DomainModelProperties.Audience.MaximumNameLength)]
-        [Column(Order = 1)]
         public string Name { get; set; }
 
-        [Required]
+        [MinLength(DomainModelProperties.Audience.MinimumNameTrxCodeLength)]
+        public string NameTrxCode { get; set; }
+
         [MinLength(DomainModelProperties.Audience.MinimumDescriptionLength)]
-        [MaxLength(DomainModelProperties.Audience.MaximumDescriptionLength)]
-        [Column(Order = 2)]
         public string Description { get; set; }
 
-        [Column(Order = 3)]
-        public Collection<Peer> PeersIncluded { get; set; }
+        [MinLength(DomainModelProperties.Audience.MinimumDescriptionTrxCodeLength)]
+        public string DescriptionTrxCode { get; set; }
 
-        [Column(Order = 4)]
-        public Collection<Peer> PeersExcluded { get; set; }
+        public ICollection<Peer> PeersIncluded { get; set; } = new HashSet<Peer>();
 
-        [Column(Order = 5)]
+        public ICollection<Peer> PeersExcluded { get; set; } = new HashSet<Peer>();
+
         public short? MinimumAge { get; set; }
 
-        [Column(Order = 6)]
         public short? MaximumAge { get; set; }
 
-        [Column(Order = 7)]
-        public Collection<Country> Countries { get; set; }
+        public ICollection<Country> Countries { get; set; } = new HashSet<Country>();
 
-        [Column(Order = 8)]
-        public Collection<Tag> Tags { get; set; }
+        public ICollection<Tag> Tags { get; set; } = new HashSet<Tag>();
+
+        public bool IsUserDefined { get; set; }
+
+        public DateTimeOffset? DeactivatedTimestamp { get; set; }
+
+        public string DeactivatedReason { get; set; } = null;
+
+        public Guid? DeactivatedBy { get; set; }
+
+        public Guid CreatedBy { get; set; }
+
+        public Guid LastModifiedBy { get; set; }
+
+        public DateTimeOffset CreatedTimestamp { get; set; }
+
+        public DateTimeOffset LastModifiedTimestamp { get; set; }
     }
 }

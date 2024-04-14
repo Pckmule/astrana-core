@@ -13,6 +13,7 @@ using Astrana.Core.Framework.Domain;
 using Astrana.Core.Framework.Model;
 using Astrana.Core.Framework.Model.Validation;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Astrana.Core.Domain.Models.Peers
 {
@@ -86,8 +87,51 @@ namespace Astrana.Core.Domain.Models.Peers
             if (!validationResult.IsSuccess)
                 throw new InvalidDomainEntityStateException(validationResult.ValidatedEntityName, new Exception(validationResult.Message));
         }
+        
+        public Peer(PeerToAddDto dto) : this()
+        {
+            if (dto == null)
+                throw new ArgumentNullException(nameof(dto));
 
-        public Guid PeerId { get; set; }
+            PeerId = Guid.Empty;
+
+            if (dto.ProfileId.HasValue)
+                VirtualProfileId = dto.ProfileId.Value;
+
+            if (!string.IsNullOrEmpty(dto.FirstName))
+                FirstName = dto.FirstName;
+
+            if (!string.IsNullOrEmpty(dto.LastName))
+                LastName = dto.LastName;
+
+            if (!string.IsNullOrEmpty(dto.Address))
+                Address = dto.Address;
+
+            if (dto.Age.HasValue)
+                Age = dto.Age.Value;
+
+            if (dto.Gender.HasValue)
+                Sex = dto.Gender.Value;
+
+            if (!string.IsNullOrEmpty(dto.Note))
+                Note = dto.Note;
+
+            if (!string.IsNullOrEmpty(dto.PeerAccessToken))
+                PeerAccessToken = dto.PeerAccessToken;
+
+            var validationResult = Validate();
+
+            if (!validationResult.IsSuccess)
+                throw new InvalidDomainEntityStateException(validationResult.ValidatedEntityName, new Exception(validationResult.Message));
+        }
+        
+        [Required]
+        [JsonIgnore]
+        public Guid PeerId
+        {
+            get => Id;
+            set => Id = value;
+        }
 
         public Guid VirtualProfileId { get; set; }
 

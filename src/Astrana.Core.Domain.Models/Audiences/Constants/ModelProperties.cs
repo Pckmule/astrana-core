@@ -18,10 +18,15 @@ namespace Astrana.Core.Domain.Models.Audiences.Constants
 
             public const int MinimumNameLength = 1;
             public const int MaximumNameLength = 30;
-            
+
+            public const int MinimumNameTrxCodeLength = 1;
+            public const int MaximumNameTrxCodeLength = 100;
+
             public const int MinimumDescriptionLength = 0;
             public const int MaximumDescriptionLength = 250;
 
+            public const int MinimumDescriptionTrxCodeLength = 0;
+            public const int MaximumDescriptionTrxCodeLength = 100;
         }
     }
 }

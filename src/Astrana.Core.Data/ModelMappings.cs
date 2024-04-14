@@ -10,8 +10,8 @@ using Astrana.Core.Data.Entities.Content;
 using Astrana.Core.Data.Entities.Identity;
 using Astrana.Core.Data.Entities.Peers;
 using Astrana.Core.Data.Entities.User;
-using Astrana.Core.Domain.Models.ContentCollections.Contracts;
 using Astrana.Core.Domain.Models.ApiAccessTokens.Contracts;
+using Astrana.Core.Domain.Models.ContentCollections.Contracts;
 using Astrana.Core.Domain.Models.Countries.Contracts;
 using Astrana.Core.Domain.Models.Feelings.Contracts;
 using Astrana.Core.Domain.Models.Images.Contracts;
@@ -238,8 +238,8 @@ namespace Astrana.Core.Data
                 cfg.CreateMap<IPeerConnectionRequestReceived, DomainModels.Peers.PeerConnectionRequestReceived>();
                 cfg.CreateMap<DomainModels.Peers.PeerConnectionRequestReceived, IPeerConnectionRequestReceived>();
 
-                cfg.CreateMap<IPeerConnectionRequestReceivedToAdd, DomainModels.Peers.PeerConnectionRequestReceivedToAdd>();
-                cfg.CreateMap<DomainModels.Peers.PeerConnectionRequestReceivedToAdd, IPeerConnectionRequestReceivedToAdd>();
+                cfg.CreateMap<IPeerConnectionRequestReceivedToAdd, DomainModels.Peers.PeerConnectionRequestReceived>();
+                cfg.CreateMap<DomainModels.Peers.PeerConnectionRequestReceived, IPeerConnectionRequestReceivedToAdd>();
 
                 // ### Peer Connection Request Submitted ###
 
@@ -265,10 +265,7 @@ namespace Astrana.Core.Data
 
                 cfg.CreateMap<ITag, DomainModels.Tags.Tag>();
                 cfg.CreateMap<DomainModels.Tags.Tag, ITag>();
-
-                cfg.CreateMap<ITagToAdd, DomainModels.Tags.TagToAdd>();
-                cfg.CreateMap<DomainModels.Tags.TagToAdd, ITagToAdd>();
-
+                
                 cfg.CreateMap<ITag, Tag>();
                 cfg.CreateMap<Tag, ITag>();
 

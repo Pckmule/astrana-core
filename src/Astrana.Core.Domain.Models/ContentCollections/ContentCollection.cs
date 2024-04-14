@@ -13,6 +13,7 @@ using Astrana.Core.Framework.Domain;
 using Astrana.Core.Framework.Model;
 using Astrana.Core.Framework.Model.Validation;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Astrana.Core.Domain.Models.ContentCollections
 {
@@ -104,6 +105,7 @@ namespace Astrana.Core.Domain.Models.ContentCollections
         }
 
         [Required]
+        [JsonIgnore]
         public Guid ContentCollectionId
         {
             get => Id;

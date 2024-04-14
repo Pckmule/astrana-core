@@ -11,6 +11,7 @@ using Astrana.Core.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Net;
+using Astrana.Core.Domain.Models.Results.Extensions;
 
 namespace Astrana.Core.API.Controllers
 {
@@ -273,6 +274,17 @@ namespace Astrana.Core.API.Controllers
         protected ObjectResult ValidationResponse(string? message = ApiResponseMessages.DefaultValidationResponseMessage, IList<ApiResponseFailedItem>? failedItems = null)
         {
             return BadRequest(new ApiResponse<dynamic>(null, message, failedItems));
+        }
+
+        /// <summary>
+        /// HTTP Response for Operations that cannot be completed due to validation failures.
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="failedItems"></param>
+        /// <returns></returns>
+        protected ObjectResult ValidationResponse(IList<ResultError> resultErrors, string? message = ApiResponseMessages.DefaultValidationResponseMessage)
+        {
+            return ValidationResponse(message, resultErrors.Select(o => o.ToApiResponseFailedItem()).ToList());
         }
 
         /// <summary>

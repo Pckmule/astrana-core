@@ -31,7 +31,7 @@ namespace Astrana.Core.Domain.IdentityAccessManagement.Managers.User
 
         Task<ExecutionResult<string>> SetPasswordResetTokenAsync(Guid userId, Guid actioningUserId);
 
-        Task<ExecutionResult> InitiatePasswordResetAsync(InitiateResetPasswordRequest resetPasswordRequest, Guid actioningUserId);
+        Task<ExecutionResult> InitiatePasswordResetAsync(InitiateResetPasswordRequestDto resetPasswordRequestDto, Guid actioningUserId);
 
         Task<UpdateResult<ApplicationUser>> SetPasswordAsync(Guid userId, string password, Guid actioningUserId);
 

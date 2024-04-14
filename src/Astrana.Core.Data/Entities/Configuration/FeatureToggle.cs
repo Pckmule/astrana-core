@@ -15,8 +15,11 @@ namespace Astrana.Core.Data.Entities.Configuration
 {
     [Table("FeatureToggles", Schema = SchemaNames.Configuration)]
     [Index(nameof(FeatureName), IsUnique = true)]
-    public class FeatureToggle : BaseEntity<Guid, Guid>
+    public class FeatureToggle
     {
+        [Key, Column(Order = 0)]
+        public Guid FeatureToggleId { get; set; }
+
         [Required]
         [MinLength(1)]
         [MaxLength(100)]
@@ -30,5 +33,17 @@ namespace Astrana.Core.Data.Entities.Configuration
         [Required]
         [Column(Order = 3)]
         public bool IsFeatureDisabled { get; set; }
+        
+        [Required, Column(Order = 99996)]
+        public Guid CreatedBy { get; set; }
+
+        [Required, Column(Order = 99997)]
+        public Guid LastModifiedBy { get; set; }
+
+        [Required, Column(Order = 99998)]
+        public DateTimeOffset CreatedTimestamp { get; set; }
+
+        [Required, Column(Order = 99999)]
+        public DateTimeOffset LastModifiedTimestamp { get; set; }
     }
 }

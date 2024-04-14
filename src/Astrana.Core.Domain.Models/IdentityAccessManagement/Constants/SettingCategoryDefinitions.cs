@@ -15,17 +15,33 @@ namespace Astrana.Core.Domain.Models.IdentityAccessManagement.Constants
             public const string AccessControl = "Access Control";
         }
 
-        public static List<SystemSettingCategory> Register(List<SystemSettingCategory> settingCategories)
+        private static readonly IReadOnlyList<SystemSettingCategory> Definitions = new List<SystemSettingCategory>
         {
-            settingCategories.Add(new SystemSettingCategory
+            new()
             {
+                SystemSettingCategoryId = new Guid("7dc564b5-9cc9-459e-987a-695fbfcab4a0"),
                 Name = Names.AccessControl,
-                NameTrxCode = "setting_category_" + Names.AccessControl.Replace(" ", "_").ToLower(),
+                NameTrxCode = GetTrxCode(Names.AccessControl),
                 Description = "Settings relating to rights and permissions for system access.",
                 DescriptionTrxCode = "setting_category_description_" + Names.AccessControl.Replace(" ", "_").ToLower()
-            });
+            }
+        };
+
+        public static List<SystemSettingCategory> Register(List<SystemSettingCategory> settingCategories)
+        {
+            settingCategories.AddRange(Definitions);
 
             return settingCategories;
+        }
+
+        public static SystemSettingCategory? FindByName(string name)
+        {
+            return Definitions.FirstOrDefault(o => o.Name == name);
+        }
+
+        private static string GetTrxCode(string name)
+        {
+            return "system_setting_category_" + name.Replace(" ", "_").ToLower();
         }
     }
 }

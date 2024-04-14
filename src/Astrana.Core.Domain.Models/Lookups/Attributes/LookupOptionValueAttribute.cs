@@ -10,5 +10,14 @@ namespace Astrana.Core.Domain.Models.Lookups.Attributes
     /// Indicates the property value should be used for the value of a lookup option.
     /// </summary>
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
-    public sealed class LookupOptionValueAttribute : Attribute { }
+    public sealed class LookupOptionValueAttribute : Attribute
+    {
+        public readonly string? FallbackValue;
+
+        /// <param name="fallbackValue">The value to use if the property/field value is empty.</param>
+        public LookupOptionValueAttribute(string? fallbackValue = null)
+        {
+            FallbackValue = fallbackValue;
+        }
+    }
 }

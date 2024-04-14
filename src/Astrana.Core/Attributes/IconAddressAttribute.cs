@@ -12,9 +12,9 @@ namespace Astrana.Core.Attributes
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Enum)]
     public class IconAddressAttribute : Attribute
     {
-        public readonly string Address;
+        public readonly string? Address;
 
-        public IconAddressAttribute(string address)
+        public IconAddressAttribute(string? address = null)
         {
             Address = address;
         }

@@ -96,7 +96,7 @@ namespace Astrana.Core.Domain.IdentityAccessManagement.Managers.User
 
         public async Task<ApplicationUser?> FindUserByIdAsync(Guid userId, Guid actioningUserId)
         {
-            return await FindUserAsync(new UserAccountQueryOptions<Guid, Guid> { Ids = new List<Guid> { userId } }, actioningUserId);
+            return await FindUserAsync(new UserAccountQueryOptions<Guid, Guid>(userId.AsList()), actioningUserId);
         }
 
         public async Task<ApplicationUser?> FindUserByUsernameAsync(string username, Guid actioningUserId)
@@ -171,7 +171,7 @@ namespace Astrana.Core.Domain.IdentityAccessManagement.Managers.User
             return await SetPasswordResetTokenAsync(userId, actioningUserId);
         }
 
-        public async Task<ExecutionResult> InitiatePasswordResetAsync(InitiateResetPasswordRequest resetPasswordRequest, Guid actioningUserId)
+        public async Task<ExecutionResult> InitiatePasswordResetAsync(InitiateResetPasswordRequestDto resetPasswordRequestDto, Guid actioningUserId)
         {
             throw new NotImplementedException();
         }

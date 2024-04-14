@@ -8,9 +8,11 @@ using Astrana.Core.Configuration;
 using Astrana.Core.Data.Repositories.SystemSettings;
 using Astrana.Core.Data.Repositories.UserAccounts;
 using Astrana.Core.Data.Utilities;
+using Astrana.Core.Domain.Application.Configuration;
 using Astrana.Core.Domain.Models.Database;
 using Astrana.Core.Domain.Models.SystemSettings.Options;
 using Astrana.Core.Domain.Models.SystemSetup.Enums;
+using Astrana.Core.Enums;
 using Astrana.Core.Utilities;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Logging;
@@ -22,7 +24,8 @@ namespace Astrana.Core.Domain.SystemSetup.Queries
     {
         private readonly ILogger<GetSystemSetupStatusQuery> _logger;
         
-        private readonly IWebHostEnvironment _environment;        
+        private readonly IWebHostEnvironment _environment;
+        private readonly IDataProtectionEncryptionUtility _dataProtectionEncryptionUtility;
         private readonly ISystemSettingRepository<Guid> _systemSettingRepository;
         private readonly IUserAccountRepository<Guid> _userAccountRepository;
         private readonly IDatabaseChecker _databaseChecker;
@@ -30,6 +33,7 @@ namespace Astrana.Core.Domain.SystemSetup.Queries
         public GetSystemSetupStatusQuery(
             ILogger<GetSystemSetupStatusQuery> logger,
             IWebHostEnvironment environment,
+            IDataProtectionEncryptionUtility dataProtectionEncryptionUtility,
             ISystemSettingRepository<Guid> systemSettingRepository, 
             IUserAccountRepository<Guid> userAccountRepository,
             IDatabaseChecker databaseChecker)
@@ -37,6 +41,7 @@ namespace Astrana.Core.Domain.SystemSetup.Queries
             _logger = logger;
 
             _environment = environment;
+            _dataProtectionEncryptionUtility = dataProtectionEncryptionUtility;
             _systemSettingRepository = systemSettingRepository;
             _userAccountRepository = userAccountRepository;
             _databaseChecker = databaseChecker;
@@ -69,9 +74,9 @@ namespace Astrana.Core.Domain.SystemSetup.Queries
         {
             var appSettingsFilePath = Path.Join(_environment.ContentRootPath, Constants.Application.SettingsFileName);
 
-            var appSettings = new ConfigurationManager(appSettingsFilePath).ApplicationSettings;
+            var appSettings = new ConfigurationManager(appSettingsFilePath, _dataProtectionEncryptionUtility).ApplicationSettings;
 
-            if (appSettings.DatabaseProvider == Enums.DatabaseProvider.Default)
+            if (appSettings.DatabaseProvider == DatabaseProvider.Default)
                 return false;
 
             var connectionString = appSettings.ConnectionStrings[appSettings.DatabaseProvider.ToString()];
@@ -79,20 +84,20 @@ namespace Astrana.Core.Domain.SystemSetup.Queries
             if (string.IsNullOrWhiteSpace(connectionString))
                 return false;
 
-            var decryptedConnectionString = appSettings.SetupMode == null ? EncryptionUtility.DecryptString(connectionString) : connectionString;
+            var decryptedConnectionString = appSettings.SetupMode == null ? _dataProtectionEncryptionUtility.DecryptString(connectionString) : connectionString;
 
             ConnectionString connectionStringModel;
             switch (appSettings.DatabaseProvider)
             {
-                case Enums.DatabaseProvider.PostgreSQL:
+                case DatabaseProvider.PostgreSQL:
                     connectionStringModel = new PostgreSqlConnectionString(decryptedConnectionString);
                     break;
 
-                case Enums.DatabaseProvider.MySQL:
+                case DatabaseProvider.MySQL:
                     connectionStringModel = new MySqlConnectionString(decryptedConnectionString);
                     break;
 
-                case Enums.DatabaseProvider.MSSqlServer:
+                case DatabaseProvider.MSSqlServer:
                     connectionStringModel = new MsSqlServerConnectionString(decryptedConnectionString);
                     break;
 

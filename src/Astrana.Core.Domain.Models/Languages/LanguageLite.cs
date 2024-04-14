@@ -18,7 +18,6 @@ namespace Astrana.Core.Domain.Models.Languages
 
             Name = fullModel.Name;
             NameTrxCode = fullModel.NameTrxCode;
-            Code = fullModel.Code;
             TwoLetterCode = fullModel.TwoLetterCode;
             ThreeLetterCode = fullModel.ThreeLetterCode;
             Direction = fullModel.Direction;

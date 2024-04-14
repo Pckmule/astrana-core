@@ -1,4 +1,4 @@
-using Astrana.Core.Data.Attributes;
+using Astrana.Core.Attributes;
 
 namespace Astrana.Core.Data.Tests.Unit
 {

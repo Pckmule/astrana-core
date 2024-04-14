@@ -13,9 +13,11 @@ using Astrana.Core.Framework.Domain;
 using Astrana.Core.Framework.Model;
 using Astrana.Core.Framework.Model.Validation;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Astrana.Core.Domain.Models.Countries
 {
+    // Reference Data?
     public class Country : DomainEntity<long, CountryDto>, ICountry, IAuditable<Guid>, IDeactivatable<Guid>
     {
         private string _twoLetterCode;
@@ -30,7 +32,6 @@ namespace Astrana.Core.Domain.Models.Countries
 
         public Country(CountryDto dto): this()
         {
-
             if (dto == null)
                 throw new ArgumentNullException(nameof(dto));
 
@@ -76,6 +77,33 @@ namespace Astrana.Core.Domain.Models.Countries
                 throw new InvalidDomainEntityStateException(validationResult.ValidatedEntityName, new Exception(validationResult.Message));
         }
 
+        public Country(CountryToAddDto dto) : this()
+        {
+            if (dto == null)
+                throw new ArgumentNullException(nameof(dto));
+
+            CountryId = 0;
+
+            if (!string.IsNullOrEmpty(dto.Name))
+                Name = dto.Name;
+
+            if (!string.IsNullOrEmpty(dto.NameTrxCode))
+                NameTrxCode = dto.NameTrxCode;
+
+            if (!string.IsNullOrEmpty(dto.TwoLetterCode))
+                TwoLetterCode = dto.TwoLetterCode;
+
+            if (!string.IsNullOrEmpty(dto.ThreeLetterCode))
+                ThreeLetterCode = dto.ThreeLetterCode;
+
+            var validationResult = Validate();
+
+            if (!validationResult.IsSuccess)
+                throw new InvalidDomainEntityStateException(validationResult.ValidatedEntityName, new Exception(validationResult.Message));
+        }
+
+        [Required]
+        [JsonIgnore]
         public long CountryId
         {
             get => Id;

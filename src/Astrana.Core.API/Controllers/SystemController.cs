@@ -20,6 +20,7 @@ using Astrana.Core.Domain.Models.SystemSetup;
 using Astrana.Core.Domain.Models.SystemSetup.Enums;
 using Astrana.Core.Domain.SystemSetup.Commands.SetupInstance;
 using Astrana.Core.Domain.SystemSetup.Queries;
+using Astrana.Core.Domain.SystemUpdates.Queries;
 using Astrana.Core.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -38,7 +39,9 @@ namespace Astrana.Core.API.Controllers
         private readonly IDeleteCountriesCommand _deleteCountriesCommand;
 
         private readonly IGetSystemSetupStatusQuery _getSystemSetupStatusQuery;
+        private readonly IGetSystemSetupSuggestedDefaultsQuery _getSystemSetupSuggestedDefaultsQuery;
         private readonly ISetupInstanceCommand _setupInstanceCommand;
+        private readonly IGetSystemUpdatesQuery _getSystemUpdatesQuery;
 
         private readonly ITestDatabaseConnectionCommand _testDatabaseConnectionCommand;
         private readonly IGetDatabaseSettingsQuery _getDatabaseSettingsQuery;
@@ -49,7 +52,9 @@ namespace Astrana.Core.API.Controllers
             IUpdateCountriesCommand updateCountriesCommand, 
             IDeleteCountriesCommand deleteCountriesCommand, 
             IGetSystemSetupStatusQuery getSystemSetupStatusQuery,
+            IGetSystemSetupSuggestedDefaultsQuery getSystemSetupSuggestedDefaultsQuery,
             ISetupInstanceCommand setupInstanceCommand,
+            IGetSystemUpdatesQuery getSystemUpdatesQuery,
             ITestDatabaseConnectionCommand testDatabaseConnectionCommand,
             IGetDatabaseSettingsQuery getDatabaseSettingsQuery) : base(logger, signInManager)
         {
@@ -62,9 +67,11 @@ namespace Astrana.Core.API.Controllers
             
             _getSystemSetupStatusQuery = getSystemSetupStatusQuery;
             _setupInstanceCommand = setupInstanceCommand;
-            
+            _getSystemUpdatesQuery = getSystemUpdatesQuery;
+
             _testDatabaseConnectionCommand = testDatabaseConnectionCommand;
             _getDatabaseSettingsQuery = getDatabaseSettingsQuery;
+            _getSystemSetupSuggestedDefaultsQuery = getSystemSetupSuggestedDefaultsQuery;
         }
 
         /// <summary>
@@ -76,9 +83,9 @@ namespace Astrana.Core.API.Controllers
         /// <response code="500">Something went wrong.</response>
         [HttpGet("Status")]
         [AllowAnonymous]
-        public SystemStatus GetStatus()
+        public SystemStatusDto GetStatus()
         {
-            return new SystemStatus("OK");
+            return new SystemStatusDto("OK");
         }
 
         /// <summary>
@@ -233,11 +240,27 @@ namespace Astrana.Core.API.Controllers
         /// <response code="500">Something went wrong.</response>
         [HttpGet("Setup/Status")]
         [AllowAnonymous]
-        public async Task<IActionResult> SetupStatus()
+        public async Task<IActionResult> GetSetupStatus()
         {
             var status = await _getSystemSetupStatusQuery.ExecuteAsync(GetActioningUserId(ActioningUserOptions.Anonymous));
 
             return Ok(status);
+        }
+
+        /// <summary>
+        /// Returns suggested setup default configuration settings for the Astrana instance.
+        /// </summary>
+        /// <returns></returns>
+        /// <response code="200">Suggested Setup Defaults successfully retrieved.</response>
+        /// <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+        /// <response code="500">Something went wrong.</response>
+        [HttpGet("Setup/Defaults/Suggested")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetSetupSuggestedDefaults()
+        {
+            var result = await _getSystemSetupSuggestedDefaultsQuery.ExecuteAsync(GetActioningUserId(ActioningUserOptions.Anonymous));
+
+            return UnpagedGetResponse(result);
         }
 
         /// <summary>
@@ -268,6 +291,21 @@ namespace Astrana.Core.API.Controllers
 
                 return ErrorResponse(options);
             }
+        }
+
+        /// <summary>
+        /// Returns a paged set of available system updates.
+        /// </summary>
+        /// <returns></returns>
+        /// <response code="200">System Setup Status successfully retrieved.</response>
+        /// <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
+        /// <response code="500">Something went wrong.</response>
+        [HttpGet("Updates/Available")]
+        public async Task<IActionResult> GetAvailableSystemUpdates()
+        {
+            var result = await _getSystemUpdatesQuery.ExecuteAsync(GetActioningUserId());
+
+            return PagedGetResponse(result, 1, int.MaxValue, result.Message);
         }
 
         /// <summary>

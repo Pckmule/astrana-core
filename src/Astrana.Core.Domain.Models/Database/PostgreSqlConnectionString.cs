@@ -7,20 +7,15 @@
 using Astrana.Core.Domain.Models.Database.Constants;
 using Astrana.Core.Domain.Models.Database.Contracts;
 using Astrana.Core.Extensions;
-using System.Text.Json.Serialization;
 using Astrana.Core.Framework.Model.Validation;
+using System.Text.Json.Serialization;
 
 namespace Astrana.Core.Domain.Models.Database
 {
     public sealed class PostgreSqlConnectionString : ConnectionString, IPostgreSqlConnectionString
     {
         [JsonConstructor]
-        public PostgreSqlConnectionString(): base()
-        {
-            NameUnique = ModelProperties.PostgreSqlConnectionString.NameUnique;
-            NameSingularForm = ModelProperties.PostgreSqlConnectionString.NameSingularForm;
-            NamePluralForm = ModelProperties.PostgreSqlConnectionString.NamePluralForm;
-        }
+        public PostgreSqlConnectionString() { }
 
         public PostgreSqlConnectionString(string connectionString) : this()
         {

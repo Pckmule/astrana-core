@@ -16,5 +16,15 @@
         {
             return guid.IsNotEmpty();
         }
+
+        public static List<Guid> AsList(this Guid guid)
+        {
+            return new List<Guid> { guid };
+        }
+
+        public static List<Guid> AsList(this Guid? guid)
+        {
+            return guid.HasValue ? guid.Value.AsList() : new List<Guid>();
+        }
     }
 }

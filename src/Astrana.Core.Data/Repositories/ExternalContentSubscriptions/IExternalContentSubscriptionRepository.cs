@@ -4,9 +4,8 @@
 * file, You can obtain one at https://mozilla.org/MPL/2.0/.
 */
 
-using Astrana.Core.Domain.Models.ExternalContentSubscriptions;
-using Astrana.Core.Domain.Models.ExternalContentSubscriptions.Contracts;
-using Astrana.Core.Domain.Models.ExternalContentSubscriptions.Options;
+using Astrana.Core.Domain.Models.ExternalContent.Subscriptions;
+using Astrana.Core.Domain.Models.ExternalContent.Subscriptions.Options;
 using Astrana.Core.Domain.Models.Results.Contracts;
 
 namespace Astrana.Core.Data.Repositories.ExternalContentSubscriptions
@@ -15,13 +14,13 @@ namespace Astrana.Core.Data.Repositories.ExternalContentSubscriptions
     {
         Task<ICountResult> GetExternalContentSubscriptionsCountAsync(ExternalContentSubscriptionQueryOptions<Guid, TUserId>? queryOptions = null);
 
-        Task<IGetResult<ExternalSubscription>> GetExternalContentSubscriptionsAsync(ExternalContentSubscriptionQueryOptions<Guid, TUserId>? queryOptions = null);
+        Task<IGetResult<ExternalContentSubscription>> GetExternalContentSubscriptionsAsync(ExternalContentSubscriptionQueryOptions<Guid, TUserId>? queryOptions = null);
 
-        Task<ExternalSubscription?> GetExternalContentSubscriptionByIdAsync(Guid id);
+        Task<ExternalContentSubscription?> GetExternalContentSubscriptionByIdAsync(Guid id);
         
-        Task<IAddResult<List<ExternalSubscription>>> CreateAsync(IEnumerable<IExternalSubscriptionToAdd> requestedAdditions, TUserId actioningUserId, bool returnRecords = true);
+        Task<IAddResult<List<ExternalContentSubscription>>> CreateAsync(IEnumerable<ExternalContentSubscription> requestedAdditions, TUserId actioningUserId, bool returnRecords = true);
 
-        Task<IUpdateResult<List<ExternalSubscription>>> UpdateAsync(IEnumerable<IExternalSubscription> requestedUpdates, TUserId actioningUserId, bool returnRecords = true);
+        Task<IUpdateResult<List<ExternalContentSubscription>>> UpdateAsync(IEnumerable<ExternalContentSubscription> requestedUpdates, TUserId actioningUserId, bool returnRecords = true);
         
         Task<IDeleteResult<List<Guid>>> DeleteAsync(IEnumerable<Guid> validatedExternalContentSubscriptionsToRemoveIds, Guid actioningUserId);
     }

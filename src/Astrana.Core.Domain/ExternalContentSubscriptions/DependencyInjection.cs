@@ -4,6 +4,7 @@
 * file, You can obtain one at https://mozilla.org/MPL/2.0/.
 */
 
+using Astrana.Core.Domain.ExternalContentSubscriptions.Commands.ComposeFeed;
 using Astrana.Core.Domain.ExternalContentSubscriptions.Commands.CreateExternalSubscriptions;
 using Astrana.Core.Domain.ExternalContentSubscriptions.Commands.DeleteExternalSubscriptions;
 using Astrana.Core.Domain.ExternalContentSubscriptions.Commands.UpdateExternalSubscriptions;
@@ -16,8 +17,8 @@ namespace Astrana.Core.Domain.ExternalContentSubscriptions
     {
         public static IServiceCollection Register(this IServiceCollection services)
         {
-            services.AddScoped<IGetExternalSubscriptionsQuery, GetExternalSubscriptionsQuery>();
-            services.AddTransient<IGetExternalSubscriptionsQuery, GetExternalSubscriptionsQuery>();
+            services.AddScoped<IGetExternalSubscriptionsQuery, GetExternalContentSubscriptionsQuery>();
+            services.AddTransient<IGetExternalSubscriptionsQuery, GetExternalContentSubscriptionsQuery>();
 
             services.AddScoped<ICreateExternalSubscriptionsCommand, CreateExternalSubscriptionsCommand>();
             services.AddTransient<ICreateExternalSubscriptionsCommand, CreateExternalSubscriptionsCommand>();
@@ -28,8 +29,8 @@ namespace Astrana.Core.Domain.ExternalContentSubscriptions
             services.AddScoped<IDeleteExternalSubscriptionsCommand, DeleteExternalSubscriptionsCommand>();
             services.AddTransient<IDeleteExternalSubscriptionsCommand, DeleteExternalSubscriptionsCommand>();
 
-            services.AddScoped<IGetExternalSummaryQuery, GetExternalSummaryQuery>();
-            services.AddTransient<IGetExternalSummaryQuery, GetExternalSummaryQuery>();
+            services.AddScoped<IComposeExternalContentSubscriptionFeedCommand, ComposeExternalContentSubscriptionFeedCommand>();
+            services.AddTransient<IComposeExternalContentSubscriptionFeedCommand, ComposeExternalContentSubscriptionFeedCommand>();
 
             return services;
         }

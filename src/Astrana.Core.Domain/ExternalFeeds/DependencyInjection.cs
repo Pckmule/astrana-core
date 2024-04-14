@@ -4,6 +4,8 @@
 * file, You can obtain one at https://mozilla.org/MPL/2.0/.
 */
 
+using Astrana.Core.Domain.CommunityFeed.Commands.ComposeFeed;
+using Astrana.Core.Domain.ExternalFeeds.Queries;
 using Astrana.Core.Domain.MainFeed.Commands.ComposeFeed;
 using Astrana.Core.Domain.MainFeed.Queries;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,6 +16,15 @@ namespace Astrana.Core.Domain.ExternalFeeds
     {
         public static IServiceCollection Register(this IServiceCollection services)
         {
+            services.AddScoped<IFetchExternalFeedContentQuery, FetchExternalFeedContentQuery>();
+            services.AddTransient<IFetchExternalFeedContentQuery, FetchExternalFeedContentQuery>();
+
+            services.AddScoped<IFetchExternalFeedItemsQuery, FetchExternalFeedItemsQuery>();
+            services.AddTransient<IFetchExternalFeedItemsQuery, FetchExternalFeedItemsQuery>();
+
+            services.AddScoped<IGetExternalFeedSummaryQuery, GetExternalFeedSummaryQuery>();
+            services.AddTransient<IGetExternalFeedSummaryQuery, GetExternalFeedSummaryQuery>();
+
             services.AddScoped<IGetMainFeedQuery, GetMainFeedQuery>();
             services.AddTransient<IGetMainFeedQuery, GetMainFeedQuery>();
 

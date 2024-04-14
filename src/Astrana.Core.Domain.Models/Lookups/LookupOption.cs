@@ -10,11 +10,12 @@ namespace Astrana.Core.Domain.Models.Lookups
 {
     public class LookupOption: ILookupOption
     {
-        public LookupOption(string value, string? label, string? labelTranslationCode = null, string? iconAddress = null)
+        public LookupOption(string value, string? label, string? labelTranslationCode = null, string? iconName = null, string? iconAddress = null)
         {
             Value = value;
             Label = string.IsNullOrEmpty(label) ? value : label;
             TrxCode = labelTranslationCode;
+            IconName = iconName;
             IconAddress = iconAddress;
         }
 
@@ -23,6 +24,8 @@ namespace Astrana.Core.Domain.Models.Lookups
         public string? Label { get; set; }
         
         public string? TrxCode { get; set; }
+
+        public string? IconName { get; set; }
 
         public string? IconAddress { get; set; }
     }

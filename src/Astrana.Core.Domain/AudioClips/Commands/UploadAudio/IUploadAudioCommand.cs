@@ -11,6 +11,6 @@ namespace Astrana.Core.Domain.AudioClips.Commands.UploadAudio
 {
     public interface IUploadAudioCommand
     {
-        Task<AddResult<List<Models.AudioClips.Audio>>> ExecuteAsync(List<IFormFile> files, Guid actioningUserId);
+        Task<AddResult<List<Models.AudioClips.AudioClip>>> ExecuteAsync(List<IFormFile> files, Guid actioningUserId);
     }
 }

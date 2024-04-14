@@ -18,7 +18,7 @@ namespace Astrana.Core.Domain.Models.Results.Contracts
 
         string? ResultCode { get; set; }
 
-        IEnumerable<IResultError> Errors { get; set; }
+        List<ResultError> Errors { get; set; }
     }
 
     public interface IAddResult<TData>: IAddResult

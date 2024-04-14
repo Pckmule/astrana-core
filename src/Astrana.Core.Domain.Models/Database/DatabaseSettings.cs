@@ -14,6 +14,7 @@ using System.Text.Json.Serialization;
 
 namespace Astrana.Core.Domain.Models.Database
 {
+    // Value Object?
     public class DatabaseSettings : DomainEntity, IDatabaseSettings
     {
         [JsonConstructor]

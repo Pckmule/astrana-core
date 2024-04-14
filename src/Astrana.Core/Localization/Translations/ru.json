@@ -63,6 +63,7 @@
 	"rejected": "Отклоненный",
 	"test_connection": "Тестовое соединение",
 	"testing": "Тестирование",
+
 	"country_name_au": "Австралия",
 	"country_name_br": "Бразилия",
 	"country_name_cn": "Китай",
@@ -74,6 +75,17 @@
 	"country_name_es": "Испания",
 	"country_name_gb": "объединенное Королевство",
 	"country_name_us": "Соединенные Штаты",
+
+	"language_name_en": "Английский",
+	"language_name_af": "Африкаанс",
+	"language_name_zh": "Китайский",
+	"language_name_fr": "Французский",
+	"language_name_he": "Иврит",
+	"language_name_hi": "Хинди",
+	"language_name_es": "Испанский",
+	"language_name_ru": "Русский",
+	"language_name_zu": "Зулу",
+
 	"nav_menuitem_community_feed": "Лента сообщества",
 	"nav_menuitem_pin_boards": "Пинборды",
 	"nav_menuitem_news_reader": "Читатель новостей",

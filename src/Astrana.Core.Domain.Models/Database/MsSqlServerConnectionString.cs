@@ -7,20 +7,15 @@
 using Astrana.Core.Domain.Models.Database.Constants;
 using Astrana.Core.Domain.Models.Database.Contracts;
 using Astrana.Core.Extensions;
-using System.Text.Json.Serialization;
 using Astrana.Core.Framework.Model.Validation;
+using System.Text.Json.Serialization;
 
 namespace Astrana.Core.Domain.Models.Database
 {
     public sealed class MsSqlServerConnectionString : ConnectionString, IMsSqlServerConnectionString
     {
         [JsonConstructor]
-        public MsSqlServerConnectionString()
-        {
-            NameUnique = ModelProperties.MsSqlServerConnectionString.NameUnique;
-            NameSingularForm = ModelProperties.MsSqlServerConnectionString.NameSingularForm;
-            NamePluralForm = ModelProperties.MsSqlServerConnectionString.NamePluralForm;
-        }
+        public MsSqlServerConnectionString() { }
 
         public MsSqlServerConnectionString(string connectionString) : this()
         {

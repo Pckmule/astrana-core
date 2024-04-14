@@ -10,6 +10,7 @@ using Astrana.Core.Domain.Models.ContentCollections.DomainTransferObjects;
 using Astrana.Core.Domain.Models.Feelings.DomainTransferObjects;
 using Astrana.Core.Domain.Models.Images.DomainTransferObjects;
 using Astrana.Core.Domain.Models.Links.DomainTransferObjects;
+using Astrana.Core.Domain.Models.Locations.DomainTransferObjects;
 using Astrana.Core.Domain.Models.Videos.DomainTransferObjects;
 using Astrana.Core.Framework.Model;
 
@@ -41,16 +42,17 @@ namespace Astrana.Core.Domain.Models.Posts.DomainTransferObjects
 
         public Guid? ContentCollectionId { get; set; }
 
-        public FeelingDto? Feeling { get; set; }
-
-        public Guid? FeelingId { get; set; }
-
         public ImageDto? Gif { get; set; }
 
         public Guid? GifId { get; set; }
 
-        [Obsolete]
-        public string? Address { get; set; }
+        public FeelingDto? Feeling { get; set; }
+
+        public Guid? FeelingId { get; set; }
+
+        public LocationDto? Location { get; set; }
+
+        public Guid? LocationId { get; set; }
 
         public string? Title { get; set; }
 

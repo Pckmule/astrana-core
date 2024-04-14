@@ -10,6 +10,10 @@ namespace Astrana.Core.Domain.Models.SystemSettings.Options
     {
         List<string> Names { get; set; }
 
-        List<string> Categories { get; set; }
+        List<string> CategoryIds { get; set; }
+        
+        bool? IncludeUserSettable { get; set; }
+
+        bool? IncludeSystemSettable { get; set; }
     }
 }

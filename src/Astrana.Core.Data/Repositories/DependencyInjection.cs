@@ -11,6 +11,7 @@ using Astrana.Core.Data.Repositories.Audios;
 using Astrana.Core.Data.Repositories.Comments;
 using Astrana.Core.Data.Repositories.ContentCollections;
 using Astrana.Core.Data.Repositories.Countries;
+using Astrana.Core.Data.Repositories.ExternalContentSubscriptions;
 using Astrana.Core.Data.Repositories.Feelings;
 using Astrana.Core.Data.Repositories.Images;
 using Astrana.Core.Data.Repositories.Languages;
@@ -18,6 +19,7 @@ using Astrana.Core.Data.Repositories.Links;
 using Astrana.Core.Data.Repositories.NewContentWorkflowStages;
 using Astrana.Core.Data.Repositories.Peers;
 using Astrana.Core.Data.Repositories.SystemSettings;
+using Astrana.Core.Data.Repositories.TimeZones;
 using Astrana.Core.Data.Repositories.UserAccounts;
 using Astrana.Core.Data.Repositories.UserProfiles;
 using Astrana.Core.Data.Repositories.Videos;
@@ -37,6 +39,9 @@ namespace Astrana.Core.Data.Repositories
 
             services.AddScoped<ILanguageRepository<Guid>, LanguageRepository>();
             services.AddTransient<ILanguageRepository<Guid>, LanguageRepository>();
+
+            services.AddScoped<ITimeZoneRepository<Guid>, TimeZoneRepository>();
+            services.AddTransient<ITimeZoneRepository<Guid>, TimeZoneRepository>();
 
             services.AddScoped<ICountryRepository<Guid>, CountryRepository>();
             services.AddTransient<ICountryRepository<Guid>, CountryRepository>();
@@ -79,6 +84,12 @@ namespace Astrana.Core.Data.Repositories
 
             services.AddScoped<IContentCollectionRepository<Guid>, ContentCollectionRepository>();
             services.AddTransient<IContentCollectionRepository<Guid>, ContentCollectionRepository>();
+
+            services.AddScoped<IExternalContentSubscriptionRepository<Guid>, ExternalContentSubscriptionRepository>();
+            services.AddTransient<IExternalContentSubscriptionRepository<Guid>, ExternalContentSubscriptionRepository>();
+
+            services.AddScoped<IExternalContentSubscriptionContentItemRepository<Guid>, ExternalContentSubscriptionContentItemRepository>();
+            services.AddTransient<IExternalContentSubscriptionContentItemRepository<Guid>, ExternalContentSubscriptionContentItemRepository>();
 
             return services;
         }

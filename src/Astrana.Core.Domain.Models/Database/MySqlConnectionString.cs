@@ -8,19 +8,13 @@ using Astrana.Core.Domain.Models.Database.Constants;
 using Astrana.Core.Domain.Models.Database.Contracts;
 using Astrana.Core.Extensions;
 using System.Text.Json.Serialization;
-using Astrana.Core.Framework.Model.Validation;
 
 namespace Astrana.Core.Domain.Models.Database
 {
     public sealed class MySqlConnectionString : ConnectionString, IMySqlConnectionString
     {
         [JsonConstructor]
-        public MySqlConnectionString()
-        {
-            NameUnique = ModelProperties.MySqlConnectionString.NameUnique;
-            NameSingularForm = ModelProperties.MySqlConnectionString.NameSingularForm;
-            NamePluralForm = ModelProperties.MySqlConnectionString.NamePluralForm;
-        }
+        public MySqlConnectionString() { }
 
         public MySqlConnectionString(string connectionString) : this()
         {
@@ -79,11 +73,6 @@ namespace Astrana.Core.Domain.Models.Database
                 parts.Add($"{ConnectionStringParts.MySql.Password}={Password}");
 
             return string.Join(";", parts);
-        }
-
-        public override EntityValidationResult Validate()
-        {
-            return this.ValidateDomainModel();
         }
     }
 }

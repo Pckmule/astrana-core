@@ -13,6 +13,7 @@ using Astrana.Core.Domain.IdentityAccessManagement.Managers.SignIn;
 using Astrana.Core.Domain.Models.Audiences;
 using Astrana.Core.Domain.Models.Audiences.Options;
 using Astrana.Core.Domain.Models.Results.Enums;
+using Astrana.Core.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -58,14 +59,14 @@ namespace Astrana.Core.API.Controllers
 
             var queryOptions = new AudienceQueryOptions<Guid, Guid>
             {
-                OwnerUserIds = createdById.HasValue ? new List<Guid> { createdById.Value } : new List<Guid>(),
-
                 CreatedAfter = createdAfter,
                 CreatedBefore = createdBefore,
 
                 PageSize = pageSize,
                 CurrentPage = page
             };
+
+            queryOptions.SetOwnerUserIds(createdById.AsList());
 
             var result = await _getAudiencesQuery.ExecuteAsync(actioningUserId, queryOptions);
 
@@ -85,10 +86,7 @@ namespace Astrana.Core.API.Controllers
         {
             var actioningUserId = GetActioningUserId();
 
-            var queryOptions = new AudienceQueryOptions<Guid, Guid>
-            {
-                Ids = new List<Guid> { id }
-            };
+            var queryOptions = new AudienceQueryOptions<Guid, Guid>(id.AsList());
 
             var result = await _getAudiencesQuery.ExecuteAsync(actioningUserId, queryOptions);
 

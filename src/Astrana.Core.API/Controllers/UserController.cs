@@ -7,14 +7,11 @@
 using Astrana.Core.Configuration.Extensions;
 using Astrana.Core.Constants;
 using Astrana.Core.Data.Repositories.Peers;
-using Astrana.Core.Domain.AstranaApi.Services;
 using Astrana.Core.Domain.IdentityAccessManagement.Managers.SignIn;
 using Astrana.Core.Domain.IdentityAccessManagement.Managers.User;
 using Astrana.Core.Domain.Models.IdentityAccessManagement.Models;
 using Astrana.Core.Domain.Models.Images;
 using Astrana.Core.Domain.Models.Images.Options;
-using Astrana.Core.Domain.Models.Options;
-using Astrana.Core.Domain.Models.Posts.Options;
 using Astrana.Core.Domain.Models.Results;
 using Astrana.Core.Domain.Models.Results.Enums;
 using Astrana.Core.Domain.Models.Results.Extensions;
@@ -30,6 +27,7 @@ using Astrana.Core.Domain.UserProfiles.Commands.DeleteUserProfileDetails;
 using Astrana.Core.Domain.UserProfiles.Commands.UpdateUserProfileDetails;
 using Astrana.Core.Domain.UserProfiles.Commands.UpdateUserProfileIntroduction;
 using Astrana.Core.Domain.UserProfiles.Queries;
+using Astrana.Core.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -177,20 +175,20 @@ namespace Astrana.Core.API.Controllers
         /// <summary>
         /// Initiates the password reset process for a specified user account.
         /// </summary>
-        /// <param name="initiateResetPasswordRequest"></param>
+        /// <param name="initiateResetPasswordRequestDto"></param>
         /// <returns></returns>
         /// <response code="202">Successfully initiated password reset process.</response>
         /// <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
         /// <response code="500">Something went wrong.</response>
         [AllowAnonymous]
         [HttpPost("ResetPassword/Initiate")]
-        public async Task<IActionResult> InitiateResetPasswordAsync(InitiateResetPasswordRequest initiateResetPasswordRequest)
+        public async Task<IActionResult> InitiateResetPasswordAsync(InitiateResetPasswordRequestDto initiateResetPasswordRequestDto)
         {
             var actioningUserId = GetActioningUserId(ActioningUserOptions.Anonymous);
 
             try
             {
-                var result = await _userManager.InitiatePasswordResetAsync(initiateResetPasswordRequest, actioningUserId);
+                var result = await _userManager.InitiatePasswordResetAsync(initiateResetPasswordRequestDto, actioningUserId);
 
                 if (result.Outcome == ResultOutcome.Success)
                     return Accepted();
@@ -201,27 +199,27 @@ namespace Astrana.Core.API.Controllers
             {
                 _logger.LogError(ex, ex.Message);
 
-                return ErrorResponse(initiateResetPasswordRequest);
+                return ErrorResponse(initiateResetPasswordRequestDto);
             }
         }
 
         /// <summary>
         /// Sets the new password for the user account associated with the supplied verification token.
         /// </summary>
-        /// <param name="resetPasswordRequest"></param>
+        /// <param name="resetPasswordRequestDto"></param>
         /// <returns></returns>
         /// <response code="200">Successfully reset password.</response>
         /// <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
         /// <response code="500">Something went wrong.</response>
         [AllowAnonymous]
         [HttpPost("ResetPassword")]
-        public async Task<IActionResult> ResetPasswordAsync(ResetPasswordRequest resetPasswordRequest)
+        public async Task<IActionResult> ResetPasswordAsync(ResetPasswordRequestDto resetPasswordRequestDto)
         {
             var actioningUserId = GetActioningUserId(ActioningUserOptions.Anonymous);
 
             try
             {
-                var result = await _userManager.ResetPasswordAsync(resetPasswordRequest.ValidationToken, resetPasswordRequest.NewPassword, actioningUserId);
+                var result = await _userManager.ResetPasswordAsync(resetPasswordRequestDto.ValidationToken, resetPasswordRequestDto.NewPassword, actioningUserId);
 
                 if (result.Outcome == ResultOutcome.Success)
                     return UpdatedSuccessResponse(result, result.Message);
@@ -232,23 +230,24 @@ namespace Astrana.Core.API.Controllers
             {
                 _logger.LogError(ex, ex.Message);
 
-                return ErrorResponse(resetPasswordRequest);
+                return ErrorResponse(resetPasswordRequestDto);
             }
         }
 
         /// <summary>
         /// Gets the Instance User Peer Summary.
         /// </summary>
+        /// <param name="includeStatistics"></param>
         /// <returns></returns>
         /// <response code="200">Instance User Peer Summary successfully retrieved.</response>
         /// <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
         /// <response code="500">Something went wrong.</response>
         [HttpGet("Instance")]
-        public async Task<IActionResult> GetInstancePeerSummaryAsync()
+        public async Task<IActionResult> GetInstancePeerSummaryAsync(bool includeStatistics = false)
         {
             var actioningUserId = GetActioningUserId();
 
-            var result = await _getInstancePeerSummaryQuery.ExecuteAsync(actioningUserId);
+            var result = await _getInstancePeerSummaryQuery.ExecuteAsync(actioningUserId, includeStatistics);
 
             return UnpagedGetResponse(result, "");
         }
@@ -278,7 +277,7 @@ namespace Astrana.Core.API.Controllers
         /// <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
         /// <response code="500">Something went wrong.</response>
         [HttpGet("Profile/Introduction")]
-        public async Task<IActionResult> GetUserProfileIntroductionAsync(Guid? peerId = null)
+        public async Task<IActionResult> GetUserProfileIntroductionAsync(Guid? peerProfileId = null)
         {
             var actioningUserId = GetActioningUserId();
 
@@ -316,13 +315,13 @@ namespace Astrana.Core.API.Controllers
         /// <response code="400">Validation requirements are not met. Request has missing or invalid values.</response>
         /// <response code="500">Something went wrong.</response>
         [HttpPost("Profile/Introduction")]
-        public async Task<IActionResult> UpdateUserProfileIntroductionAsync(Guid userProfileId, string introduction)
+        public async Task<IActionResult> UpdateUserProfileIntroductionAsync([FromBody] string introduction)
         {
             var actioningUserId = GetActioningUserId();
 
             try
             {
-                var result = await _updateUserProfileIntroductionCommand.ExecuteAsync(userProfileId, introduction, actioningUserId);
+                var result = await _updateUserProfileIntroductionCommand.ExecuteAsync(actioningUserId, introduction);
 
                 if (result.Outcome == ResultOutcome.Success)
                     return UpdatedSuccessResponse(result, result.Message);
@@ -357,14 +356,14 @@ namespace Astrana.Core.API.Controllers
 
             var queryOptions = new UserProfileDetailQueryOptions<Guid, Guid>
             {
-                OwnerUserIds = createdById.HasValue ? new List<Guid> { createdById.Value } : new List<Guid>(),
-
                 CreatedAfter = createdAfter,
                 CreatedBefore = createdBefore,
 
                 PageSize = pageSize,
                 CurrentPage = page
             };
+
+            queryOptions.SetOwnerUserIds(createdById.AsList());
 
             var result = await _getUserProfileDetailsQuery.ExecuteAsync(actioningUserId, queryOptions);
 
@@ -384,10 +383,7 @@ namespace Astrana.Core.API.Controllers
         {
             var actioningUserId = GetActioningUserId();
 
-            var queryOptions = new UserProfileDetailQueryOptions<Guid, Guid>
-            {
-                Ids = new List<Guid> { id }
-            };
+            var queryOptions = new UserProfileDetailQueryOptions<Guid, Guid>(id.AsList());
 
             var result = await _getUserProfileDetailsQuery.ExecuteAsync(actioningUserId, queryOptions);
 
@@ -502,8 +498,6 @@ namespace Astrana.Core.API.Controllers
 
             var queryOptions = new ImageQueryOptions<Guid, Guid>
             {
-                OwnerUserIds = createdById.HasValue ? new List<Guid> { createdById.Value } : new List<Guid>(),
-
                 CreatedAfter = createdAfter,
                 CreatedBefore = createdBefore,
 
@@ -513,6 +507,9 @@ namespace Astrana.Core.API.Controllers
                 OrderByDirection = orderByDirection,
                 OrderBy = orderBy
             };
+
+            queryOptions.SetOwnerUserIds(createdById.AsList());
+
 
             var result = await _getProfilePhotosQuery.ExecuteAsync(actioningUserId, queryOptions);
 

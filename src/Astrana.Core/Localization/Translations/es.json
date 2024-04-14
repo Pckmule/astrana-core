@@ -63,6 +63,7 @@
 	"rejected": "Rechazado",
 	"test_connection": "Conexión de prueba",
 	"testing": "Pruebas",
+
 	"country_name_au": "Australia",
 	"country_name_br": "Brasil",
 	"country_name_cn": "China",
@@ -74,6 +75,17 @@
 	"country_name_es": "España",
 	"country_name_gb": "Reino Unido",
 	"country_name_us": "Estados Unidos",
+
+	"language_name_en": "Inglés",
+	"language_name_af": "Afrikáans",
+	"language_name_zh": "chino",
+	"language_name_fr": "francés",
+	"language_name_he": "hebreo",
+	"language_name_hi": "Hindi",
+	"language_name_es": "Español",
+	"language_name_ru": "ruso",
+	"language_name_zu": "Zulú",
+
 	"nav_menuitem_community_feed": "Feed de la comunidad",
 	"nav_menuitem_pin_boards": "Tableros de anuncios",
 	"nav_menuitem_news_reader": "Lector de noticias",

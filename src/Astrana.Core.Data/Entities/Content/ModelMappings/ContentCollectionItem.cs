@@ -36,7 +36,7 @@ namespace Astrana.Core.Data.Entities.Content.ModelMappings
                 domainModel.Video = Video.MapToDomainModel(contentCollectionItemDataEntity.Video);
 
             if (contentCollectionItemDataEntity.Audio != null)
-                domainModel.Audio = Audio.MapToDomainModel(contentCollectionItemDataEntity.Audio);
+                domainModel.Audio = AudioClip.MapToDomainModel(contentCollectionItemDataEntity.Audio);
 
             if (contentCollectionItemDataEntity.Link != null)
                 domainModel.Link = Link.MapToDomainModel(contentCollectionItemDataEntity.Link);

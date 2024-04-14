@@ -5,15 +5,15 @@
 */
 
 using Astrana.Core.Domain.Models.SystemSetup.Constants;
-using Astrana.Core.Enums;
-using Astrana.Core.Framework.Domain;
+using Astrana.Core.Framework.Model;
 using Astrana.Core.Framework.Model.Validation;
 using Astrana.Core.Framework.Model.Validation.Attributes;
 using System.ComponentModel.DataAnnotations;
+using Astrana.Core.Enums;
 
 namespace Astrana.Core.Domain.Models.SystemSetup
 {
-    public class TestDatabaseConnectionRequest : DomainEntity, ITestDatabaseConnectionRequest
+    public class TestDatabaseConnectionRequest : InputModelBase, ITestDatabaseConnectionRequest
     {
         [RequiredEnum]
         public DatabaseProvider DatabaseProvider { get; set; }

@@ -42,24 +42,24 @@ namespace Astrana.Core.Domain.AudioClips.Commands.UploadAudio
             _getFileInfoQuery = getFileInfoQuery;
         }
 
-        public async Task<AddResult<List<Audio>>> ExecuteAsync(List<IFormFile> files, Guid actioningUserId)
+        public async Task<AddResult<List<AudioClip>>> ExecuteAsync(List<IFormFile> files, Guid actioningUserId)
         {
-            var audios = new List<Audio>();
+            var audios = new List<AudioClip>();
 
             if (files.Count < 1)
-                return new AddFailResult<List<Audio>>(audios, audios.Count, "No audios provided to upload.");
+                return new AddFailResult<List<AudioClip>>(audios, audios.Count, "No audios provided to upload.");
 
             var validAudio = GetValidAudio(files);
 
             if (validAudio.Count < 1)
-                return new AddFailResult<List<Audio>>(audios, audios.Count, "Audio(s) upload failed.", "No valid audios.");
+                return new AddFailResult<List<AudioClip>>(audios, audios.Count, "Audio(s) upload failed.", "No valid audios.");
 
             try
             {
                 var fileUploadResult = await _uploadFileCommand.ExecuteAsync(files, actioningUserId, GetFileMetadata, CompressAudioFile);
 
                 if (fileUploadResult.Outcome != ResultOutcome.Success)
-                    return new AddFailResult<List<Audio>>(null, audios.Count, "Audio(s) upload failed. " + fileUploadResult.Message, fileUploadResult.ResultCode);
+                    return new AddFailResult<List<AudioClip>>(null, audios.Count, "Audio(s) upload failed. " + fileUploadResult.Message, fileUploadResult.ResultCode);
 
                 var audiosToAdd = fileUploadResult.Data.Select(uploadedFile => new AudioToAdd
                 {
@@ -81,13 +81,13 @@ namespace Astrana.Core.Domain.AudioClips.Commands.UploadAudio
                 }
 
                 if (saveResults.Outcome == ResultOutcome.Success)
-                    return new AddSuccessResult<List<Audio>>(saveResults.Data, saveResults.Count, "Audio(s) upload successful.");
+                    return new AddSuccessResult<List<AudioClip>>(saveResults.Data, saveResults.Count, "Audio(s) upload successful.");
                 
-                return new AddFailResult<List<Audio>>(null, 0, "Audio(s) upload failed.", ErrorCodes.Default);
+                return new AddFailResult<List<AudioClip>>(null, 0, "Audio(s) upload failed.", ErrorCodes.Default);
             }
             catch (Exception)
             {
-                return new AddFailResult<List<Audio>>(null, 0, "Audio(s) upload failed.", ErrorCodes.Default);
+                return new AddFailResult<List<AudioClip>>(null, 0, "Audio(s) upload failed.", ErrorCodes.Default);
             }
         }
 

@@ -29,7 +29,7 @@ namespace Astrana.Core.Data.Repositories.AudioClips
         /// </summary>
         /// <param name="options"></param>
         /// <returns></returns>
-        private IQueryable<Audio> BuildQuery(AudioQueryOptions<Guid, Guid>? options = null)
+        private IQueryable<AudioClip> BuildQuery(AudioQueryOptions<Guid, Guid>? options = null)
         {
             options ??= new AudioQueryOptions<Guid, Guid>();
 
@@ -37,10 +37,10 @@ namespace Astrana.Core.Data.Repositories.AudioClips
 
             // Add Filters
             if (options.Ids.Any())
-                query = query.Where(o => options.Ids.Contains(o.AudioId));
+                query = query.Where(o => options.Ids.Contains(o.AudioClipId));
 
             if (options.ExcludeIds.Any())
-                query = query.Where(o => !options.ExcludeIds.Contains(o.AudioId));
+                query = query.Where(o => !options.ExcludeIds.Contains(o.AudioClipId));
 
             if (options.CreatedBefore.HasValue)
                 query = query.Where(o => o.CreatedTimestamp < options.CreatedBefore.Value);
@@ -80,7 +80,7 @@ namespace Astrana.Core.Data.Repositories.AudioClips
         /// </summary>
         /// <param name="queryOptions"></param>
         /// <returns></returns>
-        public async Task<IGetResult<DM.AudioClips.Audio>> GetAudiosAsync(AudioQueryOptions<Guid, Guid>? queryOptions = null)
+        public async Task<IGetResult<DM.AudioClips.AudioClip>> GetAudiosAsync(AudioQueryOptions<Guid, Guid>? queryOptions = null)
         {
             queryOptions ??= new AudioQueryOptions<Guid, Guid>();
 
@@ -97,9 +97,9 @@ namespace Astrana.Core.Data.Repositories.AudioClips
             else
                 resultSetCount = queryResults.Count;
 
-            var countries = queryResults.Select(country => ModelMapper.MapModel<DM.AudioClips.Audio, Audio>(country)).ToList();
+            var countries = queryResults.Select(Data.Entities.Content.ModelMappings.AudioClip.MapToDomainModel).ToList();
 
-            logger.LogInformation(string.Format(MessageRetrievedEntity, nameof(Audio)), queryOptions);
+            logger.LogInformation(string.Format(MessageRetrievedEntity, nameof(AudioClip)), queryOptions);
 
             return CreateGetResultWithPagination(countries, queryOptions, resultSetCount);
         }
@@ -109,7 +109,7 @@ namespace Astrana.Core.Data.Repositories.AudioClips
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<DM.AudioClips.Audio?> GetAudioByIdAsync(Guid id)
+        public async Task<DM.AudioClips.AudioClip?> GetAudioByIdAsync(Guid id)
         {
             return (await GetAudiosAsync(new AudioQueryOptions<Guid, Guid>(new List<Guid> { id }))).Data.FirstOrDefault();
         }
@@ -121,7 +121,7 @@ namespace Astrana.Core.Data.Repositories.AudioClips
         /// <param name="actioningUserId"></param>
         /// <param name="returnRecords"></param>
         /// <returns></returns>
-        public async Task<IAddResult<List<DM.AudioClips.Audio>>> CreateAsync(IEnumerable<IAudioToAdd> requestedAdditions, Guid actioningUserId, bool returnRecords = true)
+        public async Task<IAddResult<List<DM.AudioClips.AudioClip>>> CreateAsync(IEnumerable<IAudioToAdd> requestedAdditions, Guid actioningUserId, bool returnRecords = true)
         {
             ValidateActioningUserId(actioningUserId);
 
@@ -134,7 +134,7 @@ namespace Astrana.Core.Data.Repositories.AudioClips
 
                 foreach (var addition in requestedAdditions)
                 {
-                    var newAudioEntity = ModelMapper.MapModel<Audio, IAudioToAdd>(addition);
+                    var newAudioEntity = ModelMapper.MapModel<AudioClip, IAudioToAdd>(addition);
 
                     if (newAudioEntity == null)
                         continue;
@@ -151,16 +151,16 @@ namespace Astrana.Core.Data.Repositories.AudioClips
 
                     countAdded++;
 
-                    newAudioIds.Add(newAudioEntity.AudioId);
+                    newAudioIds.Add(newAudioEntity.AudioClipId);
                 }
 
-                logger.LogInformation(string.Format(MessageSuccessfullyCreatedEntity, newAudioIds.Count, nameof(Audio) + "(s)"));
+                logger.LogInformation(string.Format(MessageSuccessfullyCreatedEntity, newAudioIds.Count, nameof(AudioClip) + "(s)"));
 
                 // Return the current records.
                 if (returnRecords)
-                    return new AddSuccessResult<List<DM.AudioClips.Audio>>((await GetAudiosAsync(new AudioQueryOptions<Guid, Guid>() { Ids = newAudioIds })).Data, countAdded);
+                    return new AddSuccessResult<List<DM.AudioClips.AudioClip>>((await GetAudiosAsync(new AudioQueryOptions<Guid, Guid>(newAudioIds))).Data, countAdded);
 
-                return new AddSuccessResult<List<DM.AudioClips.Audio>>(new List<DM.AudioClips.Audio>(), countAdded);
+                return new AddSuccessResult<List<DM.AudioClips.AudioClip>>(new List<DM.AudioClips.AudioClip>(), countAdded);
             }
             catch (Exception ex)
             {
@@ -177,7 +177,7 @@ namespace Astrana.Core.Data.Repositories.AudioClips
         /// <param name="actioningUserId"></param>
         /// <param name="returnRecords"></param>
         /// <returns></returns>
-        public async Task<IUpdateResult<List<DM.AudioClips.Audio>>> UpdateAsync(IEnumerable<DM.AudioClips.Audio> requestedUpdates, Guid actioningUserId, bool returnRecords = true)
+        public async Task<IUpdateResult<List<DM.AudioClips.AudioClip>>> UpdateAsync(IEnumerable<DM.AudioClips.AudioClip> requestedUpdates, Guid actioningUserId, bool returnRecords = true)
         {
             ValidateActioningUserId(actioningUserId);
 
@@ -190,7 +190,7 @@ namespace Astrana.Core.Data.Repositories.AudioClips
 
                 foreach (var update in requestedUpdates)
                 {
-                    var existingAudioEntity = await databaseSession.Audios.FirstOrDefaultAsync(o => o.AudioId == update.AudioId);
+                    var existingAudioEntity = await databaseSession.Audios.FirstOrDefaultAsync(o => o.AudioClipId == update.AudioClipId);
 
                     if (existingAudioEntity == null)
                         continue;
@@ -207,16 +207,16 @@ namespace Astrana.Core.Data.Repositories.AudioClips
 
                     countUpdated++;
 
-                    updatedAudioIds.Add(existingAudioEntity.AudioId);
+                    updatedAudioIds.Add(existingAudioEntity.AudioClipId);
                 }
 
-                logger.LogInformation(string.Format(MessageSuccessfullyUpdatedEntity, updatedAudioIds.Count, nameof(Audio) + "(s)"));
+                logger.LogInformation(string.Format(MessageSuccessfullyUpdatedEntity, updatedAudioIds.Count, nameof(AudioClip) + "(s)"));
 
                 // Return the current records.
                 if (returnRecords)
-                    return new UpdateSuccessResult<List<DM.AudioClips.Audio>>((await GetAudiosAsync(new AudioQueryOptions<Guid, Guid>() { Ids = updatedAudioIds })).Data, countUpdated);
+                    return new UpdateSuccessResult<List<DM.AudioClips.AudioClip>>((await GetAudiosAsync(new AudioQueryOptions<Guid, Guid>(updatedAudioIds))).Data, countUpdated);
 
-                return new UpdateSuccessResult<List<DM.AudioClips.Audio>>(new List<DM.AudioClips.Audio>(), countUpdated);
+                return new UpdateSuccessResult<List<DM.AudioClips.AudioClip>>(new List<DM.AudioClips.AudioClip>(), countUpdated);
             }
             catch (Exception ex)
             {

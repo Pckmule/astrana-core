@@ -8,14 +8,14 @@ using Astrana.Core.Attributes;
 using Astrana.Core.Constants;
 using Astrana.Core.Domain.Models.SystemSetup.Constants;
 using Astrana.Core.Domain.Models.UserProfiles.Enums;
-using Astrana.Core.Framework.Domain;
+using Astrana.Core.Framework.Model;
 using Astrana.Core.Framework.Model.Validation;
 using Astrana.Core.Framework.Model.Validation.Attributes;
 using System.ComponentModel.DataAnnotations;
 
 namespace Astrana.Core.Domain.Models.SystemSetup
 {
-    public class InstanceSetupRequest : DomainEntity, IInstanceSetupRequest
+    public class InstanceSetupRequest : InputModelBase, IInstanceSetupRequest
     {
         [Required]
         [MinLength(ApplicationUser.MinimumUsernameLength)]

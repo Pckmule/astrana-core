@@ -25,10 +25,12 @@ namespace Astrana.Core.Domain.Models.Peers.DomainTransferObjects
         // ValueType
         public short? Age { get; set; }
 
-        public Sex? Gender { get; set; }
+        public Sex? Sex { get; set; }
 
         public ImageDto? ProfilePicture { get; set; }
 
         public ImageDto? ProfileCoverPicture { get; set; }
+        
+        public PeerStatisticsDto? Statistics { get; set; }
     }
 }

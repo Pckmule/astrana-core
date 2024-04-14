@@ -10,9 +10,14 @@ using Microsoft.Extensions.Configuration.Json;
 
 namespace Astrana.Core.Configuration
 {
-    public class ProtectedJsonConfigurationProvider : JsonConfigurationProvider
+    public sealed class ProtectedJsonConfigurationProvider : JsonConfigurationProvider
     {
-        public ProtectedJsonConfigurationProvider(ProtectedJsonConfigurationSource source) : base(source) { }
+        private readonly IDataProtectionEncryptionUtility _dataProtectionEncryptionUtility;
+
+        public ProtectedJsonConfigurationProvider(ProtectedJsonConfigurationSource source, IDataProtectionEncryptionUtility dataProtectionEncryptionUtility) : base(source)
+        {
+            _dataProtectionEncryptionUtility = dataProtectionEncryptionUtility;
+        }
 
         public override void Load(Stream stream)
         {
@@ -33,13 +38,13 @@ namespace Astrana.Core.Configuration
                 return;
 
             if(Data.ContainsKey(ApplicationConfigurationKeys.ConnectionStringsPostgreSql))
-                Data[ApplicationConfigurationKeys.ConnectionStringsPostgreSql] = EncryptionUtility.DecryptString(Data[ApplicationConfigurationKeys.ConnectionStringsPostgreSql] ?? string.Empty);
+                Data[ApplicationConfigurationKeys.ConnectionStringsPostgreSql] = _dataProtectionEncryptionUtility.DecryptString(Data[ApplicationConfigurationKeys.ConnectionStringsPostgreSql] ?? string.Empty);
 
             if (Data.ContainsKey(ApplicationConfigurationKeys.ConnectionStringsMySql))
-                Data[ApplicationConfigurationKeys.ConnectionStringsMySql] = EncryptionUtility.DecryptString(Data[ApplicationConfigurationKeys.ConnectionStringsMySql] ?? string.Empty);
+                Data[ApplicationConfigurationKeys.ConnectionStringsMySql] = _dataProtectionEncryptionUtility.DecryptString(Data[ApplicationConfigurationKeys.ConnectionStringsMySql] ?? string.Empty);
 
             if (Data.ContainsKey(ApplicationConfigurationKeys.ConnectionStringsMsSqlServer))
-                Data[ApplicationConfigurationKeys.ConnectionStringsMsSqlServer] = EncryptionUtility.DecryptString(Data[ApplicationConfigurationKeys.ConnectionStringsMsSqlServer] ?? string.Empty);
+                Data[ApplicationConfigurationKeys.ConnectionStringsMsSqlServer] = _dataProtectionEncryptionUtility.DecryptString(Data[ApplicationConfigurationKeys.ConnectionStringsMsSqlServer] ?? string.Empty);
 
             GetSerilogSinkIndex(ApplicationConfigurationKeys.SerilogSinkPostgreSqlName, out var serilogPostgreSqlIndex);
             if (serilogPostgreSqlIndex != null)
@@ -47,7 +52,7 @@ namespace Astrana.Core.Configuration
                 var sinkKey = string.Format(ApplicationConfigurationKeys.SerilogWriteToPostgreSqlArgsConnectionString, serilogPostgreSqlIndex);
                 if (Data.ContainsKey(sinkKey))
                 {
-                    Data[sinkKey] = EncryptionUtility.DecryptString(Data[sinkKey] ?? string.Empty);
+                    Data[sinkKey] = _dataProtectionEncryptionUtility.DecryptString(Data[sinkKey] ?? string.Empty);
                 }
             }
 
@@ -57,7 +62,7 @@ namespace Astrana.Core.Configuration
                 var sinkKey = string.Format(ApplicationConfigurationKeys.SerilogWriteToMySqlArgsConnectionString, serilogMySqlIndex);
                 if (Data.ContainsKey(sinkKey))
                 {
-                    Data[sinkKey] = EncryptionUtility.DecryptString(Data[sinkKey] ?? string.Empty);
+                    Data[sinkKey] = _dataProtectionEncryptionUtility.DecryptString(Data[sinkKey] ?? string.Empty);
                 }
             }
 
@@ -67,7 +72,7 @@ namespace Astrana.Core.Configuration
                 var sinkKey = string.Format(ApplicationConfigurationKeys.SerilogWriteToMsSqlServerArgsConnectionString, serilogMsSqlIndex);
                 if (Data.ContainsKey(sinkKey))
                 {
-                    Data[sinkKey] = EncryptionUtility.DecryptString(Data[sinkKey] ?? string.Empty);
+                    Data[sinkKey] = _dataProtectionEncryptionUtility.DecryptString(Data[sinkKey] ?? string.Empty);
                 }
             }
         }
@@ -93,17 +98,24 @@ namespace Astrana.Core.Configuration
 
     public class ProtectedJsonConfigurationSource : JsonConfigurationSource
     {
+        private readonly IDataProtectionEncryptionUtility _dataProtectionEncryptionUtility;
+
+        public ProtectedJsonConfigurationSource(IDataProtectionEncryptionUtility dataProtectionEncryptionUtility)
+        {
+            _dataProtectionEncryptionUtility = dataProtectionEncryptionUtility;
+        }
+
         public override IConfigurationProvider Build(IConfigurationBuilder builder)
         {
             EnsureDefaults(builder);
 
-            return new ProtectedJsonConfigurationProvider(this);
+            return new ProtectedJsonConfigurationProvider(this, _dataProtectionEncryptionUtility);
         }
     }
 
     public static class ProtectedJsonConfigurationExtensions
     {
-        public static IConfigurationBuilder AddProtectedJsonFile(this IConfigurationBuilder builder, string path, bool optional = true, bool reloadOnChange = true)
+        public static IConfigurationBuilder AddProtectedJsonFile(this IConfigurationBuilder builder, IDataProtectionEncryptionUtility dataProtectionEncryptionUtility, string path, bool optional = true, bool reloadOnChange = true)
         {
             if (builder == null)
                 throw new ArgumentNullException(nameof(builder));
@@ -111,7 +123,7 @@ namespace Astrana.Core.Configuration
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentException("File path must be a non-empty string.");
 
-            var source = new ProtectedJsonConfigurationSource
+            var source = new ProtectedJsonConfigurationSource(dataProtectionEncryptionUtility)
             {
                 FileProvider = null,
                 Path = path,

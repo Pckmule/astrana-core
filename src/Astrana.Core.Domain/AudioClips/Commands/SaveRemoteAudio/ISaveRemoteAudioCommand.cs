@@ -11,6 +11,6 @@ namespace Astrana.Core.Domain.AudioClips.Commands.SaveRemoteAudio
 {
     public interface ISaveRemoteAudioCommand
     {
-        Task<AddResult<List<Audio>>> ExecuteAsync(Uri url, Guid actioningUserId);
+        Task<AddResult<List<AudioClip>>> ExecuteAsync(Uri url, Guid actioningUserId);
     }
 }

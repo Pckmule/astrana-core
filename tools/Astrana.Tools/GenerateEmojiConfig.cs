@@ -74,7 +74,7 @@ namespace Astrana.Tools
 
             var groupNames = emojis.Where(o => !string.IsNullOrWhiteSpace(o.GroupName)).Select(o => o.GroupName).Distinct();
 
-            var groupedEmojis = groupNames.Select(groupName => new EmojiGroup
+            var groupedEmojis = groupNames.Select(groupName => new EmojiGroupDto
             {
                 Id = groupName,
                 NameTrxCode = BuildGroupNameTrxCode(groupName),
@@ -106,7 +106,7 @@ namespace Astrana.Tools
 
             }).ToList();
 
-            var groups = groupedEmojis.Where(group => configuration.IncludeEmojiGroups.Contains(group.Id)).Select(group => new EmojiGroup
+            var groups = groupedEmojis.Where(group => configuration.IncludeEmojiGroups.Contains(group.Id)).Select(group => new EmojiGroupDto
             {
                 Id = group.Id,
                 NameTrxCode = BuildGroupNameTrxCode(group.Id),
@@ -149,11 +149,11 @@ namespace Astrana.Tools
             return name;
         }
 
-        private static async Task<List<Openmoji>> ReadSourceEmojiDataFile(string filePath)
+        private static async Task<List<OpenmojiDto>> ReadSourceEmojiDataFile(string filePath)
         {
             await using var fileStream = File.OpenRead(filePath);
 
-            return await JsonSerializer.DeserializeAsync<List<Openmoji>>(fileStream, new JsonSerializerOptions()) ?? new List<Openmoji>();
+            return await JsonSerializer.DeserializeAsync<List<OpenmojiDto>>(fileStream, new JsonSerializerOptions()) ?? new List<OpenmojiDto>();
         }
 
         private async Task<EmojiConfig> GetGeneratorConfiguration(string filePath)
